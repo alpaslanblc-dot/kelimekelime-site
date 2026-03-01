@@ -30,33 +30,20 @@
         const SUPABASE_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr'; 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        // --- BELİRLEDİĞİN ŞİFRE ---
+        const ADMIN_PASSWORD = "tasovali1421"; 
+
         async function kelimeEkle() {
+            const girilenSifre = prompt("Lütfen yönetici şifresini girin:");
+
+            if (girilenSifre !== ADMIN_PASSWORD) {
+                alert("Hatalı şifre! İşlem iptal edildi.");
+                return;
+            }
+
             const k = document.getElementById('kelime').value.toUpperCase().trim();
             const a = document.getElementById('anlam').value.trim();
             if(!k || !a) return alert("Lütfen hem kelimeyi hem anlamı girin!");
 
             const { error } = await _supabase.from('kelimeler').insert([{ kelime: k, anlam: a }]);
-            if (error) alert("Veritabanı Hatası: " + error.message);
-            else { alert("Başarıyla eklendi!"); document.getElementById('kelime').value=''; document.getElementById('anlam').value=''; listele(); }
-        }
-
-        async function listele() {
-            const { data, error } = await _supabase.from('kelimeler').select('*').order('kelime', { ascending: true });
-            const div = document.getElementById('liste');
-            if(error) { div.innerHTML = "Hata oluştu."; return; }
-            div.innerHTML = '<h3>Mevcut Kelimeler (' + (data ? data.length : 0) + ')</h3>';
-            if(data) data.forEach(item => {
-                div.innerHTML += `<div class="item"><span><strong>${item.kelime}</strong></span> <button class="del-btn" onclick="sil(${item.id})">Sil</button></div>`;
-            });
-        }
-
-        async function sil(id) {
-            if(confirm("Bu kelimeyi silmek istediğinize emin misiniz?")) {
-                await _supabase.from('kelimeler').delete().eq('id', id);
-                listele();
-            }
-        }
-        listele();
-    </script>
-</body>
-</html>
+            if (error) alert("Veritabanı
