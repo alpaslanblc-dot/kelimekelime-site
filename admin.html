@@ -1,69 +1,58 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <title>KelimeKelime - Yönetici Paneli</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        body { font-family: sans-serif; padding: 20px; background: #f4f7f6; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; }
-        button:hover { background: #0056b3; }
-        .kelime-liste { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
-        .item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>Yeni Kelime Ekle</h2>
-        <input type="text" id="kelime" placeholder="Kelime (Örn: ABAKÜS)">
-        <textarea id="anlam" placeholder="Anlamı"></textarea>
-        <button onclick="kelimeEkle()">Ekle</button>
+// 1. Bağlantı (İsim çakışmaması için _supabase yaptık)
+const SUPABASE_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
+const SUPABASE_KEY = 'SENİN_ANON_KEYİN'; // Buraya kendi keyini koy
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        <div class="kelime-liste" id="liste">
-            <h3>Mevcut Kelimeler</h3>
-            </div>
-    </div>
+// 2. Kelime Ekleme Fonksiyonu
+async function kelimeEkle() {
+    const kelimeInput = document.getElementById('kelime');
+    const anlamInput = document.getElementById('anlam');
+    const kelime = kelimeInput.value.toUpperCase();
+    const anlam = anlamInput.value;
 
-    <script>
-        // BURAYI GÜNCELLE: Kendi Anon Key'ini tırnak içine yapıştır
-        const SUPABASE_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
-        const SUPABASE_KEY = 'BURAYA_ANON_KEY_GELECEK'; 
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    if(!kelime || !anlam) return alert("Boş bırakma!");
 
-        async function kelimeEkle() {
-            const kelime = document.getElementById('kelime').value.toUpperCase();
-            const anlam = document.getElementById('anlam').value;
+    const { data, error } = await _supabase
+        .from('kelimeler')
+        .insert([{ kelime, anlam }]);
 
-            if(!kelime || !anlam) return alert("Boş bırakma!");
+    if (error) {
+        alert("Hata: " + error.message);
+    } else {
+        alert("Başarıyla eklendi!");
+        kelimeInput.value = "";
+        anlamInput.value = "";
+        location.reload(); // Listeyi güncellemek için
+    }
+}
 
-            const { data, error } = await supabase
-                .from('kelimeler')
-                .insert([{ kelime, anlam }]);
+// 3. Listeleme Fonksiyonu
+async function listele() {
+    const { data: kelimeler, error } = await _supabase
+        .from('kelimeler')
+        .select('*')
+        .order('kelime');
+    
+    if (kelimeler) {
+        const listeDiv = document.getElementById('liste');
+        listeDiv.innerHTML = '<h3>Mevcut Kelimeler</h3>';
+        kelimeler.forEach(k => {
+            listeDiv.innerHTML += `
+                <div style="display:flex; justify-content:space-between; padding:5px; border-bottom:1px solid #eee;">
+                    <span><strong>${k.kelime}</strong></span>
+                    <button style="background:red; color:white; border:none; cursor:pointer;" onclick="sil(${k.id})">Sil</button>
+                </div>`;
+        });
+    }
+}
 
-            if (error) alert("Hata: " + error.message);
-            else {
-                alert("Eklendi!");
-                location.reload();
-            }
-        }
+// 4. Silme Fonksiyonu
+async function sil(id) {
+    if(confirm("Emin misin?")) {
+        await _supabase.from('kelimeler').delete().eq('id', id);
+        location.reload();
+    }
+}
 
-        async function listele() {
-            const { data: kelimeler } = await supabase.from('kelimeler').select('*').order('kelime');
-            const listeDiv = document.getElementById('liste');
-            kelimeler.forEach(k => {
-                listeDiv.innerHTML += `<div class="item"><span><strong>${k.kelime}</strong></span> <button style="width:auto; background:red;" onclick="sil(${k.id})">Sil</button></div>`;
-            });
-        }
-        
-        async function sil(id) {
-            if(confirm("Silmek istediğine emin misin?")) {
-                await supabase.from('kelimeler').delete().eq('id', id);
-                location.reload();
-            }
-        }
-        listele();
-    </script>
-</body>
-</html>
+// Sayfa açıldığında listeyi yükle
+listele();
