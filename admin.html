@@ -5,53 +5,55 @@
     <title>KelimeKelime - Yönetici Paneli</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #f4f7f6; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; margin-bottom: 10px; }
-        .item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
+        body { font-family: sans-serif; padding: 20px; background: #f4f7f6; color: #333; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        button { background: #007bff; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        .item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; background: #fff; }
+        .item:nth-child(even) { background: #fafafa; }
+        .del-btn { background: #ff4757; width: auto; padding: 5px 15px; font-size: 14px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Yeni Kelime Ekle</h2>
-        <input type="text" id="kelime" placeholder="Kelime (Örn: ABAKÜS)">
-        <textarea id="anlam" placeholder="Anlamı"></textarea>
-        <button onclick="kelimeEkle()">Ekle</button>
-        <div id="liste"><h3>Yükleniyor...</h3></div>
+        <h2>Yönetici Paneli</h2>
+        <input type="text" id="kelime" placeholder="Kelimeyi yazın...">
+        <textarea id="anlam" rows="3" placeholder="Anlamını yazın..."></textarea>
+        <button onclick="kelimeEkle()">Kelimeyi Sözlüğe Ekle</button>
+        <div id="liste" style="margin-top: 20px;"><h3>Kelimeler yükleniyor...</h3></div>
     </div>
 
     <script>
-        // --- BURAYI DÜZENLE ---
         const SUPABASE_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
-        const SUPABASE_KEY = 'BURAYA_SUPABASE_ANON_KEYINI_YAPISTIR'; 
-        // ----------------------
-
+        const SUPABASE_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr'; 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         async function kelimeEkle() {
-            const k = document.getElementById('kelime').value.toUpperCase();
-            const a = document.getElementById('anlam').value;
-            if(!k || !a) return alert("Boş bırakma!");
+            const k = document.getElementById('kelime').value.toUpperCase().trim();
+            const a = document.getElementById('anlam').value.trim();
+            if(!k || !a) return alert("Lütfen hem kelimeyi hem anlamı girin!");
 
             const { error } = await _supabase.from('kelimeler').insert([{ kelime: k, anlam: a }]);
-            if (error) alert("Hata: " + error.message);
-            else { alert("Eklendi!"); location.reload(); }
+            if (error) alert("Veritabanı Hatası: " + error.message);
+            else { alert("Başarıyla eklendi!"); document.getElementById('kelime').value=''; document.getElementById('anlam').value=''; listele(); }
         }
 
         async function listele() {
-            const { data } = await _supabase.from('kelimeler').select('*').order('kelime');
+            const { data, error } = await _supabase.from('kelimeler').select('*').order('kelime', { ascending: true });
             const div = document.getElementById('liste');
-            div.innerHTML = '<h3>Mevcut Kelimeler</h3>';
+            if(error) { div.innerHTML = "Hata oluştu."; return; }
+            div.innerHTML = '<h3>Mevcut Kelimeler (' + (data ? data.length : 0) + ')</h3>';
             if(data) data.forEach(item => {
-                div.innerHTML += `<div class="item"><strong>${item.kelime}</strong> <button style="width:auto; background:red;" onclick="sil(${item.id})">Sil</button></div>`;
+                div.innerHTML += `<div class="item"><span><strong>${item.kelime}</strong></span> <button class="del-btn" onclick="sil(${item.id})">Sil</button></div>`;
             });
         }
 
         async function sil(id) {
-            if(confirm("Silinsin mi?")) {
+            if(confirm("Bu kelimeyi silmek istediğinize emin misiniz?")) {
                 await _supabase.from('kelimeler').delete().eq('id', id);
-                location.reload();
+                listele();
             }
         }
         listele();
