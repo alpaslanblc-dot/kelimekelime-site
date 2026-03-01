@@ -3,46 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KelimeKelime | Modern Dijital Sözlük</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>KelimeKelime | Dijital Sözlük</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --border: #e2e8f0;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
+        .navbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; sticky; top: 0; z-index: 10; }
+        .logo { font-size: 1.4rem; font-weight: 800; }
+        .logo span { color: var(--primary); }
+        .admin-link { text-decoration: none; background: #eff6ff; color: var(--primary); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.8rem; }
+        .container { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem; }
+        .hero { text-align: center; margin-bottom: 3rem; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; letter-spacing: -1px; }
+        .search-wrapper { display: flex; gap: 0.5rem; background: var(--card); padding: 0.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border); margin-top: 2rem; }
+        .search-wrapper input { flex: 1; border: none; padding: 0.8rem; font-size: 1rem; outline: none; }
+        .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .alphabet-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.4rem; margin: 2rem 0; }
+        .letter-btn { width: 32px; height: 32px; border: 1px solid var(--border); background: var(--card); border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .letter-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .word-card { background: var(--card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 1rem; transition: 0.2s; }
+        .word-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .word-card h2 { margin: 0 0 0.5rem 0; color: var(--primary); font-size: 1.4rem; }
+        .word-card p { margin: 0; line-height: 1.6; }
+        footer { text-align: center; padding: 3rem; color: #94a3b8; font-size: 0.8rem; }
+    </style>
 </head>
 <body>
-
     <header class="navbar">
-        <div class="nav-container">
-            <div class="logo">Kelime<span>Kelime</span></div>
-            <nav class="menu">
-                <a href="index.html">Anasayfa</a>
-                <a href="admin.html" class="admin-btn">Yönetim Paneli</a>
-            </nav>
-        </div>
+        <div class="logo">Kelime<span>Kelime</span></div>
+        <a href="admin.html" class="admin-link">Yönetim Paneli</a>
     </header>
-
     <main class="container">
         <section class="hero">
-            <h1>Kelime Hazneni Genişlet</h1>
-            <p>Binlerce terim, tanım ve genel kültür bilgisi parmaklarının ucunda.</p>
-            
+            <h1>Sözlükte Keşfe Çık</h1>
             <div class="search-wrapper">
-                <input type="text" id="searchInput" placeholder="Bir kelime yazın...">
-                <button id="searchBtn">Sözlükte Ara</button>
+                <input type="text" id="searchInput" placeholder="Kelime veya terim ara...">
+                <button id="searchBtn">Ara</button>
             </div>
         </section>
-
-        <div class="alphabet-container">
-            <p class="filter-label">Harfe Göre Göz At:</p>
-            <div id="alphabetStrip" class="alphabet-strip"></div>
-        </div>
-
-        <div id="results" class="results-grid">
-            </div>
+        <div id="alphabetStrip" class="alphabet-strip"></div>
+        <div id="results"></div>
     </main>
-
-    <footer>
-        <p>&copy; 2024 KelimeKelime. Tüm Hakları Saklıdır.</p>
-    </footer>
-
+    <footer>&copy; 2024 KelimeKelime Digital</footer>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
 </body>
