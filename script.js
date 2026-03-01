@@ -1,38 +1,55 @@
-// Supabase Ayarları
-const SUPABASE_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr'; 
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// BURAYI KENDİ BİLGİLERİNLE DOLDUR
+const SB_URL = 'https://BURAYA_SENIN_URL.supabase.co';
+const SB_KEY = 'BURAYA_SENIN_ANON_KEY';
 
-async function ara() {
-    const input = document.getElementById('searchInput').value.toUpperCase().trim();
-    const sonucDiv = document.getElementById('result');
-    
-    // 2 harften azsa sonuçları temizle
-    if(input.length < 2) {
-        sonucDiv.innerHTML = "";
+const _supabase = supabase.createClient(SB_URL, SB_KEY);
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Alfabe butonlarını diz
+    const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
+    const strip = document.getElementById('alphabetStrip');
+    alphabet.forEach(l => {
+        const b = document.createElement('button');
+        b.innerText = l;
+        b.className = 'letter-btn';
+        b.onclick = () => getByLetter(l);
+        strip.appendChild(b);
+    });
+
+    // Arama butonu
+    document.getElementById('searchBtn').onclick = () => {
+        const val = document.getElementById('searchInput').value;
+        search(val);
+    };
+
+    // Enter tuşu
+    document.getElementById('searchInput').onkeypress = (e) => {
+        if (e.key === 'Enter') search(e.target.value);
+    };
+});
+
+async function search(q) {
+    if(!q) return;
+    const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `%${q}%`);
+    render(data);
+}
+
+async function getByLetter(l) {
+    const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `${l}%`);
+    render(data);
+}
+
+function render(data) {
+    const res = document.getElementById('results');
+    res.innerHTML = '';
+    if (!data || data.length === 0) {
+        res.innerHTML = '<p style="text-align:center; opacity:0.6;">Sonuç bulunamadı.</p>';
         return;
     }
-
-    // Veritabanında ara
-    const { data: sonuclar, error } = await _supabase
-        .from('kelimeler') 
-        .select('*')
-        .ilike('kelime', `%${input}%`); 
-
-    if (error) {
-        console.error("Hata:", error.message);
-        return;
-    }
-
-    // Ekrana yazdır
-    if (sonuclar && sonuclar.length > 0) {
-        sonucDiv.innerHTML = sonuclar.map(s => `
-            <div class="word-card">
-                <h3>${s.kelime}</h3>
-                <p>${s.anlam}</p>
-            </div>
-        `).join('');
-    } else {
-        sonucDiv.innerHTML = "<p style='text-align:center; color:#888;'>Kelime bulunamadı.</p>";
-    }
-} 
+    data.forEach(item => {
+        const d = document.createElement('div');
+        d.className = 'word-card';
+        d.innerHTML = `<h2>${item.kelime}</h2><p>${item.tanim}</p>`;
+        res.appendChild(d);
+    });
+}
