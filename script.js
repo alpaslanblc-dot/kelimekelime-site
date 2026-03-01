@@ -1,6 +1,6 @@
 // BURAYI KENDİ BİLGİLERİNLE DOLDUR
-const SB_URL = 'https://BURAYA_SENIN_URL.supabase.co';
-const SB_KEY = 'BURAYA_SENIN_ANON_KEY';
+const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
+const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
 
 const _supabase = supabase.createClient(SB_URL, SB_KEY);
 
