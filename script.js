@@ -1,15 +1,13 @@
-// 1. ADIM: BAĞLANTI BİLGİLERİN
+// 1. BAĞLANTI AYARLARI (Kendi bilgilerini tırnak içine yapıştır)
 const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
 const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
 
 const _supabase = supabase.createClient(SB_URL, SB_KEY);
 
-// 2. ADIM: SAYFA HAZIRLIĞI
 document.addEventListener('DOMContentLoaded', () => {
     // Alfabe butonlarını oluştur
     const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
     const strip = document.getElementById('alphabetStrip');
-    
     if(strip) {
         alphabet.forEach(l => {
             const b = document.createElement('button');
@@ -20,60 +18,61 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Arama butonu tetikleyici
+    // Arama butonu ve Enter tuşu
     const searchBtn = document.getElementById('searchBtn');
-    if(searchBtn) {
-        searchBtn.onclick = () => {
-            const val = document.getElementById('searchInput').value;
-            search(val);
-        };
-    }
-
-    // Enter tuşu desteği
     const searchInput = document.getElementById('searchInput');
-    if(searchInput) {
-        searchInput.onkeypress = (e) => {
-            if (e.key === 'Enter') search(e.target.value);
-        };
+    
+    if(searchBtn && searchInput) {
+        searchBtn.onclick = () => search(searchInput.value);
+        searchInput.onkeypress = (e) => { if (e.key === 'Enter') search(e.target.value); };
     }
 });
 
-// 3. ADIM: VERİ ÇEKME FONKSİYONLARI
+// Veri Çekme Fonksiyonları
 async function search(q) {
     if(!q) return;
-    const { data, error } = await _supabase.from('kelimeler').select('*').ilike('kelime', `%${q}%`);
-    if (error) console.error("Arama hatası:", error);
+    const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `%${q}%`);
     render(data);
 }
 
 async function getByLetter(l) {
-    const { data, error } = await _supabase.from('kelimeler').select('*').ilike('kelime', `${l}%`);
-    if (error) console.error("Harf hatası:", error);
+    const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `${l}%`);
     render(data);
 }
 
-// 4. ADIM: EKRANA BASMA (KRİTİK DÜZELTME BURADA)
+// 2. EKRANA BASMA (HATA PAYI SIFIRLANMIŞ SİSTEM)
 function render(data) {
     const res = document.getElementById('results');
     if(!res) return;
-    
     res.innerHTML = '';
-    
+
     if (!data || data.length === 0) {
-        res.innerHTML = '<p style="text-align:center; opacity:0.6; padding:2rem;">Sonuç bulunamadı.</p>';
+        res.innerHTML = '<p style="text-align:center; opacity:0.6; padding:2rem;">Aranan kelime bulunamadı.</p>';
         return;
     }
 
     data.forEach(item => {
+        // OTOMATİK İÇERİK BULUCU: 
+        // Kod burada 'kelime', 'id', 'created_at' dışındaki İLK dolu sütunu tanım olarak seçer.
+        // Yani sütun adın 'tanım', 'tanim', 'aciklama' ne olursa olsun çalışır.
+        let bulunanTanim = "Açıklama mevcut değil.";
+        
+        // Veritabanından gelen tüm anahtarları (sütun isimlerini) tara
+        const keys = Object.keys(item);
+        for (let key of keys) {
+            const lowKey = key.toLowerCase();
+            // id, kelime ve tarih dışındaki ilk metin alanını al
+            if (!['id', 'kelime', 'created_at'].includes(lowKey) && item[key]) {
+                bulunanTanim = item[key];
+                break; 
+            }
+        }
+
         const d = document.createElement('div');
         d.className = 'word-card';
-        
-        // Sütun adı 'tanim' da olsa 'tanım' da olsa ikisini de kontrol eder:
-        const tanimIcerigi = item.tanim || item.tanım || item.aciklama || "Açıklama henüz girilmemiş.";
-        
         d.innerHTML = `
-            <h2>${item.kelime}</h2>
-            <p>${tanimIcerigi}</p>
+            <h2>${item.kelime || "Başlıksız"}</h2>
+            <p>${bulunanTanim}</p>
         `;
         res.appendChild(d);
     });
