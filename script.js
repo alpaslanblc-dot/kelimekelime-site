@@ -1,11 +1,10 @@
-// 1. BAĞLANTI AYARLARI (Kendi bilgilerini tırnak içine yapıştır)
+// 1. BAĞLANTI (Kendi bilgilerini yapıştır)
 const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
 const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
 
 const _supabase = supabase.createClient(SB_URL, SB_KEY);
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Alfabe butonlarını oluştur
     const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
     const strip = document.getElementById('alphabetStrip');
     if(strip) {
@@ -18,20 +17,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Arama butonu ve Enter tuşu
     const searchBtn = document.getElementById('searchBtn');
     const searchInput = document.getElementById('searchInput');
-    
     if(searchBtn && searchInput) {
         searchBtn.onclick = () => search(searchInput.value);
         searchInput.onkeypress = (e) => { if (e.key === 'Enter') search(e.target.value); };
     }
 });
 
-// Veri Çekme Fonksiyonları
+// 2. ÇİFT YÖNLÜ ARAMA FONKSİYONU
 async function search(q) {
     if(!q) return;
-    const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `%${q}%`);
+
+    // Sistem hem 'kelime' sütununda hem de 'anlam' sütununda aynı anda arama yapar
+    const { data, error } = await _supabase
+        .from('kelimeler')
+        .select('*')
+        .or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`); // KRİTİK NOKTA: Burası çift yönlü arama yapar
+
+    if (error) console.error("Arama hatası:", error);
     render(data);
 }
 
@@ -40,39 +44,27 @@ async function getByLetter(l) {
     render(data);
 }
 
-// 2. EKRANA BASMA (HATA PAYI SIFIRLANMIŞ SİSTEM)
+// 3. EKRANA BASMA
 function render(data) {
     const res = document.getElementById('results');
     if(!res) return;
     res.innerHTML = '';
 
     if (!data || data.length === 0) {
-        res.innerHTML = '<p style="text-align:center; opacity:0.6; padding:2rem;">Aranan kelime bulunamadı.</p>';
+        res.innerHTML = '<p style="text-align:center; opacity:0.6; padding:2rem;">Bulmaca cevabı bulunamadı.</p>';
         return;
     }
 
     data.forEach(item => {
-        // OTOMATİK İÇERİK BULUCU: 
-        // Kod burada 'kelime', 'id', 'created_at' dışındaki İLK dolu sütunu tanım olarak seçer.
-        // Yani sütun adın 'tanım', 'tanim', 'aciklama' ne olursa olsun çalışır.
-        let bulunanTanim = "Açıklama mevcut değil.";
-        
-        // Veritabanından gelen tüm anahtarları (sütun isimlerini) tara
-        const keys = Object.keys(item);
-        for (let key of keys) {
-            const lowKey = key.toLowerCase();
-            // id, kelime ve tarih dışındaki ilk metin alanını al
-            if (!['id', 'kelime', 'created_at'].includes(lowKey) && item[key]) {
-                bulunanTanim = item[key];
-                break; 
-            }
-        }
-
         const d = document.createElement('div');
         d.className = 'word-card';
+        
+        // Görünümü bulmaca formatına uygun yapalım: Cevap büyük, Soru küçük
         d.innerHTML = `
-            <h2>${item.kelime || "Başlıksız"}</h2>
-            <p>${bulunanTanim}</p>
+            <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 5px;">SORU / TANIM:</div>
+            <p style="margin: 0 0 10px 0; font-weight: 500;">${item.anlam || item.tanım || "Açıklama yok"}</p>
+            <div style="font-size: 0.8rem; color: #2563eb; font-weight: 800; border-top: 1px dashed #e2e8f0; pt-2;">CEVAP:</div>
+            <h2 style="margin: 5px 0 0 0; color: #1e293b; letter-spacing: 2px;">${item.kelime}</h2>
         `;
         res.appendChild(d);
     });
