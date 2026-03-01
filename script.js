@@ -1,36 +1,29 @@
-// 1. Supabase Bağlantısı
-// BURAYI GÜNCELLE: Supabase'den aldığın o çok uzun 'anon public' key'i tırnak içine yapıştır.
+// --- BURAYI DÜZENLE ---
 const SUPABASE_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
-const SUPABASE_KEY = 'BURAYA_ANON_KEY_GELECEK'; 
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12c2Jya25rZnd3cHRqaWZkcWNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNjc1OTYsImV4cCI6MjA4Nzk0MzU5Nn0.k-DdP3f7slgFkNvIMrAF6L_3nLbQYkVvJtQFMRP8NqM'; 
+// ----------------------
+
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// 2. Arama Fonksiyonu
 async function ara() {
     const input = document.getElementById('searchInput').value.toUpperCase();
     const sonucDiv = document.getElementById('result');
     
-    // Kullanıcı en az 2 harf yazana kadar arama yapma (performans için)
-    if(input.length < 2) {
-        sonucDiv.innerHTML = "";
-        return;
-    }
+    if(input.length < 2) { sonucDiv.innerHTML = ""; return; }
 
-    // 3. Veritabanından Veri Çekme
-    // 'kelimeler' tablosunda, 'kelime' sütunu içinde kullanıcının yazdığı harfleri ara
-    const { data: sonuclar, error } = await _supabase
+    const { data: sonuclar } = await _supabase
         .from('kelimeler')
         .select('*')
-        .ilike('kelime', `%${input}%`); // ilike: Büyük/küçük harf duyarsız arama yapar
+        .ilike('kelime', `%${input}%`);
 
-    // 4. Sonuçları Ekrana Yazdırma
     if (sonuclar && sonuclar.length > 0) {
         sonucDiv.innerHTML = sonuclar.map(s => `
-            <div class="word-card" style="border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px;">
-                <h3 style="color: #007bff; margin-top: 0;">${s.kelime}</h3>
-                <p style="color: #333; line-height: 1.5;">${s.anlam}</p>
+            <div class="word-card">
+                <h3>${s.kelime}</h3>
+                <p>${s.anlam}</p>
             </div>
         `).join('');
     } else {
-        sonucDiv.innerHTML = "<p style='color: #666;'>Sonuç bulunamadı...</p>";
+        sonucDiv.innerHTML = "<p>Sonuç bulunamadı.</p>";
     }
 }
