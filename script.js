@@ -1,6 +1,6 @@
 // --- BURAYI DÜZENLE ---
 const SUPABASE_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12c2Jya25rZnd3cHRqaWZkcWNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNjc1OTYsImV4cCI6MjA4Nzk0MzU5Nn0.k-DdP3f7slgFkNvIMrAF6L_3nLbQYkVvJtQFMRP8NqM'; 
+const SUPABASE_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr'; 
 // ----------------------
 
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
