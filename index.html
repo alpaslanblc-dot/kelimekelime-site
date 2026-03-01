@@ -3,29 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KelimeKelime - Arama</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .search-container { width: 100%; max-width: 600px; margin-top: 50px; }
-        #searchInput { width: 100%; padding: 15px; font-size: 18px; border: 2px solid #007bff; border-radius: 30px; outline: none; box-sizing: border-box; }
-        #result { width: 100%; max-width: 600px; margin-top: 20px; }
-        .word-card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 6px solid #007bff; transition: transform 0.2s; }
-        .word-card:hover { transform: translateY(-3px); }
-        .word-card h3 { margin: 0 0 10px 0; color: #007bff; text-transform: uppercase; }
-        .word-card p { margin: 0; color: #444; line-height: 1.6; font-size: 17px; }
-    </style>
+    <title>KelimeKelime | Modern Dijital Sözlük</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="search-container">
-        <h1 style="text-align: center; color: #333;">KelimeKelime</h1>
-        <input type="text" id="searchInput" onkeyup="ara()" placeholder="Kelime aramaya başlayın..." autocomplete="off">
-    </div>
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="logo">Kelime<span>Kelime</span></div>
+            <nav class="menu">
+                <a href="index.html">Anasayfa</a>
+                <a href="admin.html" class="admin-btn">Yönetim Paneli</a>
+            </nav>
+        </div>
+    </header>
 
-    <div id="result"></div>
+    <main class="container">
+        <section class="hero">
+            <h1>Kelime Hazneni Genişlet</h1>
+            <p>Binlerce terim, tanım ve genel kültür bilgisi parmaklarının ucunda.</p>
+            
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="Bir kelime yazın...">
+                <button id="searchBtn">Sözlükte Ara</button>
+            </div>
+        </section>
+
+        <div class="alphabet-container">
+            <p class="filter-label">Harfe Göre Göz At:</p>
+            <div id="alphabetStrip" class="alphabet-strip"></div>
+        </div>
+
+        <div id="results" class="results-grid">
+            </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 KelimeKelime. Tüm Hakları Saklıdır.</p>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
-
 </body>
 </html>
