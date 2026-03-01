@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KelimeKelime.com | En Kapsamlı Bulmaca Sözlüğü</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f3f4f6; }
+        .search-shadow { box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1), 0 8px 10px -6px rgba(59, 130, 246, 0.1); }
+    </style>
+</head>
+<body class="antialiased text-slate-900">
+
+    <nav class="bg-white border-b border-slate-200 py-4 px-6 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <span class="text-2xl font-extrabold text-blue-600 tracking-tight">kelime<span class="text-slate-800">kelime</span>.com</span>
+            <div class="hidden md:block text-sm text-slate-500 font-medium italic">"Bulmacanın Eksik Parçası"</div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-4 py-12 text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-slate-900 leading-tight">
+            Aradığın Kelimeyi <span class="text-blue-600">Saniyeler İçinde</span> Bul.
+        </h1>
+        <p class="text-lg text-slate-600 mb-10">4.000'den fazla soru, cevap ve kategoriyle Türkiye'nin dijital bulmaca arşivi.</p>
+
+        <div class="bg-white p-2 rounded-2xl search-shadow mb-12 flex flex-col md:flex-row gap-2 border border-blue-100">
+            <input type="text" id="searchInput" placeholder="Soru veya cevap yazın... (Örn: Zahire, Silo, Üçgen)" 
+                class="flex-1 px-6 py-4 rounded-xl text-lg outline-none focus:bg-blue-50 transition-all border-none">
+            
+            <select id="charFilter" class="px-4 py-4 rounded-xl border-none outline-none bg-slate-100 text-slate-700 font-bold appearance-none cursor-pointer hover:bg-slate-200 transition-all">
+                <option value="">Harf Sayısı</option>
+                <option value="3">3 Harf</option><option value="4">4 Harf</option><option value="5">5 Harf</option>
+                <option value="6">6 Harf</option><option value="7">7 Harf</option><option value="8">8+ Harf</option>
+            </select>
+        </div>
+
+        <div id="resultsCount" class="text-left mb-4 text-sm font-semibold text-slate-400 uppercase tracking-widest px-2"></div>
+        <div id="resultContainer" class="grid gap-4">
+            </div>
+    </main>
+
+    <script>
+        // Veri Seti (Bugün girdiğimiz kelimeler)
+        const data = [
+            {s: "Zahire ambarı", c: "SİLO, SARPIN", h: 4, k: "Tarım"},
+            {s: "Übüvvet", c: "BABALIK, ATALIK", h: 7, k: "Sosyal"},
+            {s: "Ücac", c: "ACI SU", h: 5, k: "Eski Dil"},
+            {s: "Zaman bilimi", c: "KRONOLOJİ", h: 9, k: "Bilim"},
+            {s: "Zerdüşt dininin kutsal kitabı", c: "AVESTA", h: 6, k: "Din"},
+            {s: "Yaba", c: "ATKI, ENGÜŞTE", h: 4, k: "Tarım"},
+            {s: "Yağız at", c: "ETHEM, EDHEM", h: 5, k: "Zooloji"},
+            {s: "Zenginlerin iktidarı", c: "PLÜTOKRASİ", h: 10, k: "Siyaset"},
+            {s: "Ücretli Osmanlı askeri", c: "KAPIKULU", h: 8, k: "Tarih"},
+            {s: "Üç gram", c: "DİRHEM", h: 6, k: "Tarih"},
+            {s: "Yargı kararını yerine getirme", c: "İNFAZ", h: 5, k: "Hukuk"},
+            {s: "Yeni Zelanda dansı", c: "HAKA", h: 4, k: "Kültür"},
+            {s: "Üsküdar’ın eski adı", c: "SKUTARİ", h: 7, k: "Tarih"}
+        ];
+
+        const searchInput = document.getElementById('searchInput');
+        const charFilter = document.getElementById('charFilter');
+        const resultContainer = document.getElementById('resultContainer');
+        const resultsCount = document.getElementById('resultsCount');
+
+        function renderResults(list) {
+            resultsCount.innerText = `${list.length} Sonuç Bulundu`;
+            resultContainer.innerHTML = list.map(item => `
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 text-left flex justify-between items-center hover:border-blue-300 transition-all shadow-sm">
+                    <div>
+                        <span class="text-xs font-bold text-blue-500 uppercase tracking-wider">${item.k}</span>
+                        <h3 class="text-xl font-semibold text-slate-800 mt-1">${item.s}</h3>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-2xl font-black text-slate-900 tracking-widest">${item.c}</div>
+                        <span class="text-xs text-slate-400 font-bold">${item.h} HARFLİ</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filter() {
+            const query = searchInput.value.toLowerCase();
+            const charCount = charFilter.value;
+            const filtered = data.filter(item => {
+                const matchesText = item.s.toLowerCase().includes(query) || item.c.toLowerCase().includes(query);
+                const matchesChar = charCount === "" || (charCount === "8" ? item.h >= 8 : item.h == charCount);
+                return matchesText && matchesChar;
+            });
+            renderResults(filtered);
+        }
+
+        searchInput.addEventListener('input', filter);
+        charFilter.addEventListener('change', filter);
+        renderResults(data);
+    </script>
+</body>
+</html>
