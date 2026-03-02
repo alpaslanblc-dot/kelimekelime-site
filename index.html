@@ -83,57 +83,10 @@
         .answer-section { border-top: 1px solid var(--border); padding-top: 1rem; }
         .answer-section h2 { margin: 0.3rem 0 0 0; font-size: 1.6rem; font-weight: 800; text-transform: uppercase; color: var(--primary); }
 
-        /* Mobil Uyumlu Footer */
         .card-footer { 
             display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; 
             gap: 8px; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); 
         }
         .action-btn { 
             background: var(--primary-light); color: var(--primary); border: none; 
-            padding: 8px 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.7rem; 
-            flex: 1; max-width: 120px; text-align: center;
-        }
-        .copy-msg { font-size: 0.65rem; color: #10b981; font-weight: bold; flex-basis: 100%; text-align: right; margin-bottom: 4px; }
-
-        .ad-slot { margin: 1rem 0; padding: 0.8rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; text-align: center; color: #94a3b8; font-size: 9px; font-weight: bold; }
-
-        footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.75rem; }
-
-        /* MOBİL ÖZEL AYARLAR */
-        @media (max-width: 480px) {
-            .hero h1 { font-size: 1.8rem; }
-            .container { padding: 0.8rem; }
-            .word-card { padding: 1.2rem; border-radius: 16px; }
-            .answer-section h2 { font-size: 1.4rem; }
-            .alphabet-strip { gap: 3px; }
-            .letter-btn { width: 28px; height: 28px; font-size: 0.7rem; }
-            .action-btn { max-width: none; } /* Mobilde butonlar genişlesin */
-        }
-    </style>
-</head>
-<body>
-    <header class="navbar">
-        <div class="logo" onclick="location.reload()">Kelime<span>Kelime</span></div>
-        <a href="admin.html" style="text-decoration:none; font-size:0.75rem; font-weight:700; color:var(--primary)">Yönetim</a>
-    </header>
-
-    <main class="container">
-        <section class="hero">
-            <h1>Sözlük</h1>
-            <div class="search-wrapper">
-                <input type="text" id="searchInput" placeholder="Kelime ara..." autocomplete="off">
-                <button id="searchBtn">Ara</button>
-            </div>
-        </section>
-
-        <div id="categoryStrip" class="cat-strip"></div>
-        <div id="alphabetStrip" class="alphabet-strip"></div>
-        <div id="results"></div>
-    </main>
-
-    <footer>&copy; 2024 KelimeKelime Sözlük</footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js"></script> 
-</body>
-</html>
+            padding: 8px 12px;
