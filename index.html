@@ -7,31 +7,120 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2563eb;
-            --bg: #f8fafc;
+            --primary: #4f46e5;
+            --primary-light: #eef2ff;
+            --bg: #fdfdfd; 
             --card: #ffffff;
-            --text: #0f172a;
-            --border: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #f1f5f9;
         }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
-        .navbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; sticky; top: 0; z-index: 10; }
-        .logo { font-size: 1.4rem; font-weight: 800; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px); 
+            background-size: 20px 20px;
+            color: var(--text-main); 
+            margin: 0; 
+            padding: 0; 
+            min-height: 100vh;
+        }
+
+        .navbar { 
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border); 
+            padding: 0.8rem 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; }
         .logo span { color: var(--primary); }
-        .admin-link { text-decoration: none; background: #eff6ff; color: var(--primary); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.8rem; }
-        .container { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem; }
-        .hero { text-align: center; margin-bottom: 3rem; }
-        .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; letter-spacing: -1px; }
-        .search-wrapper { display: flex; gap: 0.5rem; background: var(--card); padding: 0.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border); margin-top: 2rem; }
-        .search-wrapper input { flex: 1; border: none; padding: 0.8rem; font-size: 1rem; outline: none; }
-        .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .alphabet-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.4rem; margin: 2rem 0; }
-        .letter-btn { width: 32px; height: 32px; border: 1px solid var(--border); background: var(--card); border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-        .letter-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
-        .word-card { background: var(--card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 1rem; transition: 0.2s; }
-        .word-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        .word-card h2 { margin: 0 0 0.5rem 0; color: var(--primary); font-size: 1.4rem; }
-        .word-card p { margin: 0; line-height: 1.6; }
-        footer { text-align: center; padding: 3rem; color: #94a3b8; font-size: 0.8rem; }
+
+        .admin-link { 
+            text-decoration: none; 
+            background: var(--primary-light); 
+            color: var(--primary); 
+            padding: 0.6rem 1.2rem; 
+            border-radius: 10px; 
+            font-weight: 600; 
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+        .admin-link:hover { background: var(--primary); color: white; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 4rem 1.5rem; }
+        
+        .hero { text-align: center; margin-bottom: 4rem; }
+        .hero h1 { font-size: 3rem; margin-bottom: 0.5rem; letter-spacing: -2px; font-weight: 800; }
+        
+        .search-wrapper { 
+            display: flex; 
+            gap: 10px; 
+            background: var(--card); 
+            padding: 10px; 
+            border-radius: 18px; 
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); 
+            border: 1px solid var(--border); 
+            margin-top: 2.5rem;
+            transition: 0.3s;
+        }
+        .search-wrapper:focus-within { border-color: var(--primary); box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.1); }
+        .search-wrapper input { flex: 1; border: none; padding: 12px; font-size: 1.1rem; outline: none; background: transparent; }
+        .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 2rem; border-radius: 12px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .search-wrapper button:hover { opacity: 0.9; transform: scale(0.98); }
+
+        .alphabet-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.6rem; margin: 3rem 0; }
+        .letter-btn { 
+            width: 40px; 
+            height: 40px; 
+            border: none; 
+            background: var(--card); 
+            color: var(--text-muted);
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 700; 
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border: 1px solid var(--border);
+        }
+        .letter-btn:hover { background: var(--primary); color: white; transform: translateY(-3px); box-shadow: 0 8px 15px rgba(79, 70, 229, 0.2); }
+
+        .word-card { 
+            background: var(--card); 
+            padding: 2rem; 
+            border-radius: 24px; 
+            border: 1px solid var(--border); 
+            margin-bottom: 1.5rem; 
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .word-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); }
+
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+        .label { color: var(--text-muted); font-weight: 800; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 1px; }
+        
+        .cat-badge { 
+            padding: 4px 12px; 
+            border-radius: 8px; 
+            font-size: 0.65rem; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .word-card h2 { margin: 0.5rem 0 0 0; color: var(--text-main); font-size: 1.8rem; letter-spacing: -0.5px; font-weight: 800; }
+        .word-card p { margin: 0.5rem 0 1.5rem 0; line-height: 1.6; color: var(--text-main); font-size: 1.1rem; }
+        
+        .answer-section { border-top: 1px solid var(--border); padding-top: 1.2rem; }
+
+        footer { text-align: center; padding: 4rem; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -39,6 +128,7 @@
         <div class="logo">Kelime<span>Kelime</span></div>
         <a href="admin.html" class="admin-link">Yönetim Paneli</a>
     </header>
+
     <main class="container">
         <section class="hero">
             <h1>Sözlükte Keşfe Çık</h1>
@@ -47,11 +137,72 @@
                 <button id="searchBtn">Ara</button>
             </div>
         </section>
+
         <div id="alphabetStrip" class="alphabet-strip"></div>
         <div id="results"></div>
     </main>
+
     <footer>&copy; 2024 KelimeKelime Digital</footer>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+    <script>
+        // SCRIPT.JS İÇERİĞİ (Buraya Gömüldü)
+        const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
+        const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
+        const _supabase = supabase.createClient(SB_URL, SB_KEY);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
+            const strip = document.getElementById('alphabetStrip');
+            const sInp = document.getElementById('searchInput');
+
+            if(strip) {
+                alphabet.forEach(l => {
+                    const b = document.createElement('button');
+                    b.innerText = l; b.className = 'letter-btn';
+                    b.onclick = () => getByLetter(l);
+                    strip.appendChild(b);
+                });
+            }
+
+            if(sInp) {
+                sInp.addEventListener('input', (e) => {
+                    const val = e.target.value.trim();
+                    if (val.length >= 2) runSearch(val);
+                    else if (val.length === 0) document.getElementById('results').innerHTML = '';
+                });
+            }
+        });
+
+        async function runSearch(q) {
+            const { data } = await _supabase.from('kelimeler').select('*')
+                .or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(20);
+            render(data);
+        }
+
+        async function getByLetter(l) {
+            const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `${l}%`);
+            render(data);
+        }
+
+        function render(data) {
+            const res = document.getElementById('results');
+            if(!res) return;
+            res.innerHTML = '';
+
+            if (!data || data.length === 0) {
+                res.innerHTML = '<p style="text-align:center; padding:2rem; opacity:0.5;">Eşleşme bulunamadı...</p>';
+                return;
+            }
+
+            data.forEach(item => {
+                const hasCat = item.kategori && item.kategori !== 'Genel';
+                let bg = '#f1f5f9', tx = '#475569';
+                
+                if(hasCat) {
+                    if(item.kategori.includes('Tıp')) { bg='#fee2e2'; tx='#991b1b'; }
+                    else if(item.kategori.includes('Mitoloji')) { bg='#fef3c7'; tx='#92400e'; }
+                    else if(item.kategori.includes('Denizcilik')) { bg='#e0f2fe'; tx='#0369a1'; }
+                }
+
+                const d = document.createElement('div');
