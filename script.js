@@ -2,133 +2,110 @@ const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
 const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
 const _supabase = supabase.createClient(SB_URL, SB_KEY);
 
-// 1. ANA BAŞLATICI
-async function setupSite() {
-    initAlphabet();     
-    loadCategories();   
-    initSearch();       
-    showVitrin(); // Sayfa açıldığında vitrini göster
-}
+// Uygulama Başlatıcı
+window.onload = () => {
+    initAlphabet();
+    loadCategories();
+    initSearch();
+    showVitrin();
+};
 
-// 2. VİTRİN MODÜLÜ (Boş Sayfayı Dolduran Makine)
-async function showVitrin() {
-    const res = document.getElementById('results');
-    res.innerHTML = '<div style="text-align:center; padding:2rem; opacity:0.3;">Sözlük hazırlanıyor...</div>';
-
-    const { data, error } = await _supabase
-        .from('kelimeler')
-        .select('*')
-        .limit(10)
-        .order('id', { ascending: false });
-
-    if (!error && data) {
-        render(data, "Günün Öne Çıkan Kelimeleri");
-    }
-}
-
-// 3. ALFABE
 function initAlphabet() {
     const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
     const strip = document.getElementById('alphabetStrip');
-    if(strip) {
-        strip.innerHTML = ''; 
-        alphabet.forEach(l => {
-            const b = document.createElement('button');
-            b.innerText = l; b.className = 'letter-btn';
-            b.onclick = () => getByLetter(l);
-            strip.appendChild(b);
-        });
-    }
-}
-
-// 4. KATEGORİLER
-function loadCategories() {
-    const catStrip = document.getElementById('categoryStrip');
-    if (!catStrip) return;
-    const myCategories = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik"];
-    catStrip.innerHTML = '';
-    myCategories.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.innerText = cat; btn.className = 'cat-btn';
-        btn.onclick = () => {
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            filterByCategory(cat);
-        };
-        catStrip.appendChild(btn);
+    if(!strip) return;
+    strip.innerHTML = '';
+    alphabet.forEach(l => {
+        const b = document.createElement('button');
+        b.className = 'letter-btn';
+        b.innerText = l;
+        b.onclick = () => getByLetter(l);
+        strip.appendChild(b);
     });
 }
 
-// 5. ARAMA MOTORU
-function initSearch() {
-    const sInp = document.getElementById('searchInput');
-    if(sInp) {
-        sInp.addEventListener('input', (e) => {
-            const val = e.target.value.trim();
-            if (val.length === 0) showVitrin(); 
-            else if (val.length >= 2) runSearch(val);
-        });
-    }
+function loadCategories() {
+    const strip = document.getElementById('categoryStrip');
+    if(!strip) return;
+    const cats = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik"];
+    strip.innerHTML = '';
+    cats.forEach(c => {
+        const b = document.createElement('button');
+        b.className = 'cat-btn';
+        b.innerText = c;
+        b.onclick = () => {
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            b.classList.add('active');
+            filterByCategory(c);
+        };
+        strip.appendChild(b);
+    });
 }
 
-// --- VERİ ÇEKME FONKSİYONLARI ---
+function initSearch() {
+    const inp = document.getElementById('searchInput');
+    const btn = document.getElementById('searchBtn');
+    if(inp) {
+        inp.oninput = (e) => {
+            const val = e.target.value.trim();
+            if(val.length >= 2) runSearch(val);
+            else if(val.length === 0) showVitrin();
+        };
+    }
+    if(btn) btn.onclick = () => runSearch(inp.value.trim());
+}
+
+async function showVitrin() {
+    const { data } = await _supabase.from('kelimeler').select('*').limit(10).order('id', {ascending: false});
+    render(data, "Öne Çıkanlar");
+}
+
 async function runSearch(q) {
-    const { data } = await _supabase.from('kelimeler').select('*')
-        .or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(30);
+    const { data } = await _supabase.from('kelimeler').select('*').or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(25);
     render(data);
 }
 
 async function getByLetter(l) {
-    const { data } = await _supabase.from('kelimeler').select('*')
-        .ilike('kelime', `${l}%`).order('kelime', { ascending: true });
+    const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `${l}%`).order('kelime');
     render(data);
 }
 
 async function filterByCategory(cat) {
-    const { data } = await _supabase.from('kelimeler').select('*')
-        .eq('kategori', cat).order('kelime', { ascending: true });
+    const { data } = await _supabase.from('kelimeler').select('*').eq('kategori', cat).order('kelime');
     render(data);
 }
 
-// --- RENDER (VİTRİN, REKLAM VE PAYLAŞ BUTONLARI) ---
 function render(data, title = "") {
     const res = document.getElementById('results');
     if(!res) return;
-    res.innerHTML = title ? `<h3 style="text-align:center; color:var(--text-muted); margin-bottom:2rem; font-size:0.9rem; letter-spacing:2px; text-transform:uppercase;">${title}</h3>` : '';
+    res.innerHTML = title ? `<h4 style="text-align:center; opacity:0.5; margin-bottom:1rem">${title}</h4>` : '';
 
-    if (!data || data.length === 0) {
-        res.innerHTML = '<div style="text-align:center; padding:3rem; opacity:0.5;">Sonuç bulunamadı.</div>';
+    if(!data || data.length === 0) {
+        res.innerHTML = '<div style="text-align:center; padding:2rem; opacity:0.5">Bulunamadı.</div>';
         return;
     }
 
     data.forEach((item, index) => {
-        if (index > 0 && index % 5 === 0) {
+        if(index > 0 && index % 5 === 0) {
             const ad = document.createElement('div');
             ad.className = 'ad-slot';
-            ad.innerHTML = "SPONSORLU BAĞLANTI / REKLAM ALANI";
+            ad.innerText = 'SPONSORLU ALAN';
             res.appendChild(ad);
         }
 
-        const hasCat = item.kategori && item.kategori !== 'Genel' && item.kategori !== '';
-        let bg = '#f1f5f9', tx = '#475569';
-        const c = item.kategori || "";
-        
-        // Kategori Renk Atamaları
-        if(c === 'Tıp') { bg='#fee2e2'; tx='#991b1b'; }
-        else if(c === 'Doğa') { bg='#f0fdf4'; tx='#166534'; }
-        else if(c === 'İnanç') { bg='#faf5ff'; tx='#6b21a8'; }
-        else if(c === 'Tarih') { bg='#fff7ed'; tx='#9a3412'; }
-        else if(c === 'Denizcilik') { bg='#e0f2fe'; tx='#0369a1'; }
-        else if(c === 'Sanat') { bg='#fef3c7'; tx='#92400e'; }
-        else if(c === 'Spor') { bg='#dcfce7'; tx='#166534'; }
-        else if(c === 'Siyaset') { bg='#e2e8f0'; tx='#1e293b'; }
-
         const d = document.createElement('div');
         d.className = 'word-card';
+        
+        // Kategori Renkleri
+        let cbg = '#f1f5f9', ctx = '#64748b';
+        if(item.kategori === 'Tıp') { cbg='#fee2e2'; ctx='#991b1b'; }
+        else if(item.kategori === 'Tarih') { cbg='#fff7ed'; ctx='#9a3412'; }
+        else if(item.kategori === 'Doğa') { cbg='#f0fdf4'; ctx='#166534'; }
+
         d.innerHTML = `
             <div class="card-header">
                 <span class="label">Tanım</span>
-                ${hasCat ? `<span class="cat-badge" style="background:${bg}; color:${tx};">${item.kategori}</span>` : ''}
+                <span class="cat-badge" style="background:${cbg}; color:${ctx}">${item.kategori || 'Genel'}</span>
             </div>
             <p>${item.anlam}</p>
             <div class="answer-section">
@@ -136,37 +113,23 @@ function render(data, title = "") {
                 <h2>${item.kelime}</h2>
             </div>
             <div class="card-footer">
-                <span id="msg-${item.id}" class="copy-success">Kopyalandı!</span>
-                <button class="action-btn" onclick="copyToClipboard('${item.kelime}', '${item.anlam}', ${item.id})">📋 Kopyala</button>
-                <button class="action-btn" onclick="shareWord('${item.kelime}', '${item.anlam}')">🔗 Paylaş</button>
+                <span id="msg-${item.id}" class="copy-msg">Kopyalandı!</span>
+                <button class="action-btn" onclick="copyMe('${item.kelime}', '${item.anlam}', ${item.id})">Kopyala</button>
+                <button class="action-btn" onclick="shareMe('${item.kelime}', '${item.anlam}')">Paylaş</button>
             </div>
         `;
         res.appendChild(d);
     });
 }
 
-// PAYLAŞMA VE KOPYALAMA FONKSİYONLARI
-function copyToClipboard(word, meaning, id) {
-    const text = `Soru: ${meaning}\nCevap: ${word}\n\nDetaylı sözlük: ${window.location.href}`;
-    navigator.clipboard.writeText(text).then(() => {
+function copyMe(w, m, id) {
+    const t = `${w}: ${m}\n${window.location.href}`;
+    navigator.clipboard.writeText(t).then(() => {
         const msg = document.getElementById(`msg-${id}`);
-        if(msg) {
-            msg.style.display = 'inline';
-            setTimeout(() => { msg.style.display = 'none'; }, 2000);
-        }
+        if(msg) { msg.style.display='block'; setTimeout(()=>msg.style.display='none', 2000); }
     });
 }
 
-function shareWord(word, meaning) {
-    if (navigator.share) {
-        navigator.share({
-            title: 'KelimeKelime Sözlük',
-            text: `${meaning} sorusunun cevabı: ${word}`,
-            url: window.location.href
-        }).catch(console.error);
-    } else {
-        alert("Paylaşım bu tarayıcıda desteklenmiyor. Kopyala butonunu kullanabilirsiniz.");
-    }
+function shareMe(w, m) {
+    if(navigator.share) navigator.share({title:'Sözlük', text:`${w}: ${m}`, url:window.location.href});
 }
-
-window.onload = setupSite;
