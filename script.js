@@ -2,13 +2,17 @@ const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
 const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
 const _supabase = supabase.createClient(SB_URL, SB_KEY);
 
-// Butonları ve arama dinleyicilerini başlatan ana fonksiyon
-function setupSite() {
+// Sayfa yüklendiğinde her şeyi başlat
+async function setupSite() {
+    initAlphabet();
+    await loadCategories(); // Kategorileri otomatik çek
+    initSearch();
+}
+
+// 1. Alfabe Butonlarını Başlat
+function initAlphabet() {
     const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
     const strip = document.getElementById('alphabetStrip');
-    const sInp = document.getElementById('searchInput');
-
-    // Alfabe butonlarını oluştur
     if(strip) {
         strip.innerHTML = ''; 
         alphabet.forEach(l => {
@@ -19,30 +23,81 @@ function setupSite() {
             strip.appendChild(b);
         });
     }
+}
 
-    // Arama kutusuna yazıldığında çalışacak tetikleyici
+// 2. Kategorileri Veritabanından Otomatik Çek ve Listele
+async function loadCategories() {
+    const catStrip = document.getElementById('categoryStrip');
+    if (!catStrip) return;
+
+    // Sadece kategorisi olan verileri çek
+    const { data, error } = await _supabase
+        .from('kelimeler')
+        .select('kategori')
+        .not('kategori', 'is', null);
+
+    if (error) return;
+
+    // Benzersiz kategorileri bul (Genel hariç)
+    const uniqueCats = [...new Set(data.map(item => item.kategori))]
+        .filter(c => c && c !== 'Genel' && c !== '');
+
+    catStrip.innerHTML = '';
+    uniqueCats.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.innerText = cat;
+        btn.className = 'cat-btn';
+        btn.onclick = () => filterByCategory(cat);
+        catStrip.appendChild(btn);
+    });
+}
+
+// 3. Arama Kutusu İşlemleri
+function initSearch() {
+    const sInp = document.getElementById('searchInput');
+    const sBtn = document.getElementById('searchBtn');
+
+    const handleSearch = () => {
+        const val = sInp.value.trim();
+        if (val.length >= 2) runSearch(val);
+    };
+
     if(sInp) {
         sInp.addEventListener('input', (e) => {
-            const val = e.target.value.trim();
-            if (val.length >= 2) runSearch(val);
-            else if (val.length === 0) {
-                const res = document.getElementById('results');
-                if(res) res.innerHTML = '';
+            if (e.target.value.trim().length === 0) {
+                document.getElementById('results').innerHTML = '';
+            } else if (e.target.value.trim().length >= 2) {
+                runSearch(e.target.value.trim());
             }
         });
     }
+    if(sBtn) sBtn.onclick = handleSearch;
 }
+
+// --- VERİ ÇEKME FONKSİYONLARI ---
 
 async function runSearch(q) {
     const { data } = await _supabase.from('kelimeler').select('*')
-        .or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(25);
+        .or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(30);
     render(data);
 }
 
 async function getByLetter(l) {
-    const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `${l}%`).order('kelime', { ascending: true });
+    const { data } = await _supabase.from('kelimeler').select('*')
+        .ilike('kelime', `${l}%`)
+        .order('kelime', { ascending: true });
     render(data);
 }
+
+async function filterByCategory(cat) {
+    const { data } = await _supabase.from('kelimeler')
+        .select('*')
+        .eq('kategori', cat)
+        .order('kelime', { ascending: true });
+    render(data);
+}
+
+// --- EKRANA BASMA (PARA MODÜLÜ DAHİL) ---
 
 function render(data) {
     const res = document.getElementById('results');
@@ -50,11 +105,19 @@ function render(data) {
     res.innerHTML = '';
 
     if (!data || data.length === 0) {
-        res.innerHTML = '<div style="text-align:center; padding:4rem; opacity:0.4; font-weight:600;">Sonuç bulunamadı...</div>';
+        res.innerHTML = '<div style="text-align:center; padding:4rem; opacity:0.4; font-weight:600;">Eşleşen bilgi bulunamadı...</div>';
         return;
     }
 
-    data.forEach(item => {
+    data.forEach((item, index) => {
+        // HER 4 KARTTA BİR REKLAM ALANI OLUŞTUR (Gelir İçin)
+        if (index > 0 && index % 4 === 0) {
+            const ad = document.createElement('div');
+            ad.className = 'ad-slot';
+            ad.innerHTML = 'Sponsorlu İçerik / Reklam Yerleşimi';
+            res.appendChild(ad);
+        }
+
         const hasCat = item.kategori && item.kategori !== 'Genel' && item.kategori !== '';
         let bg = '#f1f5f9', tx = '#475569';
         
@@ -82,5 +145,5 @@ function render(data) {
     });
 }
 
-// Sayfa tamamen yüklendiğinde butonları oluştur
+// Başlat
 window.onload = setupSite;
