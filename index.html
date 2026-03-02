@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KelimeKelime | Bulmaca Sözlüğü ve Terimler Rehberi</title>
-    <meta name="description" content="Tıp, Mitoloji, Tarih ve Denizcilik alanında binlerce kelimenin anlamı ve bulmaca cevapları.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>KelimeKelime | Bulmaca Sözlüğü</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #4f46e5;
@@ -39,13 +38,6 @@
         .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1.5px; cursor: pointer; }
         .logo span { color: var(--primary); }
 
-        .admin-link { 
-            text-decoration: none; background: var(--primary-light); color: var(--primary); 
-            padding: 0.6rem 1.2rem; border-radius: 12px; font-weight: 700; font-size: 0.85rem;
-            transition: 0.3s;
-        }
-        .admin-link:hover { background: var(--primary); color: white; }
-
         .container { max-width: 850px; margin: 0 auto; padding: 2rem 1.5rem; }
         
         .hero { text-align: center; margin-bottom: 2rem; }
@@ -54,65 +46,70 @@
         .search-wrapper { 
             display: flex; gap: 10px; background: var(--card); padding: 12px; 
             border-radius: 20px; box-shadow: 0 15px 35px -10px rgba(0,0,0,0.08); 
-            border: 1px solid var(--border); margin-top: 1.5rem; transition: 0.4s ease;
+            border: 1px solid var(--border); margin-top: 1.5rem;
         }
-        .search-wrapper:focus-within { border-color: var(--primary); transform: translateY(-2px); }
         .search-wrapper input { flex: 1; border: none; padding: 12px; font-size: 1.2rem; outline: none; background: transparent; }
         .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 2rem; border-radius: 14px; cursor: pointer; font-weight: 700; }
 
-        .cat-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.6rem; margin: 2rem 0 1rem 0; }
+        .cat-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.6rem; margin: 2rem 0; }
         .cat-btn { 
             background: var(--card); color: var(--text-muted); padding: 0.6rem 1.2rem; 
             border-radius: 12px; border: 1px solid var(--border); font-weight: 700; cursor: pointer;
             font-size: 0.8rem; transition: 0.2s;
         }
-        .cat-btn:hover, .cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); }
+        .cat-btn:hover, .cat-btn.active { background: var(--primary); color: white; }
 
-        .alphabet-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 3rem; min-height: 50px; }
+        .alphabet-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
         .letter-btn { 
             width: 38px; height: 38px; border: 1px solid var(--border); background: var(--card); 
-            color: var(--text-muted); border-radius: 10px; cursor: pointer; font-weight: 700; 
-            transition: all 0.2s;
+            border-radius: 10px; cursor: pointer; font-weight: 700; color: var(--text-muted);
         }
-        .letter-btn:hover { background: var(--primary); color: white; transform: translateY(-4px); }
+        .letter-btn:hover { background: var(--primary); color: white; }
 
         .word-card { 
-            background: var(--card); padding: 2.5rem; border-radius: 28px; border: 1px solid var(--border); 
-            margin-bottom: 1.8rem; transition: 0.4s; position: relative;
+            background: var(--card); padding: 2rem; border-radius: 24px; border: 1px solid var(--border); 
+            margin-bottom: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
         }
-        .word-card:hover { transform: translateY(-6px); box-shadow: 0 25px 40px -10px rgba(0,0,0,0.06); }
+        .card-header { display: flex; justify-content: space-between; margin-bottom: 1rem; }
+        .label { color: var(--text-muted); font-weight: 800; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 1px; }
+        .cat-badge { padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; }
 
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.2rem; }
-        .label { color: var(--text-muted); font-weight: 800; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1.5px; }
-        
-        .cat-badge { 
-            padding: 6px 14px; border-radius: 10px; font-size: 0.7rem; font-weight: 800; 
-            text-transform: uppercase; border: 1px solid rgba(0,0,0,0.04);
-        }
+        .word-card p { font-size: 1.15rem; line-height: 1.6; margin: 0.5rem 0 1.5rem 0; }
+        .answer-section { border-top: 1px solid var(--border); padding-top: 1rem; }
+        .answer-section h2 { margin: 0.5rem 0 0 0; font-size: 1.8rem; font-weight: 800; text-transform: uppercase; }
 
-        .word-card p { margin: 0.5rem 0 2rem 0; line-height: 1.7; color: var(--text-main); font-size: 1.2rem; }
-        
-        .answer-section { border-top: 1.5px solid var(--border); padding-top: 1.5rem; }
-        .answer-section h2 { margin: 0.6rem 0 0 0; color: var(--text-main); font-size: 2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .card-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+        .action-btn { background: var(--primary-light); color: var(--primary); border: none; padding: 6px 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.75rem; }
+        .copy-msg { font-size: 0.7rem; color: #10b981; display: none; margin-right: auto; font-weight: 600; }
 
-        /* Paylaş & Kopyala Alanı */
-        .card-footer { 
-            display: flex; justify-content: flex-end; align-items: center; gap: 10px; 
-            margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed var(--border);
-        }
-        .action-btn {
-            background: var(--primary-light); color: var(--primary); border: none;
-            padding: 8px 15px; border-radius: 10px; font-size: 0.75rem; font-weight: 700;
-            cursor: pointer; transition: 0.3s;
-        }
-        .action-btn:hover { background: var(--primary); color: white; }
-        .copy-success { color: #10b981; font-size: 0.7rem; font-weight: 600; margin-right: auto; display: none; }
+        .ad-slot { margin: 1.5rem 0; padding: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 15px; text-align: center; color: #94a3b8; font-size: 10px; font-weight: bold; }
 
-        .ad-slot {
-            margin: 2rem 0; padding: 1rem; background: #f8fafc;
-            border: 2px dashed #e2e8f0; border-radius: 20px;
-            text-align: center; color: #94a3b8; font-size: 0.75rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
+        footer { text-align: center; padding: 3rem; color: var(--text-muted); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo" onclick="location.reload()">Kelime<span>Kelime</span></div>
+        <a href="admin.html" style="text-decoration:none; font-size:0.8rem; font-weight:700; color:var(--primary)">Yönetim</a>
+    </header>
 
-        footer { text-align: center; padding: 5rem
+    <main class="container">
+        <section class="hero">
+            <h1>Sözlük</h1>
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="Ara...">
+                <button id="searchBtn">Ara</button>
+            </div>
+        </section>
+
+        <div id="categoryStrip" class="cat-strip"></div>
+        <div id="alphabetStrip" class="alphabet-strip"></div>
+        <div id="results"></div>
+    </main>
+
+    <footer>&copy; 2024 KelimeKelime</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script> 
+</body>
+</html>
