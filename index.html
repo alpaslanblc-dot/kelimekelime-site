@@ -57,19 +57,19 @@
         }
         .search-wrapper:focus-within { border-color: var(--primary); transform: translateY(-2px); }
         .search-wrapper input { flex: 1; border: none; padding: 12px; font-size: 1.2rem; outline: none; background: transparent; }
-        .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 2rem; border-radius: 14px; cursor: pointer; font-weight: 700; transition: 0.2s; }
+        .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 2rem; border-radius: 14px; cursor: pointer; font-weight: 700; }
 
-        .alphabet-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.7rem; margin: 3.5rem 0; }
+        .alphabet-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.7rem; margin: 3.5rem 0; min-height: 50px; }
         .letter-btn { 
             width: 42px; height: 42px; border: 1px solid var(--border); background: var(--card); 
             color: var(--text-muted); border-radius: 12px; cursor: pointer; font-weight: 700; 
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            transition: all 0.2s;
         }
-        .letter-btn:hover { background: var(--primary); color: white; transform: translateY(-4px); box-shadow: 0 12px 20px rgba(79, 70, 229, 0.25); border-color: var(--primary); }
+        .letter-btn:hover { background: var(--primary); color: white; transform: translateY(-4px); }
 
         .word-card { 
             background: var(--card); padding: 2.5rem; border-radius: 28px; border: 1px solid var(--border); 
-            margin-bottom: 1.8rem; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative;
+            margin-bottom: 1.8rem; transition: 0.4s; position: relative;
         }
         .word-card:hover { transform: translateY(-6px); box-shadow: 0 25px 40px -10px rgba(0,0,0,0.06); }
 
@@ -81,12 +81,12 @@
             text-transform: uppercase; border: 1px solid rgba(0,0,0,0.04);
         }
 
-        .word-card p { margin: 0.5rem 0 2rem 0; line-height: 1.7; color: var(--text-main); font-size: 1.2rem; font-weight: 400; }
+        .word-card p { margin: 0.5rem 0 2rem 0; line-height: 1.7; color: var(--text-main); font-size: 1.2rem; }
         
         .answer-section { border-top: 1.5px solid var(--border); padding-top: 1.5rem; }
-        .answer-section h2 { margin: 0.6rem 0 0 0; color: var(--text-main); font-size: 2rem; letter-spacing: 1px; font-weight: 800; text-transform: uppercase; }
+        .answer-section h2 { margin: 0.6rem 0 0 0; color: var(--text-main); font-size: 2rem; font-weight: 800; text-transform: uppercase; }
 
-        footer { text-align: center; padding: 5rem; color: var(--text-muted); font-size: 0.9rem; font-weight: 600; opacity: 0.6; }
+        footer { text-align: center; padding: 5rem; color: var(--text-muted); font-size: 0.9rem; opacity: 0.6; }
     </style>
 </head>
 <body>
@@ -108,59 +108,8 @@
         <div id="results"></div>
     </main>
 
-    <footer>&copy; 2024 KelimeKelime Digital • Tüm Hakları Saklıdır</footer>
+    <footer>&copy; 2024 KelimeKelime Digital</footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
-        const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
-        const _supabase = supabase.createClient(SB_URL, SB_KEY);
-
-        function init() {
-            const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
-            const strip = document.getElementById('alphabetStrip');
-            const sInp = document.getElementById('searchInput');
-
-            if(strip) {
-                strip.innerHTML = ''; 
-                alphabet.forEach(l => {
-                    const b = document.createElement('button');
-                    b.innerText = l; b.className = 'letter-btn';
-                    b.onclick = () => getByLetter(l);
-                    strip.appendChild(b);
-                });
-            }
-
-            if(sInp) {
-                sInp.addEventListener('input', (e) => {
-                    const val = e.target.value.trim();
-                    if (val.length >= 2) runSearch(val);
-                    else if (val.length === 0) document.getElementById('results').innerHTML = '';
-                });
-            }
-        }
-
-        async function runSearch(q) {
-            const { data } = await _supabase.from('kelimeler').select('*')
-                .or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(25);
-            render(data);
-        }
-
-        async function getByLetter(l) {
-            const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `${l}%`).order('kelime', { ascending: true });
-            render(data);
-        }
-
-        function render(data) {
-            const res = document.getElementById('results');
-            if(!res) return;
-            res.innerHTML = '';
-
-            if (!data || data.length === 0) {
-                res.innerHTML = '<div style="text-align:center; padding:4rem; opacity:0.4; font-weight:600;">Sonuç bulunamadı...</div>';
-                return;
-            }
-
-            data.forEach(item => {
-                const hasCat = item.kategori && item.kategori !== 'Genel' && item.kategori !== '';
-                let bg = '#f1f5f9', tx = '#4
+    <script src="script.js"></script> </body>
+</html>
