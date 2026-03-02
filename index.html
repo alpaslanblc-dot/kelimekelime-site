@@ -22,105 +22,71 @@
             background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px); 
             background-size: 20px 20px;
             color: var(--text-main); 
-            margin: 0; 
-            padding: 0; 
+            margin: 0; padding: 0; 
             min-height: 100vh;
         }
 
         .navbar { 
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border); 
-            padding: 0.8rem 5%; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            position: sticky; 
-            top: 0; 
-            z-index: 100;
+            padding: 1rem 5%; 
+            display: flex; justify-content: space-between; align-items: center; 
+            position: sticky; top: 0; z-index: 100;
         }
 
-        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; }
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1.5px; }
         .logo span { color: var(--primary); }
 
         .admin-link { 
-            text-decoration: none; 
-            background: var(--primary-light); 
-            color: var(--primary); 
-            padding: 0.6rem 1.2rem; 
-            border-radius: 10px; 
-            font-weight: 600; 
-            font-size: 0.85rem;
-            transition: 0.2s;
+            text-decoration: none; background: var(--primary-light); color: var(--primary); 
+            padding: 0.6rem 1.2rem; border-radius: 12px; font-weight: 700; font-size: 0.85rem;
+            transition: 0.3s;
         }
         .admin-link:hover { background: var(--primary); color: white; }
 
-        .container { max-width: 800px; margin: 0 auto; padding: 4rem 1.5rem; }
+        .container { max-width: 850px; margin: 0 auto; padding: 4rem 1.5rem; }
         
         .hero { text-align: center; margin-bottom: 4rem; }
-        .hero h1 { font-size: 3rem; margin-bottom: 0.5rem; letter-spacing: -2px; font-weight: 800; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 0.5rem; letter-spacing: -3px; font-weight: 800; }
         
         .search-wrapper { 
-            display: flex; 
-            gap: 10px; 
-            background: var(--card); 
-            padding: 10px; 
-            border-radius: 18px; 
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); 
-            border: 1px solid var(--border); 
-            margin-top: 2.5rem;
-            transition: 0.3s;
+            display: flex; gap: 10px; background: var(--card); padding: 12px; 
+            border-radius: 20px; box-shadow: 0 15px 35px -10px rgba(0,0,0,0.08); 
+            border: 1px solid var(--border); margin-top: 2.5rem; transition: 0.4s ease;
         }
-        .search-wrapper:focus-within { border-color: var(--primary); box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.1); }
-        .search-wrapper input { flex: 1; border: none; padding: 12px; font-size: 1.1rem; outline: none; background: transparent; }
-        .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 2rem; border-radius: 12px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-        .search-wrapper button:hover { opacity: 0.9; transform: scale(0.98); }
+        .search-wrapper:focus-within { border-color: var(--primary); transform: translateY(-2px); }
+        .search-wrapper input { flex: 1; border: none; padding: 12px; font-size: 1.2rem; outline: none; background: transparent; }
+        .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 2rem; border-radius: 14px; cursor: pointer; font-weight: 700; transition: 0.2s; }
 
-        .alphabet-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.6rem; margin: 3rem 0; }
+        .alphabet-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.7rem; margin: 3.5rem 0; }
         .letter-btn { 
-            width: 40px; 
-            height: 40px; 
-            border: none; 
-            background: var(--card); 
-            color: var(--text-muted);
-            border-radius: 12px; 
-            cursor: pointer; 
-            font-weight: 700; 
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            border: 1px solid var(--border);
+            width: 42px; height: 42px; border: 1px solid var(--border); background: var(--card); 
+            color: var(--text-muted); border-radius: 12px; cursor: pointer; font-weight: 700; 
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
         }
-        .letter-btn:hover { background: var(--primary); color: white; transform: translateY(-3px); box-shadow: 0 8px 15px rgba(79, 70, 229, 0.2); }
+        .letter-btn:hover { background: var(--primary); color: white; transform: translateY(-4px); box-shadow: 0 12px 20px rgba(79, 70, 229, 0.25); border-color: var(--primary); }
 
         .word-card { 
-            background: var(--card); 
-            padding: 2rem; 
-            border-radius: 24px; 
-            border: 1px solid var(--border); 
-            margin-bottom: 1.5rem; 
-            transition: all 0.3s ease;
-            position: relative;
+            background: var(--card); padding: 2.5rem; border-radius: 28px; border: 1px solid var(--border); 
+            margin-bottom: 1.8rem; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative;
         }
-        .word-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); }
+        .word-card:hover { transform: translateY(-6px); box-shadow: 0 25px 40px -10px rgba(0,0,0,0.06); }
 
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
-        .label { color: var(--text-muted); font-weight: 800; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 1px; }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.2rem; }
+        .label { color: var(--text-muted); font-weight: 800; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1.5px; }
         
         .cat-badge { 
-            padding: 4px 12px; 
-            border-radius: 8px; 
-            font-size: 0.65rem; 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            border: 1px solid rgba(0,0,0,0.03);
+            padding: 6px 14px; border-radius: 10px; font-size: 0.7rem; font-weight: 800; 
+            text-transform: uppercase; border: 1px solid rgba(0,0,0,0.04);
         }
 
-        .word-card h2 { margin: 0.5rem 0 0 0; color: var(--text-main); font-size: 1.8rem; letter-spacing: -0.5px; font-weight: 800; }
-        .word-card p { margin: 0.5rem 0 1.5rem 0; line-height: 1.6; color: var(--text-main); font-size: 1.1rem; }
+        .word-card p { margin: 0.5rem 0 2rem 0; line-height: 1.7; color: var(--text-main); font-size: 1.2rem; font-weight: 400; }
         
-        .answer-section { border-top: 1px solid var(--border); padding-top: 1.2rem; }
+        .answer-section { border-top: 1.5px solid var(--border); padding-top: 1.5rem; }
+        .answer-section h2 { margin: 0.6rem 0 0 0; color: var(--text-main); font-size: 2rem; letter-spacing: 1px; font-weight: 800; text-transform: uppercase; }
 
-        footer { text-align: center; padding: 4rem; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; }
+        footer { text-align: center; padding: 5rem; color: var(--text-muted); font-size: 0.9rem; font-weight: 600; opacity: 0.6; }
     </style>
 </head>
 <body>
@@ -133,7 +99,7 @@
         <section class="hero">
             <h1>Sözlükte Keşfe Çık</h1>
             <div class="search-wrapper">
-                <input type="text" id="searchInput" placeholder="Kelime veya terim ara...">
+                <input type="text" id="searchInput" placeholder="Bir kelime veya tanım yazın...">
                 <button id="searchBtn">Ara</button>
             </div>
         </section>
@@ -142,21 +108,21 @@
         <div id="results"></div>
     </main>
 
-    <footer>&copy; 2024 KelimeKelime Digital</footer>
+    <footer>&copy; 2024 KelimeKelime Digital • Tüm Hakları Saklıdır</footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // SCRIPT.JS İÇERİĞİ (Buraya Gömüldü)
         const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
         const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
         const _supabase = supabase.createClient(SB_URL, SB_KEY);
 
-        document.addEventListener('DOMContentLoaded', () => {
+        function init() {
             const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
             const strip = document.getElementById('alphabetStrip');
             const sInp = document.getElementById('searchInput');
 
             if(strip) {
+                strip.innerHTML = ''; 
                 alphabet.forEach(l => {
                     const b = document.createElement('button');
                     b.innerText = l; b.className = 'letter-btn';
@@ -172,16 +138,16 @@
                     else if (val.length === 0) document.getElementById('results').innerHTML = '';
                 });
             }
-        });
+        }
 
         async function runSearch(q) {
             const { data } = await _supabase.from('kelimeler').select('*')
-                .or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(20);
+                .or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(25);
             render(data);
         }
 
         async function getByLetter(l) {
-            const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `${l}%`);
+            const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `${l}%`).order('kelime', { ascending: true });
             render(data);
         }
 
@@ -191,18 +157,10 @@
             res.innerHTML = '';
 
             if (!data || data.length === 0) {
-                res.innerHTML = '<p style="text-align:center; padding:2rem; opacity:0.5;">Eşleşme bulunamadı...</p>';
+                res.innerHTML = '<div style="text-align:center; padding:4rem; opacity:0.4; font-weight:600;">Sonuç bulunamadı...</div>';
                 return;
             }
 
             data.forEach(item => {
-                const hasCat = item.kategori && item.kategori !== 'Genel';
-                let bg = '#f1f5f9', tx = '#475569';
-                
-                if(hasCat) {
-                    if(item.kategori.includes('Tıp')) { bg='#fee2e2'; tx='#991b1b'; }
-                    else if(item.kategori.includes('Mitoloji')) { bg='#fef3c7'; tx='#92400e'; }
-                    else if(item.kategori.includes('Denizcilik')) { bg='#e0f2fe'; tx='#0369a1'; }
-                }
-
-                const d = document.createElement('div');
+                const hasCat = item.kategori && item.kategori !== 'Genel' && item.kategori !== '';
+                let bg = '#f1f5f9', tx = '#4
