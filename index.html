@@ -60,7 +60,6 @@
         .search-wrapper input { flex: 1; border: none; padding: 12px; font-size: 1.2rem; outline: none; background: transparent; }
         .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 2rem; border-radius: 14px; cursor: pointer; font-weight: 700; }
 
-        /* Kategori Butonları CSS */
         .cat-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.6rem; margin: 2rem 0 1rem 0; }
         .cat-btn { 
             background: var(--card); color: var(--text-muted); padding: 0.6rem 1.2rem; 
@@ -76,14 +75,6 @@
             transition: all 0.2s;
         }
         .letter-btn:hover { background: var(--primary); color: white; transform: translateY(-4px); }
-
-        /* Reklam Alanı Tasarımı */
-        .ad-slot {
-            margin: 2rem 0; padding: 1rem; background: #f8fafc;
-            border: 2px dashed #e2e8f0; border-radius: 20px;
-            text-align: center; color: #94a3b8; font-size: 0.75rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
 
         .word-card { 
             background: var(--card); padding: 2.5rem; border-radius: 28px; border: 1px solid var(--border); 
@@ -104,41 +95,24 @@
         .answer-section { border-top: 1.5px solid var(--border); padding-top: 1.5rem; }
         .answer-section h2 { margin: 0.6rem 0 0 0; color: var(--text-main); font-size: 2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
 
-        footer { text-align: center; padding: 5rem; color: var(--text-muted); font-size: 0.9rem; opacity: 0.6; }
-        
-        @media (max-width: 600px) {
-            .hero h1 { font-size: 2.2rem; }
-            .word-card { padding: 1.5rem; }
+        /* Paylaş & Kopyala Alanı */
+        .card-footer { 
+            display: flex; justify-content: flex-end; align-items: center; gap: 10px; 
+            margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed var(--border);
         }
-    </style>
-</head>
-<body>
-    <header class="navbar">
-        <div class="logo" onclick="location.reload()">Kelime<span>Kelime</span></div>
-        <a href="admin.html" class="admin-link">Yönetim Paneli</a>
-    </header>
+        .action-btn {
+            background: var(--primary-light); color: var(--primary); border: none;
+            padding: 8px 15px; border-radius: 10px; font-size: 0.75rem; font-weight: 700;
+            cursor: pointer; transition: 0.3s;
+        }
+        .action-btn:hover { background: var(--primary); color: white; }
+        .copy-success { color: #10b981; font-size: 0.7rem; font-weight: 600; margin-right: auto; display: none; }
 
-    <main class="container">
-        <section class="hero">
-            <h1>Sözlükte Keşfe Çık</h1>
-            <div class="search-wrapper">
-                <input type="text" id="searchInput" placeholder="Bir kelime veya tanım yazın...">
-                <button id="searchBtn">Ara</button>
-            </div>
-        </section>
+        .ad-slot {
+            margin: 2rem 0; padding: 1rem; background: #f8fafc;
+            border: 2px dashed #e2e8f0; border-radius: 20px;
+            text-align: center; color: #94a3b8; font-size: 0.75rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
 
-        <div id="categoryStrip" class="cat-strip"></div>
-        
-        <div id="alphabetStrip" class="alphabet-strip"></div>
-
-        <div id="results"></div>
-
-        <div class="ad-slot">Reklam Alanı / Sponsorlu Bağlantılar</div>
-    </main>
-
-    <footer>&copy; 2024 KelimeKelime Digital • Bilgi Paylaştıkça Çoğalır</footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js"></script> 
-</body>
-</html>
+        footer { text-align: center; padding: 5rem
