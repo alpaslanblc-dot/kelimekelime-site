@@ -4,58 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KelimeKelime | Bulmaca Sözlüğü</title>
-    
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L0KTR31EQE"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-L0KTR31EQE');
-    </script>
-
     <style>
-        :root { --primary: #4f46e5; --bg: #fdfdfd; --text: #1e293b; --border: #f1f5f9; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); margin:0; padding:0; color: var(--text); }
-        
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background: white; border-bottom: 1px solid var(--border); position: sticky; top:0; z-index: 1000; }
-        .logo { font-weight: 800; color: var(--primary); font-size: 1.4rem; cursor: pointer; text-decoration: none; }
-        
-        .side-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; transition: 0.3s; z-index: 2001; padding: 25px; box-shadow: -10px 0 20px rgba(0,0,0,0.05); }
-        .side-menu.active { right: 0; }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 2000; backdrop-filter: blur(2px); }
-        .overlay.active { display: block; }
-        
+        :root { --primary: #4f46e5; --bg: #fdfdfd; --border: #f1f5f9; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 0; }
+        .navbar { display: flex; justify-content: space-between; padding: 1rem 5%; background: white; border-bottom: 1px solid var(--border); }
         .container { max-width: 800px; margin: auto; padding: 20px; }
-        .search-wrapper { display: flex; gap: 10px; margin: 20px 0; background: white; padding: 10px; border-radius: 15px; border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .search-wrapper input { flex: 1; border: none; padding: 10px; font-size: 1rem; outline: none; }
-        .search-wrapper button { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
-        
-        .word-card { background: white; padding: 25px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 20px; }
-        .word-card small { text-transform: uppercase; letter-spacing: 1px; font-weight: 800; color: var(--primary); font-size: 0.7rem; }
-        .word-card h2 { margin: 10px 0 0 0; font-size: 1.8rem; letter-spacing: 1px; }
-        
-        .cat-item { padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 600; margin-bottom: 5px; }
-        .cat-item:hover { background: #f1f5f9; color: var(--primary); }
+        .word-card { background: white; padding: 20px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .error-box { background: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 10px; margin: 20px 0; border: 1px solid #f87171; }
+        .search-wrapper { display: flex; gap: 10px; margin-bottom: 20px; }
+        input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
+        button { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
-    
-    <nav id="sideMenu" class="side-menu">
-        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <span style="font-weight:800; opacity:0.5">MENÜ</span>
-            <button onclick="toggleMenu()" style="border:none; background:none; font-size:1.5rem; cursor:pointer;">✕</button>
-        </div>
-        <div class="cat-item" onclick="location.reload()">🏠 Ana Sayfa</div>
-        <hr style="border:0; border-top:1px solid #eee; margin: 15px 0;">
-        <div style="font-size:0.7rem; font-weight:800; color:#999; margin-bottom:10px;">KATEGORİLER</div>
-        <div id="sideCategoryList"></div>
-    </nav>
-
     <header class="navbar">
-        <div class="logo" onclick="location.reload()">Kelime<span>Kelime</span></div>
-        <button onclick="toggleMenu()" style="background:var(--primary); color:white; border:none; padding:10px 20px; border-radius:12px; cursor:pointer; font-weight:800;">MENÜ</button>
+        <strong style="color:var(--primary); font-size: 1.2rem;">KelimeKelime</strong>
+        <span>Bulmaca Asistanı</span>
     </header>
 
     <main class="container">
@@ -63,93 +28,79 @@
             <input type="text" id="searchInput" placeholder="Kelime veya anlam ara...">
             <button id="searchBtn">Ara</button>
         </div>
-
-        <div id="results">
-            <p style="text-align:center; opacity:0.5; padding:50px;">Yükleniyor...</p>
-        </div>
+        <div id="status-msg"></div>
+        <div id="results">Veriler yükleniyor...</div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <script>
-        // 1. Fonksiyonu en tepeye, global kapsama alıyoruz
-        window.toggleMenu = function() {
-            const menu = document.getElementById('sideMenu');
-            const overlay = document.getElementById('overlay');
-            menu.classList.toggle('active');
-            overlay.classList.toggle('active');
-        };
-
+        // Bağlantı Bilgileri
         const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
         const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
-        const _supabase = supabase.createClient(SB_URL, SB_KEY);
+        
+        let _supabase;
+        try {
+            _supabase = supabase.createClient(SB_URL, SB_KEY);
+        } catch (e) {
+            document.getElementById('results').innerHTML = `<div class="error-box">Supabase Başlatılamadı: ${e.message}</div>`;
+        }
 
-        // 2. Sayfa yüklendiğinde çalışacak ana motor
-        window.onload = async () => {
-            initCategories();
+        window.onload = () => {
             showVitrin();
-            
-            // Arama Butonu Tıklama
-            document.getElementById('searchBtn').onclick = () => {
-                const q = document.getElementById('searchInput').value.trim();
-                if(q) runSearch(q);
-            };
-
-            // Enter ile Arama
-            document.getElementById('searchInput').onkeypress = (e) => {
-                if(e.key === 'Enter') runSearch(e.target.value.trim());
-            };
+            document.getElementById('searchBtn').onclick = () => runSearch();
         };
 
-        function initCategories() {
-            const cats = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik"];
-            const list = document.getElementById('sideCategoryList');
-            list.innerHTML = '';
-            cats.forEach(c => {
-                const div = document.createElement('div');
-                div.className = 'cat-item';
-                div.innerText = "• " + c;
-                div.onclick = () => { toggleMenu(); filterByCategory(c); };
-                list.appendChild(div);
-            });
-        }
-
         async function showVitrin() {
-            const { data, error } = await _supabase.from('kelimeler').select('*').limit(10);
-            if(error) console.error("Hata:", error);
-            render(data, "📅 Bugünün Öne Çıkanları");
+            const resDiv = document.getElementById('results');
+            try {
+                const { data, error } = await _supabase.from('kelimeler').select('*').limit(10);
+                
+                if (error) {
+                    resDiv.innerHTML = `<div class="error-box">Veri Çekme Hatası: ${error.message}<br><small>Tablo ismini (kelimeler) kontrol edin.</small></div>`;
+                    return;
+                }
+                render(data);
+            } catch (e) {
+                resDiv.innerHTML = `<div class="error-box">Sistem Hatası: ${e.message}</div>`;
+            }
         }
 
-        async function runSearch(q) {
-            const { data } = await _supabase.from('kelimeler').select('*').or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(30);
-            render(data, `🔍 "${q}" için sonuçlar`);
-        }
-
-        async function filterByCategory(c) {
-            const { data } = await _supabase.from('kelimeler').select('*').eq('kategori', c).order('kelime');
-            render(data, `🏷️ ${c} Kategorisi`);
-        }
-
-        function render(data, title = "") {
-            const res = document.getElementById('results');
-            if(!res) return;
-
-            res.innerHTML = title ? `<h3 style="margin-bottom:20px; opacity:0.7">${title}</h3>` : '';
+        async function runSearch() {
+            const q = document.getElementById('searchInput').value;
+            const resDiv = document.getElementById('results');
+            resDiv.innerHTML = "Aranıyor...";
             
-            if(!data || data.length === 0) {
-                res.innerHTML += '<div style="text-align:center; padding:50px; opacity:0.5;">Sonuç bulunamadı.</div>';
+            try {
+                const { data, error } = await _supabase.from('kelimeler').select('*').or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(20);
+                if (error) throw error;
+                render(data);
+            } catch (e) {
+                resDiv.innerHTML = `<div class="error-box">Arama Hatası: ${e.message}</div>`;
+            }
+        }
+
+        function render(data) {
+            const resDiv = document.getElementById('results');
+            if (!data || data.length === 0) {
+                resDiv.innerHTML = "Sonuç bulunamadı.";
                 return;
             }
 
+            resDiv.innerHTML = "";
             data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'word-card';
-                card.innerHTML = `
-                    <small>${item.kategori || 'Genel'}</small>
-                    <p style="line-height:1.6; margin:10px 0; font-size:1.1rem;">${item.anlam}</p>
-                    <h2 style="color:var(--text)">${item.kelime}</h2>
+                const div = document.createElement('div');
+                div.className = 'word-card';
+                // Sütun isimlerini güvenli bir şekilde kontrol ediyoruz
+                const kelime = item.kelime || "Bilinmiyor";
+                const anlam = item.anlam || "Tanım bulunamadı";
+                const kategori = item.kategori || "Genel";
+                
+                div.innerHTML = `
+                    <small style="color:var(--primary); font-weight:bold;">${kategori}</small>
+                    <p style="margin: 10px 0;">${anlam}</p>
+                    <h2 style="margin:0; font-size:1.4rem;">${kelime}</h2>
                 `;
-                res.appendChild(card);
+                resDiv.appendChild(div);
             });
         }
     </script>
