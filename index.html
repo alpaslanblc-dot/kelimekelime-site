@@ -5,169 +5,153 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KelimeKelime | Bulmaca Sözlüğü</title>
     
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2174139710234620" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        :root { --primary: #4f46e5; --primary-light: #eef2ff; --bg: #fdfdfd; --text: #1e293b; --border: #f1f5f9; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #eef2ff;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --border: #e2e8f0;
+        }
 
-        /* NAVBAR */
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 5%; background: white; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
-        .logo-main { font-size: 1.4rem; font-weight: 800; cursor: pointer; }
-        .logo-main span { color: var(--primary); }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-        /* ALFABETİK ŞERİT - GARANTİLENMİŞ YAPI */
-        .alphabet-container { background: white; border-bottom: 1px solid var(--border); padding: 10px 0; position: sticky; top: 60px; z-index: 999; }
-        .alphabet-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; max-width: 900px; margin: 0 auto; padding: 0 10px; }
-        .letter-btn { width: 30px; height: 30px; border: 1px solid var(--border); background: white; border-radius: 6px; cursor: pointer; font-weight: 800; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .letter-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        /* HEADER & NAVBAR */
+        .header { background: white; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 5%; height: 60px; }
+        .logo { font-size: 1.4rem; font-weight: 800; cursor: pointer; color: var(--text); }
+        .logo span { color: var(--primary); }
+        .menu-btn { background: var(--primary-light); color: var(--primary); border: none; padding: 8px 16px; border-radius: 10px; cursor: pointer; font-weight: 800; }
 
-        /* YAN MENÜ */
-        .side-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 2001; padding: 1.5rem; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.3s; display: flex; flex-direction: column; }
-        .side-menu.active { right: 0; }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 2000; backdrop-filter: blur(4px); }
-        .overlay.active { display: block; }
+        /* ALFABE ŞERİDİ */
+        .alphabet-section { background: white; border-bottom: 1px solid var(--border); padding: 8px 0; overflow-x: auto; white-space: nowrap; }
+        .alphabet-strip { display: flex; justify-content: center; gap: 4px; padding: 0 10px; }
+        .letter-btn { min-width: 32px; height: 32px; border: 1px solid var(--border); background: white; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; }
+        .letter-btn:hover { background: var(--primary); color: white; }
 
-        .container { max-width: 850px; margin: 0 auto; padding: 20px; }
+        /* ANA İÇERİK */
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
         
-        /* ARAMA ALANI */
-        .search-section { text-align: center; margin: 20px 0; }
-        .search-wrapper { display: flex; gap: 8px; background: white; padding: 8px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .search-wrapper input { flex: 1; border: none; padding: 12px; outline: none; font-size: 1rem; }
-        .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 12px; cursor: pointer; font-weight: 700; }
+        .search-area { margin: 20px 0; }
+        .search-box { display: flex; gap: 8px; background: white; padding: 8px; border-radius: 15px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .search-box input { flex: 1; border: none; padding: 10px; outline: none; font-size: 1rem; }
+        .search-box button { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 10px; cursor: pointer; font-weight: 700; }
 
         /* KARTLAR */
-        .word-card { background: white; padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .word-card h2 { color: var(--primary); font-size: 1.6rem; font-weight: 800; margin-top: 5px; }
-        
-        /* FOOTER & MODAL */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: white; padding: 2rem; border-radius: 24px; max-width: 500px; width: 100%; }
-        .cat-item { padding: 12px; background: #f8fafc; border-radius: 10px; margin-bottom: 8px; cursor: pointer; font-weight: 600; }
+        .results-title { margin-bottom: 15px; font-size: 0.9rem; color: #64748b; font-weight: 600; text-transform: uppercase; }
+        .word-card { background: white; padding: 20px; border-radius: 18px; border: 1px solid var(--border); margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .word-card small { color: var(--primary); font-weight: 800; font-size: 0.75rem; background: var(--primary-light); padding: 4px 8px; border-radius: 6px; }
+        .word-card h2 { margin: 10px 0; font-size: 1.6rem; color: var(--text); letter-spacing: 0.5px; }
+        .word-card p { color: #475569; line-height: 1.6; }
+
+        /* YAN MENÜ */
+        .side-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 2000; padding: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1); transition: 0.3s; display: flex; flex-direction: column; }
+        .side-menu.open { right: 0; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; z-index: 1999; backdrop-filter: blur(2px); }
+        .overlay.open { display: block; }
+
+        .side-link { padding: 12px; background: #f1f5f9; border-radius: 10px; margin-bottom: 8px; cursor: pointer; font-weight: 600; list-style: none; }
+        .side-link:hover { background: var(--primary-light); color: var(--primary); }
+
+        /* FOOTER / MODAL */
+        .suggest-banner { background: var(--primary); color: white; padding: 30px; border-radius: 20px; text-align: center; margin-top: 40px; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 3000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; max-width: 500px; width: 100%; position: relative; }
     </style>
 </head>
 <body>
 
-    <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
-    
-    <nav id="sideMenu" class="side-menu">
-        <div style="display:flex; justify-content: space-between; margin-bottom: 2rem;">
-            <b style="color:var(--primary)">MENÜ</b>
-            <button onclick="toggleMenu()" style="border:none; background:none; font-size:1.5rem; cursor:pointer;">✕</button>
-        </div>
-        <div id="sideCategoryList" style="flex:1; overflow-y:auto;"></div>
-        <div style="border-top: 1px solid #eee; padding-top:15px;">
-            <div onclick="openModal('about')" style="cursor:pointer; margin-bottom:10px;">📖 Hakkımızda</div>
-            <div onclick="openModal('contact')" style="cursor:pointer; margin-bottom:10px;">✉️ İletişim</div>
-            <div onclick="openModal('privacy')" style="cursor:pointer;">🔒 Gizlilik</div>
-        </div>
-    </nav>
+<div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 
-    <header class="navbar">
-        <div class="logo-main" onclick="location.reload()">Kelime<span>Kelime</span></div>
-        <button onclick="toggleMenu()" style="background:var(--primary-light); color:var(--primary); border:none; padding:8px 16px; border-radius:10px; cursor:pointer; font-weight:800;">MENÜ ☰</button>
-    </header>
-
-    <div class="alphabet-container">
-        <div id="alphabetStrip" class="alphabet-strip"></div>
+<nav id="sideMenu" class="side-menu">
+    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <span style="font-weight:800;">MENÜ</span>
+        <button onclick="toggleMenu()" style="border:none; background:none; font-size:1.5rem; cursor:pointer;">✕</button>
     </div>
+    <div id="categoryContainer" style="flex:1; overflow-y:auto;"></div>
+    <div style="border-top:1px solid #eee; padding-top:20px;">
+        <div class="side-link" onclick="openModal('about')">📖 Hakkımızda</div>
+        <div class="side-link" onclick="openModal('contact')">✉️ İletişim</div>
+        <div class="side-link" onclick="openModal('privacy')">🔒 Gizlilik</div>
+    </div>
+</nav>
 
-    <main class="container">
-        <div class="search-section">
-            <div class="search-wrapper">
-                <input type="text" id="searchInput" placeholder="Kelime veya anlam ara...">
-                <button id="searchBtn">Ara</button>
-            </div>
-        </div>
+<header class="header">
+    <div class="navbar">
+        <div class="logo" onclick="location.reload()">Kelime<span>Kelime</span></div>
+        <button class="menu-btn" onclick="toggleMenu()">MENÜ ☰</button>
+    </div>
+</header>
 
-        <div id="results"></div>
+<div class="alphabet-section">
+    <div id="alphabetStrip" class="alphabet-strip"></div>
+</div>
 
-        <div style="background:var(--primary); color:white; padding:2rem; border-radius:24px; text-align:center; margin:2rem 0;">
-            <h3>Kelime Bulamadın mı?</h3>
-            <button onclick="openModal('suggest')" style="margin-top:15px; padding:10px 20px; border-radius:10px; border:none; font-weight:800; cursor:pointer;">Kelime Öner</button>
-        </div>
-    </main>
-
-    <div id="infoModal" class="modal" onclick="closeModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h2 id="modalTitle"></h2>
-            <div id="modalBody" style="margin:15px 0;"></div>
-            <button onclick="closeModal()" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:10px; cursor:pointer;">Kapat</button>
+<main class="container">
+    <div class="search-area">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Bulmaca sorusu veya kelime yaz...">
+            <button id="searchBtn">Ara</button>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
-        const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
-        const _supabase = supabase.createClient(SB_URL, SB_KEY);
+    <div id="resultsTitle" class="results-title"></div>
+    <div id="results"></div>
 
-        window.toggleMenu = () => {
-            document.getElementById('sideMenu').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
-        };
+    <div class="suggest-banner">
+        <h3>Aradığın kelime yok mu?</h3>
+        <p style="margin-bottom:15px; opacity:0.8;">Bize öner, hemen ekleyelim.</p>
+        <button onclick="openModal('suggest')" style="padding:10px 20px; border-radius:10px; border:none; font-weight:800; cursor:pointer; color:var(--primary);">Kelime Öner</button>
+    </div>
+</main>
 
-        window.onload = () => {
-            initAlphabet();
-            initCategories();
-            showVitrin();
-            document.getElementById('searchBtn').onclick = () => runSearch(document.getElementById('searchInput').value);
-        };
+<div id="infoModal" class="modal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <h2 id="modalTitle" style="margin-bottom:15px;"></h2>
+        <div id="modalBody"></div>
+        <button onclick="closeModal()" style="width:100%; padding:12px; margin-top:20px; border:none; background:var(--primary); color:white; border-radius:10px; cursor:pointer; font-weight:700;">Kapat</button>
+    </div>
+</div>
 
-        function initAlphabet() {
-            const letters = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
-            const strip = document.getElementById('alphabetStrip');
-            strip.innerHTML = ""; 
-            letters.forEach(l => {
-                const b = document.createElement('button');
-                b.className = 'letter-btn';
-                b.innerText = l;
-                b.onclick = () => getByLetter(l);
-                strip.appendChild(b);
-            });
-        }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
+    const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
+    const _supabase = supabase.createClient(SB_URL, SB_KEY);
 
-        function initCategories() {
-            const cats = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik"];
-            const list = document.getElementById('sideCategoryList');
-            cats.forEach(c => {
-                const d = document.createElement('div');
-                d.className = 'cat-item';
-                d.innerText = "📂 " + c;
-                d.onclick = () => { toggleMenu(); filterByCategory(c); };
-                list.appendChild(d);
-            });
-        }
+    // Menü Fonksiyonu
+    window.toggleMenu = () => {
+        document.getElementById('sideMenu').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('open');
+    };
 
-        async function showVitrin() {
-            const { data } = await _supabase.from('kelimeler').select('*').limit(5);
-            render(data, "✨ Öne Çıkanlar");
-        }
+    window.onload = () => {
+        renderAlphabet();
+        renderCategories();
+        loadInitialData();
+        
+        document.getElementById('searchBtn').onclick = () => runSearch();
+        document.getElementById('searchInput').onkeyup = (e) => { if(e.key === 'Enter') runSearch(); };
+    };
 
-        async function runSearch(q) {
-            if(!q) return;
-            const { data } = await _supabase.from('kelimeler').select('*').or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(20);
-            render(data, `🔍 "${q}" Sonuçları`);
-        }
+    function renderAlphabet() {
+        const letters = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
+        const strip = document.getElementById('alphabetStrip');
+        letters.forEach(l => {
+            const btn = document.createElement('button');
+            btn.className = 'letter-btn';
+            btn.innerText = l;
+            btn.onclick = () => getByLetter(l);
+            strip.appendChild(btn);
+        });
+    }
 
-        async function getByLetter(l) {
-            const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `${l}%`).order('kelime', { ascending: true });
-            render(data, `${l} Harfi`);
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        }
-
-        async function filterByCategory(c) {
-            const { data } = await _supabase.from('kelimeler').select('*').eq('kategori', c).order('kelime');
-            render(data, c);
-        }
-
-        function render(data, title = "") {
-            const res = document.getElementById('results');
-            res.innerHTML = title ? `<h3 style="margin:1rem 0; opacity:0.5;">${title}</h3>` : '';
-            if(!data || data.length === 0) { res.innerHTML += "<p>Sonuç bulunamadı.</p>"; return; }
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'word-card';
-                card.innerHTML = `<small style="font-weight:800; color:#666;">${item
+    function renderCategories() {
+        const cats = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik"];
+        const container = document.getElementById('categoryContainer');
+        cats.forEach(c => {
+            const div = document.createElement('div');
+            div.className = 'side-
