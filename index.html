@@ -10,49 +10,42 @@
     
     <style>
         :root { --primary: #4f46e5; --primary-light: #eef2ff; --bg: #fdfdfd; --text: #1e293b; --border: #f1f5f9; }
-        * { box-sizing: border-box; transition: all 0.2s ease; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; color: var(--text); }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
 
         /* NAVBAR */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 5%; background: white; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
-        .logo-wrapper { display: flex; align-items: center; gap: 12px; cursor: pointer; text-decoration: none; }
-        .logo-icon { display: grid; grid-template-columns: repeat(2, 1fr); gap: 3px; width: 34px; height: 34px; transform: rotate(-5deg); }
-        .grid-box { border-radius: 4px; }
-        .grid-box.empty { background: var(--primary-light); }
-        .grid-box.filled { background: var(--primary); }
-        .logo-main { font-size: 1.4rem; font-weight: 800; color: var(--text); }
+        .logo-main { font-size: 1.4rem; font-weight: 800; cursor: pointer; }
         .logo-main span { color: var(--primary); }
 
+        /* ALFABETİK ŞERİT - GARANTİLENMİŞ YAPI */
+        .alphabet-container { background: white; border-bottom: 1px solid var(--border); padding: 10px 0; position: sticky; top: 60px; z-index: 999; }
+        .alphabet-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; max-width: 900px; margin: 0 auto; padding: 0 10px; }
+        .letter-btn { width: 30px; height: 30px; border: 1px solid var(--border); background: white; border-radius: 6px; cursor: pointer; font-weight: 800; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .letter-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
         /* YAN MENÜ */
-        .side-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 2001; padding: 1.5rem; box-shadow: -10px 0 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+        .side-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 2001; padding: 1.5rem; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.3s; display: flex; flex-direction: column; }
         .side-menu.active { right: 0; }
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 2000; backdrop-filter: blur(4px); }
         .overlay.active { display: block; }
 
-        .cat-list { display: flex; flex-direction: column; gap: 6px; overflow-y: auto; flex: 1; }
-        .cat-item { padding: 10px 14px; border-radius: 10px; background: #f8fafc; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; color: var(--text); font-size: 0.9rem; }
-        .cat-item:hover { background: var(--primary-light); color: var(--primary); }
-
-        .extra-links { border-top: 1px solid var(--border); padding-top: 15px; margin-top: 15px; }
-        .extra-item { padding: 8px 14px; font-size: 0.85rem; color: #64748b; cursor: pointer; font-weight: 600; display: block; }
-        .extra-item:hover { color: var(--primary); }
-
-        /* MODAL */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: white; padding: 2rem; border-radius: 24px; max-width: 500px; width: 100%; position: relative; }
-
-        /* KELİME ÖNER ALANI */
-        .suggest-box { background: linear-gradient(135deg, #4f46e5, #6366f1); color: white; padding: 2rem; border-radius: 24px; text-align: center; margin: 3rem 0; }
-        .suggest-btn { background: white; color: var(--primary); border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 15px; }
-
-        /* DİĞER STİLLER */
-        .container { max-width: 850px; margin: 0 auto; padding: 1rem; }
-        .search-wrapper { display: flex; gap: 8px; background: white; padding: 8px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); margin-bottom: 1rem; }
+        .container { max-width: 850px; margin: 0 auto; padding: 20px; }
+        
+        /* ARAMA ALANI */
+        .search-section { text-align: center; margin: 20px 0; }
+        .search-wrapper { display: flex; gap: 8px; background: white; padding: 8px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .search-wrapper input { flex: 1; border: none; padding: 12px; outline: none; font-size: 1rem; }
-        .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 1.5rem; border-radius: 12px; cursor: pointer; font-weight: 700; }
-        .alphabet-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin: 1rem 0; }
-        .letter-btn { width: 32px; height: 32px; border: 1px solid var(--border); background: white; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 0.8rem; }
-        .word-card { background: white; padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 1rem; }
+        .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 12px; cursor: pointer; font-weight: 700; }
+
+        /* KARTLAR */
+        .word-card { background: white; padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .word-card h2 { color: var(--primary); font-size: 1.6rem; font-weight: 800; margin-top: 5px; }
+        
+        /* FOOTER & MODAL */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: white; padding: 2rem; border-radius: 24px; max-width: 500px; width: 100%; }
+        .cat-item { padding: 12px; background: #f8fafc; border-radius: 10px; margin-bottom: 8px; cursor: pointer; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -60,47 +53,121 @@
     <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
     
     <nav id="sideMenu" class="side-menu">
-        <div style="display:flex; justify-content: space-between; margin-bottom: 1.5rem;">
-            <span style="font-weight:800; color:var(--primary)">KELİMEKELİME</span>
-            <button onclick="toggleMenu()" style="border:none; background:none; font-size:1.2rem; cursor:pointer;">✕</button>
+        <div style="display:flex; justify-content: space-between; margin-bottom: 2rem;">
+            <b style="color:var(--primary)">MENÜ</b>
+            <button onclick="toggleMenu()" style="border:none; background:none; font-size:1.5rem; cursor:pointer;">✕</button>
         </div>
-        <div id="sideCategoryList" class="cat-list"></div>
-        
-        <div class="extra-links">
-            <span class="extra-item" onclick="openModal('about')">📖 Hakkımızda</span>
-            <span class="extra-item" onclick="openModal('contact')">✉️ İletişim</span>
-            <span class="extra-item" onclick="openModal('privacy')">🔒 Gizlilik Politikası</span>
+        <div id="sideCategoryList" style="flex:1; overflow-y:auto;"></div>
+        <div style="border-top: 1px solid #eee; padding-top:15px;">
+            <div onclick="openModal('about')" style="cursor:pointer; margin-bottom:10px;">📖 Hakkımızda</div>
+            <div onclick="openModal('contact')" style="cursor:pointer; margin-bottom:10px;">✉️ İletişim</div>
+            <div onclick="openModal('privacy')" style="cursor:pointer;">🔒 Gizlilik</div>
         </div>
     </nav>
 
-    <div id="infoModal" class="modal" onclick="closeModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h2 id="modalTitle" style="margin-top:0"></h2>
-            <div id="modalBody" style="line-height:1.6; color:#475569;"></div>
-            <button onclick="closeModal()" style="margin-top:20px; width:100%; padding:12px; border:none; background:var(--primary); color:white; border-radius:12px; cursor:pointer; font-weight:700;">Kapat</button>
-        </div>
-    </div>
-
     <header class="navbar">
-        <div class="logo-wrapper" onclick="location.reload()">
-            <div class="logo-icon">
-                <div class="grid-box empty"></div><div class="grid-box filled"></div>
-                <div class="grid-box filled"></div><div class="grid-box empty"></div>
-            </div>
-            <div class="logo-main">Kelime<span>Kelime</span></div>
-        </div>
-        <button onclick="toggleMenu()" style="background:var(--primary-light); color:var(--primary); border:none; padding:10px 18px; border-radius:12px; cursor:pointer; font-weight:800;">MENÜ ☰</button>
+        <div class="logo-main" onclick="location.reload()">Kelime<span>Kelime</span></div>
+        <button onclick="toggleMenu()" style="background:var(--primary-light); color:var(--primary); border:none; padding:8px 16px; border-radius:10px; cursor:pointer; font-weight:800;">MENÜ ☰</button>
     </header>
 
+    <div class="alphabet-container">
+        <div id="alphabetStrip" class="alphabet-strip"></div>
+    </div>
+
     <main class="container">
-        <section style="text-align:center; padding: 1rem 0;">
+        <div class="search-section">
             <div class="search-wrapper">
-                <input type="text" id="searchInput" placeholder="Bulmacadaki soruyu veya cevabı yazın...">
+                <input type="text" id="searchInput" placeholder="Kelime veya anlam ara...">
                 <button id="searchBtn">Ara</button>
             </div>
-            <div id="alphabetStrip" class="alphabet-strip"></div>
-        </section>
+        </div>
 
         <div id="results"></div>
 
-        <section class="suggest-box">
+        <div style="background:var(--primary); color:white; padding:2rem; border-radius:24px; text-align:center; margin:2rem 0;">
+            <h3>Kelime Bulamadın mı?</h3>
+            <button onclick="openModal('suggest')" style="margin-top:15px; padding:10px 20px; border-radius:10px; border:none; font-weight:800; cursor:pointer;">Kelime Öner</button>
+        </div>
+    </main>
+
+    <div id="infoModal" class="modal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2 id="modalTitle"></h2>
+            <div id="modalBody" style="margin:15px 0;"></div>
+            <button onclick="closeModal()" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:10px; cursor:pointer;">Kapat</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
+        const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
+        const _supabase = supabase.createClient(SB_URL, SB_KEY);
+
+        window.toggleMenu = () => {
+            document.getElementById('sideMenu').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        };
+
+        window.onload = () => {
+            initAlphabet();
+            initCategories();
+            showVitrin();
+            document.getElementById('searchBtn').onclick = () => runSearch(document.getElementById('searchInput').value);
+        };
+
+        function initAlphabet() {
+            const letters = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
+            const strip = document.getElementById('alphabetStrip');
+            strip.innerHTML = ""; 
+            letters.forEach(l => {
+                const b = document.createElement('button');
+                b.className = 'letter-btn';
+                b.innerText = l;
+                b.onclick = () => getByLetter(l);
+                strip.appendChild(b);
+            });
+        }
+
+        function initCategories() {
+            const cats = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik"];
+            const list = document.getElementById('sideCategoryList');
+            cats.forEach(c => {
+                const d = document.createElement('div');
+                d.className = 'cat-item';
+                d.innerText = "📂 " + c;
+                d.onclick = () => { toggleMenu(); filterByCategory(c); };
+                list.appendChild(d);
+            });
+        }
+
+        async function showVitrin() {
+            const { data } = await _supabase.from('kelimeler').select('*').limit(5);
+            render(data, "✨ Öne Çıkanlar");
+        }
+
+        async function runSearch(q) {
+            if(!q) return;
+            const { data } = await _supabase.from('kelimeler').select('*').or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(20);
+            render(data, `🔍 "${q}" Sonuçları`);
+        }
+
+        async function getByLetter(l) {
+            const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `${l}%`).order('kelime', { ascending: true });
+            render(data, `${l} Harfi`);
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        async function filterByCategory(c) {
+            const { data } = await _supabase.from('kelimeler').select('*').eq('kategori', c).order('kelime');
+            render(data, c);
+        }
+
+        function render(data, title = "") {
+            const res = document.getElementById('results');
+            res.innerHTML = title ? `<h3 style="margin:1rem 0; opacity:0.5;">${title}</h3>` : '';
+            if(!data || data.length === 0) { res.innerHTML += "<p>Sonuç bulunamadı.</p>"; return; }
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'word-card';
+                card.innerHTML = `<small style="font-weight:800; color:#666;">${item
