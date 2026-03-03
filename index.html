@@ -14,9 +14,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <title>KelimeKelime | Online Bulmaca Sözlüğü ve Kelime Bulucu</title>
-    <meta name="description" content="KelimeKelime: Türkiye'nin en güncel bulmaca sözlüğü. Kare, çengel ve sarmal bulmacalarda takıldığınız tüm soruların cevaplarını saniyeler içinde bulun.">
-    <meta name="keywords" content="bulmaca sözlüğü, kelime bulucu, bulmaca cevapları, kare bulmaca, çengel bulmaca çözümleri, tıp terimleri sözlüğü, denizcilik terimleri">
+    <title>KelimeKelime | Online Bulmaca Sözlüğü</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%225%22 y=%225%22 width=%2242%22 height=%2242%22 rx=%2210%22 fill=%22%23eef2ff%22/><rect x=%2253%22 y=%225%22 width=%2242%22 height=%2242%22 rx=%2210%22 fill=%22%234f46e5%22/><rect x=%225%22 y=%2253%22 width=%2242%22 height=%2242%22 rx=%2210%22 fill=%22%234f46e5%22/><rect x=%2253%22 y=%2253%22 width=%2242%22 height=%2242%22 rx=%2210%22 fill=%22%23eef2ff%22/></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -31,7 +29,6 @@
             font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 0; 
             background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px); background-size: 20px 20px;
         }
-
         .navbar { 
             background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); 
             padding: 0.8rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000;
@@ -43,34 +40,119 @@
         .grid-box.filled { background: var(--primary); }
         .logo-main { font-size: 1.4rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
         .logo-main span { color: var(--primary); }
-
-        .menu-trigger {
-            background: var(--primary-light); color: var(--primary); border: none; padding: 10px 15px;
-            border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 0.9rem;
-        }
-
-        .side-menu {
-            position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: white;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.1); z-index: 2001; padding: 2rem; display: flex; flex-direction: column; gap: 1rem;
-            overflow-y: auto;
-        }
+        .menu-trigger { background: var(--primary-light); color: var(--primary); border: none; padding: 10px 15px; border-radius: 12px; cursor: pointer; font-weight: 800; }
+        .side-menu { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: white; box-shadow: -10px 0 30px rgba(0,0,0,0.1); z-index: 2001; padding: 2rem; display: flex; flex-direction: column; gap: 1rem; overflow-y: auto; }
         .side-menu.active { right: 0; }
-        .menu-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(4px); z-index: 2000; display: none;
-        }
+        .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); backdrop-filter: blur(4px); z-index: 2000; display: none; }
         .menu-overlay.active { display: block; }
-        .menu-item {
-            text-decoration: none; color: var(--text-main); font-weight: 700; font-size: 1rem;
-            padding: 10px 12px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 10px;
-        }
-        .menu-item:hover { background: var(--primary-light); color: var(--primary); }
-        .menu-close { align-self: flex-end; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }
-
+        .menu-item { text-decoration: none; color: var(--text-main); font-weight: 700; padding: 10px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
         .container { max-width: 850px; margin: 0 auto; padding: 1rem; }
         .hero { text-align: center; margin: 2rem 0; }
-        .search-wrapper { 
-            display: flex; gap: 8px; background: var(--card); padding: 8px; border-radius: 16px; 
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); border: 1px solid var(--border);
+        .search-wrapper { display: flex; gap: 8px; background: var(--card); padding: 8px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); border: 1px solid var(--border); }
+        .search-wrapper input { flex: 1; border: none; padding: 12px; font-size: 1rem; outline: none; }
+        .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 1.5rem; border-radius: 12px; cursor: pointer; font-weight: 700; }
+        .cat-strip, .alphabet-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 20px 0; }
+        .cat-btn, .letter-btn { background: var(--card); border: 1px solid var(--border); font-weight: 700; cursor: pointer; }
+        .cat-btn { padding: 0.6rem 1.2rem; border-radius: 12px; font-size: 0.8rem; }
+        .letter-btn { width: 36px; height: 36px; border-radius: 10px; }
+        .word-card { background: var(--card); padding: 1.8rem; border-radius: 24px; border: 1px solid var(--border); margin-bottom: 1.5rem; }
+        .ad-slot { margin: 20px 0; text-align: center; background: #f8fafc; border-radius: 16px; padding: 10px; border: 1px dashed #cbd5e1; min-height: 100px; }
+        .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+        .modal-content { background: white; margin: 10% auto; padding: 2rem; width: 90%; max-width: 500px; border-radius: 24px; }
+    </style>
+</head>
+<body>
+
+    <div class="menu-overlay" id="overlay" onclick="toggleMenu()"></div>
+    <nav class="side-menu" id="sideMenu">
+        <button onclick="toggleMenu()" style="float:right; background:none; border:none; font-size:1.5rem; cursor:pointer;">✕</button>
+        <div style="margin-top:2rem;">
+            <a class="menu-item" onclick="location.reload()">🏠 Ana Sayfa</a>
+            <a class="menu-item" onclick="showInfo('about')">📖 Hakkımızda</a>
+            <a class="menu-item" onclick="showInfo('privacy')">🔒 Gizlilik</a>
+            <hr>
+            <div id="sideCategoryList"></div>
+        </div>
+    </nav>
+
+    <header class="navbar">
+        <div class="logo-wrapper" onclick="location.reload()">
+            <div class="logo-icon">
+                <div class="grid-box empty"></div><div class="grid-box filled"></div>
+                <div class="grid-box filled"></div><div class="grid-box empty"></div>
+            </div>
+            <div class="logo-main">Kelime<span>Kelime</span></div>
+        </div>
+        <button class="menu-trigger" onclick="toggleMenu()">MENÜ ☰</button>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1 style="font-size: 2.5rem; letter-spacing: -2px; font-weight: 800;">Bulmaca Sözlüğü</h1>
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="Kelime ara...">
+                <button id="searchBtn">Ara</button>
+            </div>
+        </section>
+
+        <div class="ad-slot" id="top-ad">
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2174139710234620" data-ad-slot="DISPLAY_AD_ID" data-ad-format="auto"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+
+        <nav id="categoryStrip" class="cat-strip"></nav>
+        <nav id="alphabetStrip" class="alphabet-strip"></nav>
+        <section id="results"></section>
+    </main>
+
+    <div id="infoModal" class="modal" onclick="this.style.display='none'">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 id="modalTitle"></h3>
+            <p id="modalText"></p>
+            <button onclick="document.getElementById('infoModal').style.display='none'" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; border-radius:10px; cursor:pointer;">Kapat</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
+        const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
+        const _supabase = supabase.createClient(SB_URL, SB_KEY);
+        let searchTimer;
+
+        function toggleMenu() {
+            document.getElementById('sideMenu').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
         }
-        .search-wrapper input { flex: 1; border: none; padding: 12px; font-size: 1rem;
+
+        window.onload = () => {
+            initAlphabet();
+            loadCategories();
+            initSearch();
+            showVitrin();
+        };
+
+        function initAlphabet() {
+            const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
+            const strip = document.getElementById('alphabetStrip');
+            if(!strip) return;
+            alphabet.forEach(l => {
+                const b = document.createElement('button');
+                b.className = 'letter-btn';
+                b.innerText = l;
+                b.onclick = () => getByLetter(l);
+                strip.appendChild(b);
+            });
+        }
+
+        function loadCategories() {
+            const strip = document.getElementById('categoryStrip');
+            const sideList = document.getElementById('sideCategoryList');
+            const cats = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik"];
+            
+            strip.innerHTML = '<button class="cat-btn" onclick="fetchRandomWord()" style="background:var(--primary-light); color:var(--primary)">🎲 Rastgele</button>';
+            cats.forEach(c => {
+                const b = document.createElement('button');
+                b.className = 'cat-btn';
+                b.innerText = c;
+                b.onclick = () => filterByCategory(
