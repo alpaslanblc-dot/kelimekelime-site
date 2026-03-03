@@ -4,9 +4,25 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2174139710234620" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KelimeKelime | Bulmaca Sözlüğü</title>
+    
+    <title>KelimeKelime | Online Bulmaca Sözlüğü ve Kelime Bulucu</title>
+    <meta name="description" content="KelimeKelime: Türkiye'nin en güncel bulmaca sözlüğü. Kare, çengel ve sarmal bulmacalarda takıldığınız tüm soruların cevaplarını saniyeler içinde bulun.">
+    <meta name="keywords" content="bulmaca sözlüğü, kelime bulucu, bulmaca cevapları, kare bulmaca, çengel bulmaca çözümleri, tıp terimleri sözlüğü, denizcilik terimleri">
+    <meta name="author" content="KelimeKelime">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.kelimekelime.com/"> <meta property="og:title" content="KelimeKelime | Online Bulmaca Sözlüğü">
+    <meta property="og:description" content="Bulmacalarda takılmaya son! Binlerce kelimenon anlamı ve cevabı tek tıkla elinizin altında.">
+    <meta property="og:image" content="https://www.kelimekelime.com/og-image.jpg">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="KelimeKelime | Bulmaca Asistanınız">
+    <meta name="twitter:description" content="Kare ve çengel bulmacalar için en hızlı kelime bulucu.">
+
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%225%22 y=%225%22 width=%2242%22 height=%2242%22 rx=%2210%22 fill=%22%23eef2ff%22/><rect x=%2253%22 y=%225%22 width=%2242%22 height=%2242%22 rx=%2210%22 fill=%22%234f46e5%22/><rect x=%225%22 y=%2253%22 width=%2242%22 height=%2242%22 rx=%2210%22 fill=%22%234f46e5%22/><rect x=%2253%22 y=%2253%22 width=%2242%22 height=%2242%22 rx=%2210%22 fill=%22%23eef2ff%22/></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --primary: #4f46e5; --primary-light: #eef2ff; --bg: #fdfdfd; 
@@ -18,7 +34,6 @@
             background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px); background-size: 20px 20px;
         }
 
-        /* Navbar & Menu */
         .navbar { 
             background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); 
             padding: 0.8rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000;
@@ -36,7 +51,6 @@
             border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 0.9rem;
         }
 
-        /* Side Menu */
         .side-menu {
             position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: white;
             box-shadow: -10px 0 30px rgba(0,0,0,0.1); z-index: 2001; padding: 2rem; display: flex; flex-direction: column; gap: 1rem;
@@ -55,7 +69,6 @@
         .menu-item:hover { background: var(--primary-light); color: var(--primary); }
         .menu-close { align-self: flex-end; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }
 
-        /* Ana İçerik */
         .container { max-width: 850px; margin: 0 auto; padding: 1rem; }
         .hero { text-align: center; margin: 2rem 0; }
         .search-wrapper { 
@@ -65,10 +78,9 @@
         .search-wrapper input { flex: 1; border: none; padding: 12px; font-size: 1rem; outline: none; background: transparent; }
         .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 1.5rem; border-radius: 12px; cursor: pointer; font-weight: 700; }
         
-        /* Şeritler */
         .cat-strip, .alphabet-strip { 
             display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 20px 0; 
-            min-height: 40px; /* Boşluk oluşmaması için */
+            min-height: 40px;
         }
         .cat-btn, .letter-btn { background: var(--card); border: 1px solid var(--border); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .cat-btn { padding: 0.6rem 1.2rem; border-radius: 12px; font-size: 0.8rem; color: var(--text-muted); }
@@ -85,8 +97,8 @@
 
     <div class="menu-overlay" id="overlay" onclick="toggleMenu()"></div>
     
-    <nav class="side-menu" id="sideMenu">
-        <button class="menu-close" onclick="toggleMenu()">✕</button>
+    <nav class="side-menu" id="sideMenu" role="navigation">
+        <button class="menu-close" onclick="toggleMenu()" aria-label="Kapat">✕</button>
         <div style="font-weight: 800; color: var(--primary); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase;">Navigasyon</div>
         <a class="menu-item" onclick="toggleMenu(); location.reload();">🏠 Ana Sayfa</a>
         <a class="menu-item" onclick="showInfo('about')">📖 Hakkımızda</a>
@@ -105,33 +117,41 @@
             </div>
             <div class="logo-text"><div class="logo-main">Kelime<span>Kelime</span></div></div>
         </div>
-        <button class="menu-trigger" onclick="toggleMenu()">MENÜ ☰</button>
+        <button class="menu-trigger" onclick="toggleMenu()" aria-label="Menüyü Aç">MENÜ ☰</button>
     </header>
 
     <main class="container">
         <section class="hero">
             <h1 style="font-size: 2.5rem; letter-spacing: -2px; font-weight: 800;">Bulmaca Sözlüğü</h1>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Aradığınız bulmaca cevapları ve kelime anlamları için doğru yerdesiniz.</p>
             <div class="search-wrapper">
-                <input type="text" id="searchInput" placeholder="Kelime veya anlam ara...">
+                <input type="text" id="searchInput" placeholder="Kelime veya anlam ara..." aria-label="Arama kutusu">
                 <button id="searchBtn">Ara</button>
             </div>
         </section>
 
-        <div id="categoryStrip" class="cat-strip"></div>
-        <div id="alphabetStrip" class="alphabet-strip"></div>
-        <div id="results"></div>
+        <nav id="categoryStrip" class="cat-strip" aria-label="Kategoriler"></nav>
+        <nav id="alphabetStrip" class="alphabet-strip" aria-label="Alfabetik Arama"></nav>
+        
+        <section id="results" aria-live="polite">
+            </section>
 
         <section id="iletisimArea" style="background: white; padding: 40px; border-radius: 24px; text-align: center; margin-top: 50px; border: 1px solid var(--border);">
             <h3 style="font-weight: 800;">Bize Ulaşın</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">Eksik bir kelime mi buldunuz?</p>
             <button onclick="showContactForm()" style="background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 12px; font-weight: 700; cursor: pointer;">Kelime Öner</button>
         </section>
     </main>
 
+    <footer style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.85rem;">
+        &copy; 2026 KelimeKelime. Tüm Hakları Saklıdır.
+    </footer>
+
     <div id="infoModal" class="modal" onclick="this.style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
             <h3 id="modalTitle" style="font-weight: 800;"></h3>
-            <div id="modalText" style="margin: 20px 0;"></div>
-            <button onclick="document.getElementById('infoModal').style.display='none'" style="width:100%; padding:12px; border:none; background:var(--primary); color:white; font-weight:bold; border-radius:12px;">Kapat</button>
+            <div id="modalText" style="margin: 20px 0; line-height: 1.6;"></div>
+            <button onclick="document.getElementById('infoModal').style.display='none'" style="width:100%; padding:12px; border:none; background:var(--primary); color:white; font-weight:bold; border-radius:12px; cursor: pointer;">Kapat</button>
         </div>
     </div>
 
@@ -141,14 +161,11 @@
         const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
         const _supabase = supabase.createClient(SB_URL, SB_KEY);
 
-        // Menü Aç/Kapat
         function toggleMenu() {
             document.getElementById('sideMenu').classList.toggle('active');
             document.getElementById('overlay').classList.toggle('active');
         }
 
-        // --- BAŞLATICI ---
-        // Sayfa DOM yüklendiği anda çalışır, hiçbir şeyin kaybolmasına izin vermez
         document.addEventListener('DOMContentLoaded', () => {
             initAlphabet();
             loadCategories();
@@ -165,6 +182,7 @@
                 const b = document.createElement('button');
                 b.className = 'letter-btn';
                 b.innerText = l;
+                b.setAttribute('aria-label', `${l} harfi ile başlayan kelimeler`);
                 b.onclick = () => getByLetter(l);
                 strip.appendChild(b);
             });
@@ -213,7 +231,7 @@
         async function showVitrin() {
             const { data: allData } = await _supabase.from('kelimeler').select('id');
             if (allData?.length > 0) {
-                const seed = new Date().getDate(); // Sadece güne göre değişsin
+                const seed = new Date().getDate();
                 const shuffled = [...allData].sort(() => (Math.sin(seed) * 10000 % 1) - 0.5);
                 const { data } = await _supabase.from('kelimeler').select('*').in('id', shuffled.slice(0, 5).map(i => i.id));
                 render(data, "📅 Bugünün Öne Çıkan Kelimeleri");
@@ -237,44 +255,53 @@
 
         async function fetchRandomWord() {
             const { data } = await _supabase.from('kelimeler').select('*').limit(100);
-            if(data) render([data[Math.floor(Math.random() * data.length)]], "🎲 Rastgele");
+            if(data) render([data[Math.floor(Math.random() * data.length)]], "🎲 Rastgele Seçilen Kelime");
         }
 
+        // --- SEMANTİK RENDER (SEO İÇİN KRİTİK) ---
         function render(data, title = "") {
             const res = document.getElementById('results');
             if(!res) return;
-            res.innerHTML = title ? `<h4 style="text-align:center; font-weight:800; margin-bottom:1.5rem;">${title}</h4>` : '';
+            res.innerHTML = title ? `<h2 style="text-align:center; font-weight:800; font-size:1.3rem; margin-bottom:1.5rem; color:var(--text-main);">${title}</h2>` : '';
+            
             if(!data || data.length === 0) {
-                res.innerHTML += '<div style="text-align:center; padding:3rem; opacity:0.5">Sonuç bulunamadı.</div>';
+                res.innerHTML += '<div style="text-align:center; padding:3rem; opacity:0.5">Aradığınız kriterlere uygun sonuç bulunamadı.</div>';
                 return;
             }
+
             data.forEach(item => {
-                const d = document.createElement('div');
-                d.className = 'word-card';
-                d.innerHTML = `
+                const art = document.createElement('article');
+                art.className = 'word-card';
+                // Yapılandırılmış Veri (Schema.org) botlar için eklenmiştir
+                art.setAttribute('itemscope', '');
+                art.setAttribute('itemtype', 'https://schema.org/DefinedTerm');
+                
+                art.innerHTML = `
                     <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
                         <span style="font-size:0.7rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Tanım</span>
-                        <span style="background:var(--primary-light); color:var(--primary); padding:4px 8px; border-radius:6px; font-size:0.7rem; font-weight:800;">${item.kategori || 'Genel'}</span>
+                        <span itemprop="category" style="background:var(--primary-light); color:var(--primary); padding:4px 8px; border-radius:6px; font-size:0.7rem; font-weight:800;">${item.kategori || 'Genel'}</span>
                     </div>
-                    <p style="font-size:1.1rem; color:var(--text-main); margin-bottom:15px; font-weight:500;">${item.anlam}</p>
+                    <p itemprop="description" style="font-size:1.1rem; color:var(--text-main); margin-bottom:15px; font-weight:500; line-height:1.5;">${item.anlam}</p>
                     <div style="border-top:1px solid var(--border); padding-top:10px;">
                         <span style="font-size:0.7rem; font-weight:800; color:var(--primary); text-transform:uppercase;">Cevap</span>
-                        <h2 style="margin:0; font-size:1.7rem; color:var(--text-main); font-weight:800;">${item.kelime}</h2>
+                        <h2 itemprop="name" style="margin:0; font-size:1.7rem; color:var(--text-main); font-weight:800; letter-spacing:1px;">${item.kelime}</h2>
                     </div>
                 `;
-                res.appendChild(d);
+                res.appendChild(art);
             });
         }
 
         function showInfo(type) {
             toggleMenu();
             const m = document.getElementById('infoModal');
-            document.getElementById('modalTitle').innerText = type === 'about' ? "Hakkımızda" : "Gizlilik";
-            document.getElementById('modalText').innerText = type === 'about' ? "KelimeKelime Türkiye'nin dijital bulmaca rehberidir." : "Verileriniz anonim olarak korunmaktadır.";
+            document.getElementById('modalTitle').innerText = type === 'about' ? "Hakkımızda" : "Gizlilik Politikası";
+            document.getElementById('modalText').innerText = type === 'about' ? 
+                "KelimeKelime, kare ve çengel bulmaca tutkunları için geliştirilmiş modern bir dijital sözlüktür. Amacımız, en zorlu bulmacalarda bile doğru bilgiye en hızlı şekilde ulaşmanızı sağlamaktır." : 
+                "Kullanıcı gizliliği bizim önceliğimizdir. Sitemizde kişisel verileriniz toplanmaz, yalnızca deneyimi iyileştirmek adına anonim kullanım istatistikleri takip edilir.";
             m.style.display = 'block';
         }
 
-        function showContactForm() { alert("Yakında aktif!"); }
+        function showContactForm() { alert("Öneri sistemimiz çok yakında aktif olacak. Teşekkürler!"); }
     </script>
 </body>
 </html>
