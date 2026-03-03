@@ -13,7 +13,7 @@
         * { box-sizing: border-box; transition: all 0.2s ease; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; color: var(--text); }
 
-        /* NAVBAR & LOGO */
+        /* NAVBAR */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 5%; background: white; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
         .logo-wrapper { display: flex; align-items: center; gap: 12px; cursor: pointer; text-decoration: none; }
         .logo-icon { display: grid; grid-template-columns: repeat(2, 1fr); gap: 3px; width: 34px; height: 34px; transform: rotate(-5deg); }
@@ -23,39 +23,36 @@
         .logo-main { font-size: 1.4rem; font-weight: 800; color: var(--text); }
         .logo-main span { color: var(--primary); }
 
-        /* YAN MENÜ (HAMBURGER) */
+        /* YAN MENÜ */
         .side-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 2001; padding: 1.5rem; box-shadow: -10px 0 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
         .side-menu.active { right: 0; }
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 2000; backdrop-filter: blur(4px); }
         .overlay.active { display: block; }
 
-        .menu-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        .menu-title { font-weight: 800; font-size: 1.2rem; color: var(--primary); }
-        
-        .cat-list { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
-        .cat-item { 
-            padding: 12px 16px; border-radius: 12px; background: #f8fafc; 
-            font-weight: 600; cursor: pointer; display: flex; align-items: center; 
-            justify-content: space-between; text-decoration: none; color: var(--text);
-        }
-        .cat-item:hover { background: var(--primary-light); color: var(--primary); transform: translateX(5px); }
-        .cat-item::after { content: '→'; opacity: 0.3; }
+        .cat-list { display: flex; flex-direction: column; gap: 6px; overflow-y: auto; flex: 1; }
+        .cat-item { padding: 10px 14px; border-radius: 10px; background: #f8fafc; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; color: var(--text); font-size: 0.9rem; }
+        .cat-item:hover { background: var(--primary-light); color: var(--primary); }
 
-        /* İÇERİK ALANI */
+        .extra-links { border-top: 1px solid var(--border); padding-top: 15px; margin-top: 15px; }
+        .extra-item { padding: 8px 14px; font-size: 0.85rem; color: #64748b; cursor: pointer; font-weight: 600; display: block; }
+        .extra-item:hover { color: var(--primary); }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: white; padding: 2rem; border-radius: 24px; max-width: 500px; width: 100%; position: relative; }
+
+        /* KELİME ÖNER ALANI */
+        .suggest-box { background: linear-gradient(135deg, #4f46e5, #6366f1); color: white; padding: 2rem; border-radius: 24px; text-align: center; margin: 3rem 0; }
+        .suggest-btn { background: white; color: var(--primary); border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 15px; }
+
+        /* DİĞER STİLLER */
         .container { max-width: 850px; margin: 0 auto; padding: 1rem; }
-        .search-wrapper { display: flex; gap: 8px; background: white; padding: 8px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); margin-bottom: 1.5rem; }
+        .search-wrapper { display: flex; gap: 8px; background: white; padding: 8px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); margin-bottom: 1rem; }
         .search-wrapper input { flex: 1; border: none; padding: 12px; outline: none; font-size: 1rem; }
         .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 1.5rem; border-radius: 12px; cursor: pointer; font-weight: 700; }
-        
-        .alphabet-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 1rem 0; }
-        .letter-btn { width: 34px; height: 34px; border: 1px solid var(--border); background: white; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 0.85rem; }
-        .letter-btn:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); }
-
-        .word-card { background: white; padding: 1.8rem; border-radius: 24px; border: 1px solid var(--border); margin-bottom: 1.5rem; position: relative; overflow: hidden; }
-        .word-card::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 5px; background: var(--primary); opacity: 0.5; }
-        .word-card small { background: var(--primary-light); color: var(--primary); padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.7rem; }
-        
-        .ad-slot { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 16px; padding: 15px; text-align: center; margin: 1.5rem 0; color: #94a3b8; font-size: 11px; font-weight: 600; }
+        .alphabet-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin: 1rem 0; }
+        .letter-btn { width: 32px; height: 32px; border: 1px solid var(--border); background: white; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 0.8rem; }
+        .word-card { background: white; padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 1rem; }
     </style>
 </head>
 <body>
@@ -63,16 +60,26 @@
     <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
     
     <nav id="sideMenu" class="side-menu">
-        <div class="menu-header">
-            <span class="menu-title">Kategoriler</span>
-            <button onclick="toggleMenu()" style="border:none; background:var(--primary-light); color:var(--primary); width:35px; height:35px; border-radius:10px; font-size:1.2rem; cursor:pointer; font-weight:800;">✕</button>
+        <div style="display:flex; justify-content: space-between; margin-bottom: 1.5rem;">
+            <span style="font-weight:800; color:var(--primary)">KELİMEKELİME</span>
+            <button onclick="toggleMenu()" style="border:none; background:none; font-size:1.2rem; cursor:pointer;">✕</button>
         </div>
-        <div id="sideCategoryList" class="cat-list">
-            </div>
-        <div style="margin-top:auto; padding-top:20px; border-top:1px solid #f1f5f9; font-size:0.8rem; text-align:center; opacity:0.5;">
-            KelimeKelime v2.0
+        <div id="sideCategoryList" class="cat-list"></div>
+        
+        <div class="extra-links">
+            <span class="extra-item" onclick="openModal('about')">📖 Hakkımızda</span>
+            <span class="extra-item" onclick="openModal('contact')">✉️ İletişim</span>
+            <span class="extra-item" onclick="openModal('privacy')">🔒 Gizlilik Politikası</span>
         </div>
     </nav>
+
+    <div id="infoModal" class="modal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2 id="modalTitle" style="margin-top:0"></h2>
+            <div id="modalBody" style="line-height:1.6; color:#475569;"></div>
+            <button onclick="closeModal()" style="margin-top:20px; width:100%; padding:12px; border:none; background:var(--primary); color:white; border-radius:12px; cursor:pointer; font-weight:700;">Kapat</button>
+        </div>
+    </div>
 
     <header class="navbar">
         <div class="logo-wrapper" onclick="location.reload()">
@@ -82,127 +89,18 @@
             </div>
             <div class="logo-main">Kelime<span>Kelime</span></div>
         </div>
-        <button onclick="toggleMenu()" style="background:var(--primary-light); color:var(--primary); border:none; padding:10px 18px; border-radius:12px; cursor:pointer; font-weight:800; display:flex; align-items:center; gap:8px;">
-            MENÜ <span style="font-size:1.2rem;">☰</span>
-        </button>
+        <button onclick="toggleMenu()" style="background:var(--primary-light); color:var(--primary); border:none; padding:10px 18px; border-radius:12px; cursor:pointer; font-weight:800;">MENÜ ☰</button>
     </header>
 
     <main class="container">
-        <section style="text-align:center; margin: 1.5rem 0;">
-            <h1 style="font-size: 2rem; letter-spacing: -1px; font-weight: 800; margin-bottom: 1.5rem;">Bulmaca Çözmek Artık Kolay</h1>
+        <section style="text-align:center; padding: 1rem 0;">
             <div class="search-wrapper">
-                <input type="text" id="searchInput" placeholder="Soru veya cevap yazın...">
+                <input type="text" id="searchInput" placeholder="Bulmacadaki soruyu veya cevabı yazın...">
                 <button id="searchBtn">Ara</button>
             </div>
             <div id="alphabetStrip" class="alphabet-strip"></div>
         </section>
 
         <div id="results"></div>
-    </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        window.toggleMenu = function() {
-            document.getElementById('sideMenu').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
-        };
-
-        const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
-        const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
-        const _supabase = supabase.createClient(SB_URL, SB_KEY);
-
-        window.onload = () => {
-            initAlphabet();
-            initCategories();
-            showVitrin();
-            
-            document.getElementById('searchBtn').onclick = () => runSearch(document.getElementById('searchInput').value);
-            // Enter tuşu desteği
-            document.getElementById('searchInput').onkeypress = (e) => { if(e.key === 'Enter') runSearch(e.target.value); };
-        };
-
-        function initAlphabet() {
-            const letters = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
-            const strip = document.getElementById('alphabetStrip');
-            letters.forEach(l => {
-                const b = document.createElement('button');
-                b.className = 'letter-btn';
-                b.innerText = l;
-                b.onclick = () => getByLetter(l);
-                strip.appendChild(b);
-            });
-        }
-
-        function initCategories() {
-            const cats = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik", "Edebiyat", "Coğrafya"];
-            const list = document.getElementById('sideCategoryList');
-            list.innerHTML = ''; // Temizle
-            
-            // Ana Sayfa butonu en üste
-            const home = document.createElement('a');
-            home.className = 'cat-item';
-            home.innerHTML = '<span>🏠 Ana Sayfa</span>';
-            home.onclick = () => { location.reload(); };
-            list.appendChild(home);
-
-            cats.forEach(c => {
-                const a = document.createElement('a');
-                a.className = 'cat-item';
-                a.innerHTML = `<span>📂 ${c}</span>`;
-                a.onclick = () => { toggleMenu(); filterByCategory(c); };
-                list.appendChild(a);
-            });
-        }
-
-        async function showVitrin() {
-            const { data } = await _supabase.from('kelimeler').select('*').limit(6);
-            render(data, "✨ Popüler Aramalar");
-        }
-
-        async function runSearch(q) {
-            if(!q) return;
-            const { data } = await _supabase.from('kelimeler').select('*').or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(25);
-            render(data, `🔍 "${q}" Sonuçları`);
-        }
-
-        async function getByLetter(l) {
-            const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `${l}%`).order('kelime');
-            render(data, `${l} Harfi İle Başlayanlar`);
-        }
-
-        async function filterByCategory(c) {
-            const { data } = await _supabase.from('kelimeler').select('*').eq('kategori', c).order('kelime');
-            render(data, `${c} Kategorisi`);
-        }
-
-        function render(data, title = "") {
-            const res = document.getElementById('results');
-            res.innerHTML = title ? `<h2 style="font-size:1.1rem; margin:1.5rem 0 1rem; opacity:0.6; padding-left:10px;">${title}</h2>` : '';
-            
-            if(!data || data.length === 0) {
-                res.innerHTML += "<div style='text-align:center; padding:3rem; opacity:0.4;'>Eşleşen bir sonuç bulamadık.</div>";
-                return;
-            }
-            
-            data.forEach((item, index) => {
-                const card = document.createElement('article');
-                card.className = 'word-card';
-                card.innerHTML = `
-                    <div style="margin-bottom:12px;"><small>${item.kategori || 'Genel'}</small></div>
-                    <p style="margin:0 0 12px 0; font-size:1.15rem; line-height:1.6; font-weight:400;">${item.anlam}</p>
-                    <h2 style="margin:0; font-size:1.8rem; font-weight:800; color:var(--primary); letter-spacing:1px;">${item.kelime.toUpperCase()}</h2>
-                `;
-                res.appendChild(card);
-                
-                if((index + 1) % 4 === 0) {
-                    const ad = document.createElement('div');
-                    ad.className = 'ad-slot';
-                    ad.innerText = "BU ALAN REKLAM İÇİN AYRILMIŞTIR";
-                    res.appendChild(ad);
-                }
-            });
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    </script>
-</body>
-</html>
+        <section class="suggest-box">
