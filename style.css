@@ -1,12 +1,50 @@
-:root { --p: #4f46e5; --pl: #eef2ff; --bg: #f8fafc; --t: #1e293b; --m: #64748b; --b: #e2e8f0; --w: #ffffff; }
-body { background: var(--bg); color: var(--t); font-family: 'Inter', sans-serif; line-height: 1.6; }
-.navbar { background: var(--w); border-bottom: 1px solid var(--b); padding: 1rem 5%; display: flex; justify-content: space-between; }
-.logo { font-size: 1.5rem; font-weight: 800; cursor: pointer; }
+:root { 
+    --p: #4f46e5; --pl: #eef2ff; --bg: #f8fafc; 
+    --t: #1e293b; --m: #64748b; --b: #e2e8f0; --w: #ffffff; 
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+body { background: var(--bg); color: var(--t); overflow-x: hidden; }
+
+/* Navbar & Hamburger */
+.navbar { 
+    background: var(--w); border-bottom: 1px solid var(--b); 
+    padding: 0.8rem 5%; display: flex; justify-content: space-between; 
+    align-items: center; position: sticky; top: 0; z-index: 1000; 
+}
+.logo { font-size: 1.4rem; font-weight: 800; cursor: pointer; text-decoration: none; color: var(--t); }
 .logo span { color: var(--p); }
+
+.menu-btn { 
+    background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--t); 
+}
+
+/* Yan Menü (Drawer) */
+.side-menu {
+    position: fixed; top: 0; right: -300px; width: 300px; height: 100%;
+    background: var(--w); box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    z-index: 2000; transition: 0.3s ease; padding: 30px; overflow-y: auto;
+}
+.side-menu.active { right: 0; }
+.overlay { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.5); display: none; z-index: 1500; 
+}
+.overlay.active { display: block; }
+
+.menu-section { margin-bottom: 25px; }
+.menu-section h4 { font-size: 0.75rem; text-transform: uppercase; color: var(--m); letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px solid var(--b); padding-bottom: 5px; }
+.menu-link { display: block; padding: 10px 0; text-decoration: none; color: var(--t); font-weight: 500; transition: 0.2s; cursor: pointer; }
+.menu-link:hover { color: var(--p); padding-left: 5px; }
+
+/* İçerik Kartları */
 .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-.card { background: var(--w); padding: 25px; border-radius: 20px; border: 1px solid var(--b); margin-bottom: 20px; position: relative; }
-.btn-s { flex-shrink: 0; border: 1px solid var(--b); background: var(--w); padding: 8px 14px; border-radius: 10px; cursor: pointer; font-weight: 700; margin-right: 5px; }
-.ad-box { background: #f1f5f9; border: 2px dashed var(--b); margin: 20px 0; padding: 20px; text-align: center; color: var(--m); border-radius: 12px; font-size: 0.8rem; }
-/* Admin Formu Stilleri */
-.admin-form { background: #1e293b; color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
-.admin-form input, .admin-form textarea { width: 100%; margin: 5px 0; padding: 10px; border-radius: 5px; border: none; }
+.card { 
+    background: var(--w); padding: 25px; border-radius: 18px; 
+    border: 1px solid var(--b); margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+}
+.search-area { 
+    display: flex; gap: 8px; background: var(--w); padding: 6px; 
+    border-radius: 14px; border: 1px solid var(--b); margin: 20px 0;
+}
+.search-area input { flex: 1; border: none; padding: 12px; outline: none; font-size: 1rem; }
+.search-area button { background: var(--p); color: var(--w); border: none; padding: 0 20px; border-radius: 10px; font-weight: 700; cursor: pointer; }
