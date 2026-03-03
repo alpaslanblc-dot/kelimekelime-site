@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KelimeKelime | Bulmaca Sözlüğü</title>
+    <title>Kelime Bulmaca | Profesyonel Bulmaca Sözlüğü</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -11,17 +11,14 @@
 <body>
 
     <nav class="navbar">
-        <div class="logo" onclick="location.reload()">Kelime<span>Kelime</span></div>
+        <div class="logo">🧩 KELİME<span>BULMACA</span></div>
     </nav>
 
     <div class="strip-box">
         <div class="strip" id="alphaStrip"></div>
-        <div class="strip" id="catStrip"></div>
     </div>
 
     <main class="container">
-        <div id="adminContainer"></div>
-
         <div class="search-area">
             <input type="text" id="sInp" placeholder="Soru veya cevap arayın...">
             <button id="searchBtn">ARA</button>
@@ -32,7 +29,6 @@
 
     <script src="database.js"></script>
     <script src="ui.js"></script>
-    <script src="admin.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
