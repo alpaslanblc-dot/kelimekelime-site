@@ -1,5 +1,5 @@
-const URL = "SENİN_SUPABASE_URL_ADRESİN";
-const KEY = "SENİN_SUPABASE_ANON_KEY_ADRESİN";
+const URL = "https://mvsbrknkfwwptjifdqca.supabase.co";
+const KEY = "sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr";
 
 const _db = supabase.createClient(URL, KEY);
 
@@ -9,3 +9,4 @@ async function getWords(params = {}) {
     if (params.search) query = query.ilike('kelime', `%${params.search}%`);
     return await query;
 }
+
