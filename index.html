@@ -9,31 +9,21 @@
         :root { --p: #4f46e5; --bg: #f8fafc; --txt: #1e293b; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background: var(--bg); color: var(--txt); }
-        
-        /* Navbar */
         .nav { background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; }
         .logo { font-weight: 900; font-size: 1.5rem; cursor: pointer; }
         .logo span { color: var(--p); }
         .m-btn { background: #eef2ff; color: var(--p); border: none; padding: 8px 15px; border-radius: 8px; font-weight: 800; cursor: pointer; }
-
-        /* Alfabe - Görünürlük Garantili */
         .alpha-wrap { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 10px 0; overflow-x: auto; }
-        .alpha-grid { display: flex; justify-content: center; gap: 5px; min-width: 800px; }
-        .l-btn { width: 32px; height: 32px; border: 1px solid #e2e8f0; background: #fff; border-radius: 6px; cursor: pointer; font-weight: 800; }
+        .alpha-grid { display: flex; justify-content: center; gap: 5px; width: max-content; margin: 0 auto; padding: 0 20px; }
+        .l-btn { width: 32px; height: 32px; border: 1px solid #e2e8f0; background: #fff; border-radius: 6px; cursor: pointer; font-weight: 800; flex-shrink: 0; }
         .l-btn:hover { background: var(--p); color: #fff; }
-
-        /* İçerik */
         .main { max-width: 800px; margin: 0 auto; padding: 20px; }
         .s-box { display: flex; gap: 10px; background: #fff; padding: 10px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
         .s-box input { flex: 1; border: none; outline: none; font-size: 1rem; }
         .s-box button { background: var(--p); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; }
-
-        /* Kartlar */
-        .card { background: #fff; padding: 20px; border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .card { background: #fff; padding: 20px; border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 15px; }
         .card h2 { color: var(--p); font-size: 1.5rem; margin-top: 5px; }
         .card small { font-weight: 800; color: #64748b; background: #f1f5f9; padding: 3px 8px; border-radius: 5px; font-size: 0.7rem; }
-
-        /* Yan Menü */
         .menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: #fff; z-index: 200; transition: 0.3s; padding: 25px; box-shadow: -5px 0 15px rgba(0,0,0,0.1); }
         .menu.active { right: 0; }
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; z-index: 150; }
@@ -50,9 +40,8 @@
     </div>
     <div id="cats"></div>
     <hr style="margin:20px 0; opacity:0.1;">
-    <div class="m-item" onclick="openM('about')">Hakkımızda</div>
-    <div class="m-item" onclick="openM('contact')">İletişim</div>
-    <div class="m-item" onclick="openM('privacy')">Gizlilik</div>
+    <div class="m-item" onclick="alert('Hakkımızda sayfası')">Hakkımızda</div>
+    <div class="m-item" onclick="alert('İletişim sayfası')">İletişim</div>
 </nav>
 
 <nav class="nav">
@@ -74,9 +63,18 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    const URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
+    // URL ve KEY Tanımlamaları
+    const URL = 'https://mvsbrknkfwwptjifdqca.supabase.co'; 
     const KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
-    const sb = supabase.createClient(URL, KEY);
+
+    let sb;
+    try {
+        // CreateClient içindeki tırnaklara ve boşluklara dikkat!
+        sb = supabase.createClient(URL, KEY);
+    } catch (err) {
+        console.error("Supabase başlatılamadı:", err.message);
+        document.getElementById('res').innerHTML = "Bağlantı Ayarları Hatalı!";
+    }
 
     function toggleM() {
         document.getElementById('sid').classList.toggle('active');
@@ -84,7 +82,6 @@
     }
 
     window.onload = () => {
-        // Alfabe Oluştur
         const letters = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
         letters.forEach(l => {
             const b = document.createElement('button');
@@ -93,7 +90,6 @@
             document.getElementById('alpha').appendChild(b);
         });
 
-        // Kategoriler
         const cArr = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor"];
         cArr.forEach(c => {
             const d = document.createElement('div');
@@ -106,7 +102,9 @@
     };
 
     async function loadInit() {
-        const { data } = await sb.from('kelimeler').select('*').limit(5);
+        if(!sb) return;
+        const { data, error } = await sb.from('kelimeler').select('*').limit(5);
+        if(error) { document.getElementById('res').innerHTML = "Hata: " + error.message; return; }
         render(data, "Günün Kelimeleri");
     }
 
@@ -133,10 +131,6 @@
         data.forEach(i => {
             r.innerHTML += `<div class="card"><small>${i.kategori}</small><h2>${i.kelime.toUpperCase()}</h2><p>${i.anlam}</p></div>`;
         });
-    }
-
-    function openM(type) {
-        alert(type + " sayfası yakında eklenecek. Kod çalışıyor!");
     }
 </script>
 </body>
