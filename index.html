@@ -4,107 +4,141 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KelimeKelime | Bulmaca Sözlüğü</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --primary: #4f46e5; --bg: #f8fafc; --text: #1e293b; --muted: #64748b; 
-            --border: #e2e8f0; --white: #ffffff; --ad-bg: #f1f5f9;
+            --primary: #4f46e5; --primary-light: #eef2ff; --bg: #f8fafc; 
+            --text-main: #1e293b; --text-muted: #64748b; --border: #e2e8f0; --white: #ffffff; 
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); }
+        body { background: var(--bg); color: var(--text-main); line-height: 1.6; }
 
-        /* REKLAM ALANLARI (AD SLOTS) */
-        .ad-placeholder {
-            background: var(--ad-bg);
-            border: 2px dashed var(--border);
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--muted);
-            font-size: 0.8rem;
-            border-radius: 12px;
-            min-height: 100px; /* CLS Engelleme: Alanı önceden ayır */
+        /* REKLAM ALANLARI (CLS Korumalı) */
+        .ad-slot { 
+            background: #f1f5f9; border: 2px dashed var(--border); 
+            margin: 20px auto; display: flex; align-items: center; 
+            justify-content: center; color: var(--text-muted); 
+            font-size: 0.8rem; border-radius: 12px; min-height: 120px; max-width: 800px;
         }
-        .ad-banner { width: 100%; min-height: 250px; } /* Sidebar veya orta reklam */
 
-        /* SKELETON SCREEN (Yükleme Efekti) */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
+        /* CONTAINER & NAV */
+        .navbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 1rem 5%; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.4rem; font-weight: 800; color: var(--text-main); text-decoration: none; }
+        .logo span { color: var(--primary); }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+        /* ARAMA BÖLÜMÜ */
+        .search-box { display: flex; gap: 10px; background: var(--white); padding: 10px; border-radius: 15px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .search-box input { flex: 1; border: none; outline: none; padding: 10px; font-size: 1rem; }
+        .search-box button { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+
+        /* KATEGORİ ŞERİDİ */
+        .strip { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; }
+        .strip::-webkit-scrollbar { display: none; }
+        .btn-item { flex-shrink: 0; border: 1px solid var(--border); background: var(--white); padding: 8px 15px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+        .btn-item:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* KARTLAR & SKELETON */
+        .word-card { background: var(--white); padding: 25px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 20px; position: relative; }
+        .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e6e6e6 50%, #f0f0f0 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 5px; }
         @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        /* MODAL & LEGAL PAGES */
-        .footer-links { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border); margin-top: 40px; }
-        .footer-links a { color: var(--muted); text-decoration: none; margin: 0 10px; font-size: 0.85rem; cursor: pointer; }
-        .footer-links a:hover { color: var(--primary); }
-
-        /* KART TASARIMI (PRO) */
-        .word-card { background: var(--white); padding: 25px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 20px; transition: 0.3s; }
-        .word-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        /* FOOTER & LEGAL */
+        footer { text-align: center; padding: 40px; margin-top: 40px; border-top: 1px solid var(--border); }
+        .legal-link { color: var(--text-muted); text-decoration: none; margin: 0 10px; font-size: 0.8rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="ad-placeholder" style="max-width: 800px; margin: 10px auto;">Google AdSense (Header Banner)</div>
+<nav class="navbar">
+    <a href="/" class="logo">Kelime<span>Kelime</span></a>
+    <button onclick="openForm()" style="background:var(--primary-light); color:var(--primary); border:none; padding:8px 15px; border-radius:8px; font-weight:700; cursor:pointer;">ÖNERİ YAP</button>
+</nav>
 
-<main class="container" id="mainContainer">
+<div class="ad-slot">Reklam Alanı (Tepe Banner)</div>
+
+<main class="container">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Soru veya cevap yazın...">
+        <button onclick="runSearch()">ARA</button>
+    </div>
+
+    <div class="strip" id="categoryStrip"></div>
+
     <div id="results">
-        <div class="word-card"><div class="skeleton" style="height:20px; width:30%;"></div><div class="skeleton" style="height:60px;"></div></div>
-        <div class="word-card"><div class="skeleton" style="height:20px; width:30%;"></div><div class="skeleton" style="height:60px;"></div></div>
+        <div class="word-card"><div class="skeleton" style="height:15px; width:40%; margin-bottom:15px;"></div><div class="skeleton" style="height:40px;"></div></div>
     </div>
 </main>
 
-<div class="ad-placeholder ad-banner" style="max-width: 800px; margin: 20px auto;">Google AdSense (Sticky Footer / In-Feed)</div>
-
-<footer class="footer-links">
-    <a onclick="showLegal('about')">Hakkımızda</a>
-    <a onclick="showLegal('privacy')">Gizlilik Politikası</a>
-    <a onclick="showLegal('terms')">Kullanım Şartları</a>
-    <p style="margin-top:20px; font-size:0.75rem; color:var(--muted);">© 2024 KelimeKelime.com - Para Kazanma Makinesi Aktif.</p>
+<footer>
+    <div style="margin-bottom: 15px;">
+        <span class="legal-link" onclick="alert('KelimeKelime: En iyi bulmaca yardımcınız.')">Hakkımızda</span>
+        <span class="legal-link" onclick="alert('Gizlilik Politikası: Verileriniz güvende.')">Gizlilik</span>
+        <span class="legal-link" onclick="alert('Kullanım Şartları: Adil kullanım esastır.')">Şartlar</span>
+    </div>
+    <p style="font-size:0.75rem; color:var(--text-muted);">© 2026 KelimeKelime.com</p>
 </footer>
 
 <script>
-    // HUKUKİ İÇERİKLER (AdSense için zorunlu)
-    const legalContent = {
-        about: { title: "Hakkımızda", text: "KelimeKelime, Türkiye'nin en kapsamlı bulmaca sözlüğüdür..." },
-        privacy: { title: "Gizlilik Politikası", text: "Verileriniz Google reklam standartlarına uygun olarak korunmaktadır. Çerezler kullanıcı deneyimini artırmak için kullanılır..." },
-        terms: { title: "Kullanım Şartları", text: "Sitemizi kullanarak tüm kullanım koşullarını kabul etmiş sayılırsınız..." }
+    // BAĞLANTI AYARLARI
+    const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
+    const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
+    const _supabase = supabase.createClient(SB_URL, SB_KEY);
+
+    window.onload = () => {
+        loadCategories();
+        showVitrin();
     };
 
-    function showLegal(type) {
-        const page = legalContent[type];
-        // Profesyonel modal yapısını burada tetikleyebiliriz
-        alert(`${page.title}\n\n${page.text}`);
+    function loadCategories() {
+        const cats = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik"];
+        const strip = document.getElementById('categoryStrip');
+        cats.forEach(c => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-item';
+            btn.innerText = c;
+            btn.onclick = () => filterByCategory(c);
+            strip.appendChild(btn);
+        });
     }
 
-    // AD-SENSENT FEED LOGIC (Veri basarken reklam aralara sızar)
+    async function showVitrin() {
+        const { data } = await _supabase.from('kelimeler').select('*').limit(10);
+        render(data, "📅 Bugünün Kelimeleri");
+    }
+
+    async function runSearch() {
+        const q = document.getElementById('searchInput').value.trim();
+        if(!q) return;
+        const { data } = await _supabase.from('kelimeler').select('*').or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(20);
+        render(data, `🔍 "${q}" Araması`);
+    }
+
+    async function filterByCategory(cat) {
+        const { data } = await _supabase.from('kelimeler').select('*').eq('kategori', cat).limit(30);
+        render(data, `📂 ${cat} Kategorisi`);
+    }
+
     function render(data, title = "") {
         const res = document.getElementById('results');
-        res.innerHTML = title ? `<h2 style="margin-bottom:20px; font-weight:800;">${title}</h2>` : '';
+        res.innerHTML = title ? `<h3 style="margin-bottom:20px;">${title}</h3>` : '';
+
+        if (!data || data.length === 0) {
+            res.innerHTML += '<p style="text-align:center; padding:20px; color:gray;">Sonuç bulunamadı.</p>';
+            return;
+        }
 
         data.forEach((item, index) => {
-            // HER 3 KARTTA BİR REKLAM EKLE (Para Kazanma Dinamiği)
-            if (index > 0 && index % 3 === 0) {
+            // HER 4 KELİMEDE BİR REKLAM YERLEŞİMİ (PARA KAZANMA)
+            if (index > 0 && index % 4 === 0) {
                 const ad = document.createElement('div');
-                ad.className = 'ad-placeholder';
-                ad.innerText = "Google AdSense (In-Feed Native Ad)";
+                ad.className = 'ad-slot';
+                ad.innerText = "İçerik Arası Reklam (AdSense)";
                 res.appendChild(ad);
             }
 
             const art = document.createElement('article');
             art.className = 'word-card';
             art.innerHTML = `
-                <div style="font-size:0.7rem; font-weight:800; color:var(--muted); margin-bottom:10px;">BULMACA CEVABI</div>
-                <h2 style="font-size:1.8rem; color:var(--primary); margin-bottom:10px;">${item.kelime.toUpperCase()}</h2>
-                <p style="color:var(--text); line-height:1.6;">${item.anlam}</p>
-            `;
-            res.appendChild(art);
-        });
-    }
-</script>
-</body>
-</html>
+                <div style
