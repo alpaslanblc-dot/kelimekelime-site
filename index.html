@@ -62,7 +62,7 @@
         footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); margin-top: 2rem; font-size: 0.75rem; }
         .footer-links a { color: var(--primary); text-decoration: none; margin: 0 10px; font-weight: 600; cursor: pointer; }
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); }
-        .modal-content { background: white; margin: 15% auto; padding: 2rem; width: 90%; max-width: 500px; border-radius: 20px; position: relative; }
+        .modal-content { background: white; margin: 15% auto; padding: 2.5rem; width: 90%; max-width: 500px; border-radius: 24px; position: relative; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
         
         @media (max-width: 480px) {
             .hero h1 { font-size: 1.8rem; }
@@ -89,17 +89,18 @@
         <div id="results"></div>
     </main>
 
-    <section id="iletisim" style="background: #ffffff; padding: 60px 20px; text-align: center; border-top: 1px solid #f0f0f0; margin-top: 40px; font-family: 'Inter', sans-serif;">
+    <section id="iletisim" style="background: #ffffff; padding: 60px 20px; text-align: center; border-top: 1px solid #f0f0f0; margin-top: 40px;">
         <div style="max-width: 700px; margin: 0 auto;">
-            <div style="background: #e3f2fd; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                <span style="font-size: 24px;">✉️</span>
+            <div style="background: var(--primary-light); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <span style="font-size: 24px;">💡</span>
             </div>
-            <h3 style="color: #1a1a1b; font-size: 1.8rem; font-weight: 800; margin-bottom: 15px; letter-spacing: -0.5px;">Bizimle İletişime Geçin</h3>
-            <p style="color: #515365; line-height: 1.7; font-size: 1.1rem; margin-bottom: 30px;">
-                KelimeKelime sözlüğünü geliştirmemize yardımcı olun. Hatalı tanımları bildirmek, yeni kelime önermek veya reklam iş birlikleri için bize her zaman yazabilirsiniz.
+            <h3 style="color: #1e293b; font-size: 1.8rem; font-weight: 800; margin-bottom: 15px;">Bize Katkıda Bulunun</h3>
+            <p style="color: #64748b; line-height: 1.7; font-size: 1.1rem; margin-bottom: 30px;">
+                Eksik kelimeleri bildirebilir, yeni terimler önerebilir veya içeriklerle ilgili hataları bize iletebilirsiniz.
             </p>
-            <a href="mailto:alpaslanblc@hotmail.com" style="display: inline-block; background: #007bff; color: #ffffff; padding: 16px 40px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 15px rgba(0,123,255,0.3); transition: all 0.3s ease;">
-                alpaslanblc@hotmail.com Adresine Yazın
+            <a href="mailto:alpaslanblc@hotmail.com?subject=Kelime Onerisi / Hata Bildirimi" 
+               style="display: inline-block; background: var(--primary); color: #ffffff; padding: 16px 40px; border-radius: 14px; text-decoration: none; font-weight: 700; font-size: 1rem; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3); transition: transform 0.2s;">
+                ✨ Kelime Öner / Hata Bildir
             </a>
         </div>
     </section>
@@ -110,14 +111,14 @@
             <a onclick="showInfo('privacy')">Gizlilik</a>
             <a href="#iletisim">İletişim</a>
         </div>
-        <p>&copy; 2026 KelimeKelime</p>
+        <p style="margin-top: 15px; color: #94a3b8;">&copy; 2026 KelimeKelime</p>
     </footer>
 
     <div id="infoModal" class="modal" onclick="this.style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <h3 id="modalTitle"></h3>
-            <p id="modalText"></p>
-            <button onclick="document.getElementById('infoModal').style.display='none'" style="width:100%; padding:10px; border-radius:10px; border:none; background:var(--primary); color:white; font-weight:bold; cursor:pointer;">Kapat</button>
+            <h3 id="modalTitle" style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 15px;"></h3>
+            <p id="modalText" style="color: var(--text-main); line-height: 1.6; margin-bottom: 25px;"></p>
+            <button onclick="document.getElementById('infoModal').style.display='none'" style="width:100%; padding:14px; border-radius:12px; border:none; background:var(--primary); color:white; font-weight:bold; cursor:pointer;">Anladım</button>
         </div>
     </div>
 
@@ -129,4 +130,14 @@
             const t = document.getElementById('modalTitle');
             const txt = document.getElementById('modalText');
             if(type === 'about') {
-                t.innerText = "Hakkımızda
+                t.innerText = "Hakkımızda";
+                txt.innerText = "KelimeKelime, bulmaca severlerin ve araştırmacıların aradıkları terimlere en hızlı şekilde ulaşması için tasarlanmış modern bir dijital sözlüktür. Binlerce kelimelik veri tabanımızla, tıptan sanata, denizcilikten tarihe her alanda rehberlik ediyoruz.";
+            } else {
+                t.innerText = "Gizlilik Politikası";
+                txt.innerText = "Gizliliğiniz bizim için önemlidir. KelimeKelime, Google AdSense reklam hizmetlerini sunmak için çerezleri kullanır. Bu çerezler, size ilgi alanlarınıza göre reklamlar göstermek amacıyla kullanılır. Sitemizi kullanarak bu anonim veri kullanımını kabul etmiş sayılırsınız.";
+            }
+            m.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
