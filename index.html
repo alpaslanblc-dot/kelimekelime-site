@@ -38,123 +38,76 @@
         .logo span { color: var(--primary); }
 
         .menu-btn {
-            background: var(--primary-light);
-            color: var(--primary);
-            border: none;
-            padding: 10px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
+            background: var(--primary-light); color: var(--primary);
+            border: none; padding: 10px 15px; border-radius: 10px;
+            cursor: pointer; font-weight: 800; display: flex; align-items: center; gap: 8px;
         }
-        .menu-btn:hover { background: var(--primary); color: var(--white); }
 
         /* --- SIDE MENU --- */
         .side-menu { 
-            position: fixed; 
-            top: 0; 
-            right: -320px; 
-            width: 300px; 
-            height: 100%; 
-            background: var(--white); 
-            z-index: 2000; 
-            padding: 40px 25px; 
+            position: fixed; top: 0; right: -320px; width: 300px; height: 100%; 
+            background: var(--white); z-index: 2000; padding: 40px 25px; 
             box-shadow: -10px 0 30px rgba(0,0,0,0.1); 
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            display: flex; flex-direction: column;
         }
         .side-menu.active { right: 0; }
         .overlay { 
-            position: fixed; 
-            inset: 0; 
-            background: rgba(0,0,0,0.4); 
-            display: none; 
-            z-index: 1999; 
-            backdrop-filter: blur(4px); 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.4); 
+            display: none; z-index: 1999; backdrop-filter: blur(4px); 
         }
         .overlay.active { display: block; }
         
         .side-item { 
-            padding: 15px; 
-            border-radius: 12px; 
-            margin-bottom: 10px; 
-            cursor: pointer; 
-            font-weight: 600; 
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            padding: 15px; border-radius: 12px; margin-bottom: 10px; 
+            cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 12px;
         }
         .side-item:hover { background: var(--primary-light); color: var(--primary); }
 
-        /* --- STRIPS (ALFABE & KATEGORİ) --- */
+        /* --- STRIPS --- */
         .strip-section { background: var(--white); border-bottom: 1px solid var(--border); padding: 12px 0; }
-        .strip { 
-            display: flex; 
-            gap: 10px; 
-            overflow-x: auto; 
-            padding: 0 5%; 
-            scrollbar-width: none; 
-        }
+        .strip { display: flex; gap: 10px; overflow-x: auto; padding: 0 5%; scrollbar-width: none; }
         .strip::-webkit-scrollbar { display: none; }
         
         .btn-item { 
-            flex-shrink: 0; 
-            border: 1px solid var(--border); 
-            background: var(--white); 
-            border-radius: 10px; 
-            cursor: pointer; 
-            font-weight: 700; 
-            transition: 0.2s;
-            padding: 10px 14px;
-            font-size: 0.9rem;
+            flex-shrink: 0; border: 1px solid var(--border); background: var(--white); 
+            border-radius: 10px; cursor: pointer; font-weight: 700; padding: 10px 14px; font-size: 0.9rem;
         }
-        .btn-item:hover, .btn-item.active { 
-            background: var(--primary); 
-            color: var(--white); 
-            border-color: var(--primary); 
-            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
-        }
+        .btn-item:hover, .btn-item.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
 
-        /* --- SEARCH & CONTENT --- */
+        /* --- CONTENT --- */
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
         .search-container { 
-            margin: 20px 0; 
-            display: flex; 
-            gap: 10px; 
-            background: var(--white); 
-            padding: 10px; 
-            border-radius: 18px; 
-            border: 1px solid var(--border); 
+            margin: 20px 0; display: flex; gap: 10px; background: var(--white); 
+            padding: 10px; border-radius: 18px; border: 1px solid var(--border); 
             box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); 
         }
         .search-container input { flex: 1; border: none; padding: 12px; outline: none; font-size: 1.1rem; }
-        .search-container button { 
-            background: var(--primary); 
-            color: var(--white); 
-            border: none; 
-            padding: 0 25px; 
-            border-radius: 14px; 
-            cursor: pointer; 
-            font-weight: 700; 
-        }
+        .search-container button { background: var(--primary); color: var(--white); border: none; padding: 0 25px; border-radius: 14px; cursor: pointer; font-weight: 700; }
 
-        /* --- WORD CARDS --- */
-        .card { 
-            background: var(--white); 
-            padding: 30px; 
-            border-radius: 24px; 
-            border: 1px solid var(--border); 
-            margin-bottom: 25px; 
-            transition: 0.3s;
-        }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 12px 20px rgba(0,0,0,0.05); }
-        .card-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .tag { background: var(--primary-light); color: var(--primary); padding: 5px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; }
+        .card { background: var(--white); padding: 30px; border-radius: 24px; border: 1px solid var(--border); margin-bottom: 25px; }
         .card h2 { font-size: 2rem; font-weight: 900; color: var(--text-main); letter-spacing: 1px; margin-top: 10px; }
         .card p { font-size: 1.15rem; color: var(--text-muted); font-weight: 500; margin: 15px 0; border-left: 4px solid var(--primary-light); padding-left: 15px; }
+
+        /* --- MODAL FORM --- */
+        .modal { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6); 
+            display: none; align-items: center; justify-content: center; z-index: 3000; padding: 20px;
+        }
+        .modal-content { 
+            background: var(--white); padding: 30px; border-radius: 24px; 
+            width: 100%; max-width: 450px; position: relative; 
+        }
+        .modal-content h3 { margin-bottom: 20px; color: var(--primary); font-weight: 800; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; color: var(--text-muted); }
+        .form-group input, .form-group textarea { 
+            width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 10px; outline: none; font-size: 1rem;
+        }
+        .submit-btn { 
+            width: 100%; background: var(--primary); color: white; border: none; 
+            padding: 14px; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 10px;
+        }
 
         .section-title { text-align: center; margin-bottom: 25px; color: var(--text-muted); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
     </style>
@@ -169,8 +122,9 @@
         <button onclick="toggleMenu()" style="border:none; background:none; font-size:1.8rem; cursor:pointer;">✕</button>
     </div>
     <div class="side-item" onclick="location.reload()">🏠 Ana Sayfa</div>
-    <div class="side-item" onclick="alert('KelimeKelime: Bulmaca yardımcı platformu.')">📖 Hakkımızda</div>
-    <div class="side-item" onclick="alert('destek@kelimekelime.com')">✉️ İletişim</div>
+    <div class="side-item" onclick="openForm('öner')">💡 Kelime Öner</div>
+    <div class="side-item" onclick="alert('KelimeKelime: Bulmaca severler için ücretsiz dijital sözlük.')">📖 Hakkımızda</div>
+    <div class="side-item" onclick="openForm('iletişim')">✉️ İletişim</div>
     <div style="margin-top: auto; text-align: center; font-size: 0.8rem; color: var(--text-muted);">© 2026 KelimeKelime</div>
 </nav>
 
@@ -186,65 +140,110 @@
 
 <main class="container">
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Bulmaca sorusu veya kelime ara...">
+        <input type="text" id="searchInput" placeholder="Bulmaca sorusu veya cevap ara...">
         <button onclick="runSearch()">Ara</button>
     </div>
     
     <div id="contentArea">
-        <div style="text-align:center; padding:50px; color:var(--primary); font-weight:700;">Veriler hazırlanıyor...</div>
+        <div style="text-align:center; padding:50px; color:var(--primary); font-weight:700;">Veriler yükleniyor...</div>
     </div>
 </main>
+
+<div id="formModal" class="modal">
+    <div class="modal-content">
+        <button onclick="closeForm()" style="position:absolute; top:20px; right:20px; border:none; background:none; font-size:1.2rem; cursor:pointer;">✕</button>
+        <h3 id="formTitle">Kelime Öner</h3>
+        <p id="formDesc" style="font-size:0.9rem; color:var(--text-muted); margin-bottom:20px;">Eksik olduğunu düşündüğünüz kelimeyi bize gönderin.</p>
+        
+        <div class="form-group">
+            <label id="label1">KELİME / KONU</label>
+            <input type="text" id="formSubject" placeholder="...">
+        </div>
+        <div class="form-group">
+            <label id="label2">AÇIKLAMA / ANLAMI</label>
+            <textarea id="formMessage" rows="4" placeholder="Detayları buraya yazın..."></textarea>
+        </div>
+        <button class="submit-btn" onclick="sendMail()">GÖNDER</button>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-    // Bağlantı Parametreleri (Temizlenmiş)
     const SB_URL = "https://mvsbrknkfwwptjifdqca.supabase.co".trim();
     const SB_KEY = "sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr".trim();
     const _sb = supabase.createClient(SB_URL, SB_KEY);
 
-    // Hamburger Menü Fonksiyonu
     function toggleMenu() {
         document.getElementById('sideMenu').classList.toggle('active');
         document.getElementById('overlay').classList.toggle('active');
     }
 
-    // Alfabe & Kategori Başlatma
+    // FORM YÖNETİMİ
+    function openForm(type) {
+        const modal = document.getElementById('formModal');
+        const title = document.getElementById('formTitle');
+        const desc = document.getElementById('formDesc');
+        const l1 = document.getElementById('label1');
+        const l2 = document.getElementById('label2');
+
+        if(type === 'öner') {
+            title.innerText = "Kelime Öner";
+            desc.innerText = "Sözlüğümüzde bulamadığınız kelimeyi ekleyelim.";
+            l1.innerText = "ÖNERİLEN KELİME";
+            l2.innerText = "KELİME ANLAMI (BİLİYORSANIZ)";
+        } else {
+            title.innerText = "İletişim";
+            desc.innerText = "Görüş ve önerileriniz için bize yazın.";
+            l1.innerText = "KONU";
+            l2.innerText = "MESAJINIZ";
+        }
+
+        modal.style.display = "flex";
+        if(document.getElementById('sideMenu').classList.contains('active')) toggleMenu();
+    }
+
+    function closeForm() {
+        document.getElementById('formModal').style.display = "none";
+    }
+
+    function sendMail() {
+        const subject = document.getElementById('formSubject').value;
+        const message = document.getElementById('formMessage').value;
+        const email = "alpaslanblc@hotmail.com";
+        
+        if(!subject || !message) {
+            alert("Lütfen alanları doldurun.");
+            return;
+        }
+
+        const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+        window.location.href = mailtoLink;
+        closeForm();
+    }
+
+    // VERİ TABANI SİSTEMİ
     window.onload = () => {
-        // Alfabe
         const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
         const aStrip = document.getElementById('alphaStrip');
         alphabet.forEach(l => {
             const btn = document.createElement('button');
-            btn.className = 'btn-item';
-            btn.innerText = l;
+            btn.className = 'btn-item'; btn.innerText = l;
             btn.onclick = () => getByLetter(l);
             aStrip.appendChild(btn);
         });
 
-        // Kategoriler
         const cats = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik"];
         const cStrip = document.getElementById('catStrip');
-        
-        // Rastgele Butonu
-        const rBtn = document.createElement('button');
-        rBtn.className = 'btn-item'; rBtn.innerHTML = '🎲 Rastgele';
-        rBtn.style.color = 'var(--primary)';
-        rBtn.onclick = () => fetchRandom();
-        cStrip.appendChild(rBtn);
-
         cats.forEach(c => {
             const btn = document.createElement('button');
-            btn.className = 'btn-item';
-            btn.innerText = c;
+            btn.className = 'btn-item'; btn.innerText = c;
             btn.onclick = () => getByCategory(c);
             cStrip.appendChild(btn);
         });
 
         loadVitrin();
     };
-
-    // --- VERİ FONKSİYONLARI ---
 
     async function loadVitrin() {
         const { data, error } = await _sb.from('kelimeler').select('*').limit(8);
@@ -255,7 +254,7 @@
         const q = document.getElementById('searchInput').value.trim();
         if(!q) return;
         const { data } = await _sb.from('kelimeler').select('*').or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(40);
-        render(data, `🔍 "${q}" Arama Sonuçları`);
+        render(data, `🔍 "${q}" Sonuçları`);
     }
 
     async function getByLetter(l) {
@@ -268,19 +267,16 @@
         render(data, `${c} Kategorisi`);
     }
 
-    async function fetchRandom() {
-        const { data } = await _sb.from('kelimeler').select('*').limit(50);
-        if(data) render([data[Math.floor(Math.random() * data.length)]], "🎲 Şansına Ne Çıktı?");
-    }
-
-    // --- EKRANA YAZDIRMA (RENDER) ---
-
     function render(data, title) {
         const area = document.getElementById('contentArea');
         area.innerHTML = `<div class="section-title">${title}</div>`;
 
         if(!data || data.length === 0) {
-            area.innerHTML += `<div style="text-align:center; padding:40px; opacity:0.5;">Sonuç bulunamadı.</div>`;
+            area.innerHTML += `
+                <div style="text-align:center; padding:40px;">
+                    <p style="opacity:0.5; margin-bottom:15px;">Sonuç bulunamadı.</p>
+                    <button onclick="openForm('öner')" style="background:var(--primary-light); color:var(--primary); border:none; padding:10px 20px; border-radius:10px; font-weight:700; cursor:pointer;">Kelime Öner</button>
+                </div>`;
             return;
         }
 
@@ -288,9 +284,9 @@
             const card = document.createElement('div');
             card.className = 'card';
             card.innerHTML = `
-                <div class="card-meta">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
                     <span style="font-size:0.7rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Tanımlama</span>
-                    <span class="tag">${item.kategori || 'Genel'}</span>
+                    <span style="background:var(--primary-light); color:var(--primary); padding:5px 12px; border-radius:8px; font-size:0.75rem; font-weight:800;">${item.kategori || 'Genel'}</span>
                 </div>
                 <p>${item.anlam}</p>
                 <div style="border-top:1px solid var(--border); padding-top:15px; margin-top:10px;">
