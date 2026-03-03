@@ -9,39 +9,60 @@
     <style>
         :root { --p: #4f46e5; --pl: #eef2ff; --bg: #f8fafc; --t: #1e293b; --m: #64748b; --b: #e2e8f0; --w: #ffffff; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--t); line-height: 1.6; }
+        body { background: var(--bg); color: var(--t); line-height: 1.6; overflow-x: hidden; }
         
-        /* REKLAM ALANLARI (AD SENSE READY) */
-        .ad-slot { background: #f1f5f9; border: 2px dashed var(--b); margin: 20px 0; display: flex; align-items: center; justify-content: center; color: var(--m); font-size: 0.75rem; border-radius: 12px; min-height: 100px; }
-
+        /* NAVBAR & HAMBURGER */
         .navbar { background: var(--w); border-bottom: 1px solid var(--b); padding: 0.8rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 1.5rem; font-weight: 800; cursor: pointer; text-decoration: none; color: var(--t); }
         .logo span { color: var(--p); }
         
+        .menu-btn { background: var(--pl); color: var(--p); border: none; padding: 10px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 800; }
+
+        /* SIDEBAR (YAN MENÜ) */
+        .sidebar { position: fixed; top: 0; right: -280px; width: 280px; height: 100%; background: var(--w); box-shadow: -5px 0 15px rgba(0,0,0,0.05); z-index: 2000; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); padding: 30px; }
+        .sidebar.active { right: 0; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1500; display: none; backdrop-filter: blur(3px); }
+        .overlay.active { display: block; }
+
+        .side-link { display: block; padding: 15px; border-radius: 12px; color: var(--t); text-decoration: none; font-weight: 700; margin-bottom: 10px; transition: 0.2s; cursor: pointer; }
+        .side-link:hover { background: var(--pl); color: var(--p); }
+
+        /* DİĞER TASARIMLAR */
+        .ad-slot { background: #f1f5f9; border: 2px dashed var(--b); margin: 20px 0; display: flex; align-items: center; justify-content: center; color: var(--m); font-size: 0.75rem; border-radius: 12px; min-height: 100px; }
         .strip-section { background: var(--w); border-bottom: 1px solid var(--b); padding: 12px 0; }
         .strip { display: flex; gap: 10px; overflow-x: auto; padding: 0 5%; scrollbar-width: none; }
         .strip::-webkit-scrollbar { display: none; }
         .btn-item { flex-shrink: 0; border: 1px solid var(--b); background: var(--w); border-radius: 10px; cursor: pointer; font-weight: 700; padding: 10px 14px; font-size: 0.9rem; }
         .btn-item:hover { background: var(--p); color: var(--w); }
-
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
         .search-container { margin: 20px 0; display: flex; gap: 10px; background: var(--w); padding: 10px; border-radius: 18px; border: 1px solid var(--b); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .search-container input { flex: 1; border: none; padding: 12px; outline: none; font-size: 1.1rem; }
         .search-container button { background: var(--p); color: var(--w); border: none; padding: 0 25px; border-radius: 14px; cursor: pointer; font-weight: 700; }
-
-        .card { background: var(--w); padding: 30px; border-radius: 24px; border: 1px solid var(--b); margin-bottom: 25px; position: relative; }
-        .card h2 { font-size: 1.8rem; margin-top: 10px; letter-spacing: 1px; }
-        
-        footer { text-align: center; padding: 40px; border-top: 1px solid var(--b); margin-top: 40px; background: var(--w); }
-        .footer-link { margin: 0 10px; color: var(--m); cursor: pointer; font-size: 0.8rem; text-decoration: none; }
-        .footer-link:hover { color: var(--p); }
+        .card { background: var(--w); padding: 30px; border-radius: 24px; border: 1px solid var(--b); margin-bottom: 25px; }
+        footer { text-align: center; padding: 40px; border-top: 1px solid var(--b); background: var(--w); }
     </style>
 </head>
 <body>
 
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+<div class="sidebar" id="sidebar">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+        <h2 style="font-weight:800;">Menü</h2>
+        <button onclick="toggleMenu()" style="border:none; background:none; font-size:1.5rem; cursor:pointer;">✕</button>
+    </div>
+    <div class="side-link" onclick="location.reload()">🏠 Ana Sayfa</div>
+    <div class="side-link" onclick="toggleMenu(); alert('Yakında!')">🏆 En Çok Arananlar</div>
+    <div class="side-link" onclick="toggleMenu(); alert('Öneri formuna yönlendiriliyor...')">✍️ Kelime Öner</div>
+    <hr style="border:0; border-top:1px solid var(--b); margin:20px 0;">
+    <div class="side-link" onclick="alert('Gizlilik Politikası')">🔒 Gizlilik</div>
+    <div class="side-link" onclick="alert('İletişim')">📧 İletişim</div>
+</div>
+
 <header class="navbar">
     <div class="logo" onclick="location.reload()">Kelime<span>Kelime</span></div>
-    <button onclick="alert('Öneriler yakında aktif!')" style="background:var(--pl); color:var(--p); border:none; padding:8px 16px; border-radius:10px; font-weight:800; cursor:pointer;">ÖNERİ YAP</button>
+    <button class="menu-btn" onclick="toggleMenu()">
+        <span>☰</span> <span style="font-size:0.8rem">MENÜ</span>
+    </button>
 </header>
 
 <div class="strip-section">
@@ -63,29 +84,27 @@
 </main>
 
 <footer>
-    <div style="margin-bottom: 15px;">
-        <span class="footer-link" onclick="alert('Hakkımızda: Bulmaca tutkunları için en büyük sözlük rehberi.')">Hakkımızda</span>
-        <span class="footer-link" onclick="alert('Gizlilik: Verileriniz Google AdSense standartlarında korunmaktadır.')">Gizlilik Politikası</span>
-        <span class="footer-link" onclick="alert('Şartlar: KelimeKelime kullanım koşulları.')">Kullanım Şartları</span>
-    </div>
     <p style="font-size:0.75rem; color:var(--m);">© 2026 KelimeKelime.com | Para Kazanma Makinesi</p>
 </footer>
 
 <script>
-    // SUPABASE BAĞLANTISI (DEĞİŞTİRMEYİN)
     const SB_URL = "https://mvsbrknkfwwptjifdqca.supabase.co";
     const SB_KEY = "sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr";
     const _sb = supabase.createClient(SB_URL, SB_KEY);
 
+    // MENÜ FONKSİYONU
+    function toggleMenu() {
+        document.getElementById('sidebar').classList.toggle('active');
+        document.getElementById('overlay').classList.toggle('active');
+    }
+
     window.onload = () => {
-        // Alfabe Oluştur
         const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
         alphabet.forEach(l => {
             const b = document.createElement('button'); b.className = 'btn-item'; b.innerText = l;
             b.onclick = () => getByL(l); document.getElementById('alphaStrip').appendChild(b);
         });
 
-        // Kategoriler Oluştur
         const cats = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik"];
         cats.forEach(c => {
             const b = document.createElement('button'); b.className = 'btn-item'; b.innerText = c;
@@ -127,7 +146,6 @@
         }
 
         data.forEach((i, index) => {
-            // --- SAFHA 3: REKLAM YERLEŞİMİ (PARA KAZANMA) ---
             if (index > 0 && index % 4 === 0) {
                 const ad = document.createElement('div');
                 ad.className = 'ad-slot';
@@ -145,7 +163,7 @@
                 <p style="font-size:1.15rem; color:var(--t); font-weight:500; margin:15px 0;">${i.anlam}</p>
                 <div style="border-top:1px solid var(--b); padding-top:15px;">
                     <small style="color:var(--p); font-weight:800; font-size:0.7rem;">CEVAP:</small>
-                    <h2>${i.kelime.toUpperCase()}</h2>
+                    <h2 style="font-size:1.8rem; letter-spacing:1px;">${i.kelime.toUpperCase()}</h2>
                 </div>
             `;
             area.appendChild(card);
