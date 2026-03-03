@@ -33,10 +33,10 @@
 
         .menu-trigger {
             background: var(--primary-light); color: var(--primary); border: none; padding: 10px 15px;
-            border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
+            border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 0.9rem;
         }
 
-        /* Side Menu (Drawer) */
+        /* Side Menu */
         .side-menu {
             position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: white;
             box-shadow: -10px 0 30px rgba(0,0,0,0.1); z-index: 2001; padding: 2rem; display: flex; flex-direction: column; gap: 1rem;
@@ -65,15 +65,18 @@
         .search-wrapper input { flex: 1; border: none; padding: 12px; font-size: 1rem; outline: none; background: transparent; }
         .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 1.5rem; border-radius: 12px; cursor: pointer; font-weight: 700; }
         
-        .cat-strip, .alphabet-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 20px 0; }
+        /* Şeritler */
+        .cat-strip, .alphabet-strip { 
+            display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 20px 0; 
+            min-height: 40px; /* Boşluk oluşmaması için */
+        }
         .cat-btn, .letter-btn { background: var(--card); border: 1px solid var(--border); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .cat-btn { padding: 0.6rem 1.2rem; border-radius: 12px; font-size: 0.8rem; color: var(--text-muted); }
         .letter-btn { width: 36px; height: 36px; border-radius: 10px; font-size: 0.85rem; color: var(--text-main); }
-        .cat-btn:hover, .letter-btn:hover, .cat-btn.active { background: var(--primary); color: white !important; }
+        .cat-btn:hover, .letter-btn:hover { background: var(--primary); color: white !important; }
 
         .word-card { background: var(--card); padding: 1.8rem; border-radius: 24px; border: 1px solid var(--border); margin-bottom: 1.5rem; }
         
-        /* Modal */
         .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
         .modal-content { background: white; margin: 10% auto; padding: 2rem; width: 90%; max-width: 500px; border-radius: 24px; }
     </style>
@@ -84,17 +87,14 @@
     
     <nav class="side-menu" id="sideMenu">
         <button class="menu-close" onclick="toggleMenu()">✕</button>
-        <div style="font-weight: 800; color: var(--primary); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">Navigasyon</div>
-        <a class="menu-item" onclick="toggleMenu(); location.href='#'; showVitrin();">🏠 Ana Sayfa</a>
+        <div style="font-weight: 800; color: var(--primary); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase;">Navigasyon</div>
+        <a class="menu-item" onclick="toggleMenu(); location.reload();">🏠 Ana Sayfa</a>
         <a class="menu-item" onclick="showInfo('about')">📖 Hakkımızda</a>
         <a class="menu-item" onclick="showInfo('privacy')">🔒 Gizlilik</a>
         <a class="menu-item" onclick="toggleMenu(); document.getElementById('iletisimArea').scrollIntoView({behavior: 'smooth'});">📧 İletişim</a>
-        
         <hr style="border: 0; border-top: 1px solid var(--border); margin: 10px 0;">
-        
-        <div style="font-weight: 800; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Kategoriler</div>
-        <div id="sideCategoryList">
-            </div>
+        <div style="font-weight: 800; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Kategoriler</div>
+        <div id="sideCategoryList"></div>
     </nav>
 
     <header class="navbar">
@@ -122,4 +122,159 @@
         <div id="results"></div>
 
         <section id="iletisimArea" style="background: white; padding: 40px; border-radius: 24px; text-align: center; margin-top: 50px; border: 1px solid var(--border);">
-            <h3 style="font-
+            <h3 style="font-weight: 800;">Bize Ulaşın</h3>
+            <button onclick="showContactForm()" style="background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 12px; font-weight: 700; cursor: pointer;">Kelime Öner</button>
+        </section>
+    </main>
+
+    <div id="infoModal" class="modal" onclick="this.style.display='none'">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 id="modalTitle" style="font-weight: 800;"></h3>
+            <div id="modalText" style="margin: 20px 0;"></div>
+            <button onclick="document.getElementById('infoModal').style.display='none'" style="width:100%; padding:12px; border:none; background:var(--primary); color:white; font-weight:bold; border-radius:12px;">Kapat</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
+        const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
+        const _supabase = supabase.createClient(SB_URL, SB_KEY);
+
+        // Menü Aç/Kapat
+        function toggleMenu() {
+            document.getElementById('sideMenu').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        // --- BAŞLATICI ---
+        // Sayfa DOM yüklendiği anda çalışır, hiçbir şeyin kaybolmasına izin vermez
+        document.addEventListener('DOMContentLoaded', () => {
+            initAlphabet();
+            loadCategories();
+            initSearch();
+            showVitrin();
+        });
+
+        function initAlphabet() {
+            const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
+            const strip = document.getElementById('alphabetStrip');
+            if(!strip) return;
+            strip.innerHTML = '';
+            alphabet.forEach(l => {
+                const b = document.createElement('button');
+                b.className = 'letter-btn';
+                b.innerText = l;
+                b.onclick = () => getByLetter(l);
+                strip.appendChild(b);
+            });
+        }
+
+        function loadCategories() {
+            const strip = document.getElementById('categoryStrip');
+            const sideList = document.getElementById('sideCategoryList');
+            const cats = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik"];
+            const emojis = {"Tarih":"📜","Sanat":"🎨","İnanç":"🕌","Doğa":"🌿","Tıp":"⚕️","Siyaset":"⚖️","Spor":"⚽","Denizcilik":"⚓"};
+
+            if(strip) {
+                strip.innerHTML = '<button class="cat-btn" onclick="fetchRandomWord()" style="background:var(--primary-light); color:var(--primary)">🎲 Rastgele</button>';
+                cats.forEach(c => {
+                    const b = document.createElement('button');
+                    b.className = 'cat-btn';
+                    b.innerText = c;
+                    b.onclick = () => filterByCategory(c);
+                    strip.appendChild(b);
+                });
+            }
+
+            if(sideList) {
+                sideList.innerHTML = '';
+                cats.forEach(c => {
+                    const a = document.createElement('a');
+                    a.className = 'menu-item';
+                    a.innerHTML = `<span>${emojis[c] || '🏷️'}</span> ${c}`;
+                    a.onclick = () => { toggleMenu(); filterByCategory(c); document.getElementById('results').scrollIntoView({behavior:'smooth'}); };
+                    sideList.appendChild(a);
+                });
+            }
+        }
+
+        function initSearch() {
+            const inp = document.getElementById('searchInput');
+            if(inp) {
+                inp.oninput = (e) => {
+                    const val = e.target.value.trim();
+                    if(val.length >= 2) runSearch(val);
+                    else if(val.length === 0) showVitrin();
+                };
+            }
+        }
+
+        async function showVitrin() {
+            const { data: allData } = await _supabase.from('kelimeler').select('id');
+            if (allData?.length > 0) {
+                const seed = new Date().getDate(); // Sadece güne göre değişsin
+                const shuffled = [...allData].sort(() => (Math.sin(seed) * 10000 % 1) - 0.5);
+                const { data } = await _supabase.from('kelimeler').select('*').in('id', shuffled.slice(0, 5).map(i => i.id));
+                render(data, "📅 Bugünün Öne Çıkan Kelimeleri");
+            }
+        }
+
+        async function runSearch(q) {
+            const { data } = await _supabase.from('kelimeler').select('*').or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(25);
+            render(data);
+        }
+
+        async function getByLetter(l) {
+            const { data } = await _supabase.from('kelimeler').select('*').ilike('kelime', `${l}%`).order('kelime');
+            render(data, `${l} Harfi İle Başlayanlar`);
+        }
+
+        async function filterByCategory(cat) {
+            const { data } = await _supabase.from('kelimeler').select('*').eq('kategori', cat).order('kelime');
+            render(data, `${cat} Kategorisi`);
+        }
+
+        async function fetchRandomWord() {
+            const { data } = await _supabase.from('kelimeler').select('*').limit(100);
+            if(data) render([data[Math.floor(Math.random() * data.length)]], "🎲 Rastgele");
+        }
+
+        function render(data, title = "") {
+            const res = document.getElementById('results');
+            if(!res) return;
+            res.innerHTML = title ? `<h4 style="text-align:center; font-weight:800; margin-bottom:1.5rem;">${title}</h4>` : '';
+            if(!data || data.length === 0) {
+                res.innerHTML += '<div style="text-align:center; padding:3rem; opacity:0.5">Sonuç bulunamadı.</div>';
+                return;
+            }
+            data.forEach(item => {
+                const d = document.createElement('div');
+                d.className = 'word-card';
+                d.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                        <span style="font-size:0.7rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Tanım</span>
+                        <span style="background:var(--primary-light); color:var(--primary); padding:4px 8px; border-radius:6px; font-size:0.7rem; font-weight:800;">${item.kategori || 'Genel'}</span>
+                    </div>
+                    <p style="font-size:1.1rem; color:var(--text-main); margin-bottom:15px; font-weight:500;">${item.anlam}</p>
+                    <div style="border-top:1px solid var(--border); padding-top:10px;">
+                        <span style="font-size:0.7rem; font-weight:800; color:var(--primary); text-transform:uppercase;">Cevap</span>
+                        <h2 style="margin:0; font-size:1.7rem; color:var(--text-main); font-weight:800;">${item.kelime}</h2>
+                    </div>
+                `;
+                res.appendChild(d);
+            });
+        }
+
+        function showInfo(type) {
+            toggleMenu();
+            const m = document.getElementById('infoModal');
+            document.getElementById('modalTitle').innerText = type === 'about' ? "Hakkımızda" : "Gizlilik";
+            document.getElementById('modalText').innerText = type === 'about' ? "KelimeKelime Türkiye'nin dijital bulmaca rehberidir." : "Verileriniz anonim olarak korunmaktadır.";
+            m.style.display = 'block';
+        }
+
+        function showContactForm() { alert("Yakında aktif!"); }
+    </script>
+</body>
+</html>
