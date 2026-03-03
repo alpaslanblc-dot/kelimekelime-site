@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelime Bulmaca | Profesyonel Bulmaca Sözlüğü</title>
+    
+    <title>KelimeKelime | Profesyonel Bulmaca Sözlüğü</title>
+    <meta name="description" content="KelimeKelime.com: En kapsamlı bulmaca sözlüğü. Binlerce kelimenin anlamı, bulmaca cevapları ve kelime öneri sistemi ile bulmacalar artık daha kolay.">
+    <meta name="keywords" content="kelimekelime, bulmaca sözlüğü, kelime anlamları, bulmaca cevapları, çengel bulmaca, kare bulmaca">
+    <meta name="author" content="KelimeKelime">
+    
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -11,24 +16,150 @@
 <body>
 
     <nav class="navbar">
-        <div class="logo">🧩 KELİME<span>BULMACA</span></div>
+        <a href="/" class="logo" style="text-decoration:none; display:flex; align-items:center; gap:8px;">
+            <span style="font-size:1.8rem;">🧩</span> 
+            <div style="display:flex; flex-direction:column; line-height:1;">
+                <span style="font-size:1.2rem; font-weight:800; color:#1e293b;">KELİME</span>
+                <span style="font-size:0.9rem; font-weight:700; color:#4f46e5; letter-spacing:1px;">KELİME</span>
+            </div>
+        </a>
+        <button onclick="toggleMenu()" style="background:none; border:none; font-size:1.8rem; cursor:pointer; color:#1e293b;">☰</button>
     </nav>
 
-    <div class="strip-box">
-        <div class="strip" id="alphaStrip"></div>
-    </div>
+    <div class="strip-box"><div class="strip" id="alphaStrip"></div></div>
 
     <main class="container">
         <div class="search-area">
             <input type="text" id="sInp" placeholder="Soru veya cevap arayın...">
             <button id="searchBtn">ARA</button>
         </div>
-
         <div id="viewArea"></div>
     </main>
 
-    <script src="database.js"></script>
-    <script src="ui.js"></script>
-    <script src="app.js"></script>
-</body>
-</html>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-section"><h4>Kategoriler</h4><div id="menuCats"></div></div>
+        <div class="menu-section">
+            <h4>Kurumsal</h4>
+            <a class="menu-link" onclick="showSuggest()">🧩 Kelime Öner</a>
+            <a class="menu-link" onclick="showContact()">📧 İletişim</a>
+            <a class="menu-link" onclick="showPrivacy()">🛡️ Gizlilik Politikası</a>
+        </div>
+    </div>
+    
+    <div id="customModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3000; align-items:center; justify-content:center; backdrop-filter:blur(5px);">
+        <div style="background:white; width:90%; max-width:500px; padding:30px; border-radius:20px; position:relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+            <button onclick="closeModal()" style="position:absolute; top:15px; right:15px; border:none; background:none; font-size:1.8rem; cursor:pointer; color:#64748b;">&times;</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // SUPABASE BAĞLANTISI (BİLGİLERİN GİRİLDİ)
+        const SUPABASE_URL = "https://mvsbrknkfwwptjifdqca.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr";
+        const _db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const viewArea = document.getElementById('viewArea');
+
+        function toggleMenu() { 
+            document.getElementById('sideMenu').classList.toggle('active'); 
+            document.getElementById('overlay').classList.toggle('active'); 
+        }
+
+        function closeModal() { 
+            document.getElementById('customModal').style.display = 'none'; 
+        }
+
+        function openModal(html) { 
+            document.getElementById('modalContent').innerHTML = html; 
+            document.getElementById('customModal').style.display = 'flex'; 
+            if(document.getElementById('sideMenu').classList.contains('active')) toggleMenu(); 
+        }
+
+        // VERİ ÇEKME MOTORU
+        async function loadData(params = {}) {
+            viewArea.innerHTML = "<div style='text-align:center; padding:50px; color:#64748b;'>Kelimeler getiriliyor...</div>";
+            let q = _db.from('kelimeler').select('*');
+            
+            if (params.harf) q = q.ilike('kelime', `${params.harf}%`);
+            if (params.search) q = q.ilike('kelime', `%${params.search}%`);
+            if (params.cat) q = q.eq('kategori', params.cat);
+
+            const { data, error } = await q.order('kelime', { ascending: true }).limit(50);
+            
+            if (error) { 
+                viewArea.innerHTML = "<div class='card'>Veri bağlantısında bir sorun oluştu.</div>"; 
+                return; 
+            }
+            render(data, params.search || params.harf || params.cat || "Öne Çıkan Kelimeler");
+        }
+
+        function render(data, title) {
+            viewArea.innerHTML = `<h1 style="margin-bottom:20px; color:#64748b; font-size:0.9rem; text-transform:uppercase; letter-spacing:1px;">${title}</h1>`;
+            
+            if (!data || data.length === 0) { 
+                viewArea.innerHTML += "<div class='card' style='text-align:center; padding:40px;'>Aradığınız kriterde kelime bulunamadı. 🧩</div>"; 
+                return; 
+            }
+            
+            data.forEach((item, index) => {
+                // ADSENSE REKLAM ALANI
+                if (index > 0 && index % 5 === 0) {
+                    viewArea.innerHTML += `
+                        <div style="margin:20px 0; padding:20px; background:#f8fafc; border:2px dashed #e2e8f0; border-radius:15px; text-align:center;">
+                            <span style="font-size:0.6rem; color:#94a3b8; font-weight:800;">REKLAM</span>
+                            <div style="height:90px; display:flex; align-items:center; justify-content:center; color:#cbd5e1; font-size:0.8rem;">Google AdSense Onayı Bekleniyor</div>
+                        </div>`;
+                }
+
+                const card = document.createElement('article');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="background:#eef2ff; color:#4f46e5; padding:4px 10px; border-radius:8px; font-size:0.7rem; font-weight:800;">${item.kategori || 'GENEL'}</span>
+                    </div>
+                    <p style="font-size:1.2rem; margin:15px 0; color:#1e293b; line-height:1.5;">${item.anlam}</p>
+                    <div style="border-top:1px solid #f1f5f9; padding-top:15px;">
+                        <h2 style="color:#4f46e5; font-size:1.7rem; font-weight:900; letter-spacing:1px;">${item.kelime.toUpperCase()}</h2>
+                    </div>
+                `;
+                viewArea.appendChild(card);
+            });
+        }
+
+        // BAŞLATICI
+        window.onload = () => {
+            // Alfabe
+            const trAlpha = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
+            trAlpha.forEach(l => {
+                const btn = document.createElement('button'); btn.className = 'btn-s'; btn.innerText = l;
+                btn.onclick = () => loadData({ harf: l });
+                document.getElementById('alphaStrip').appendChild(btn);
+            });
+
+            // Arama
+            document.getElementById('searchBtn').onclick = () => {
+                const val = document.getElementById('sInp').value;
+                if(val) loadData({ search: val });
+            };
+
+            // Kategoriler
+            const categories = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor"];
+            categories.forEach(c => {
+                const a = document.createElement('a'); a.className = 'menu-link'; a.innerText = c;
+                a.onclick = () => { loadData({ cat: c }); toggleMenu(); };
+                document.getElementById('menuCats').appendChild(a);
+            });
+
+            loadData(); // İlk verileri getir
+        };
+
+        // KURUMSAL MODALLAR
+        function showPrivacy() { openModal("<h2>🛡️ Gizlilik Politikası</h2><p style='margin-top:15px; line-height:1.6;'>KelimeKelime.com, kullanıcı gizliliğine önem verir. Sitemizde kullanılan çerezler, reklam deneyiminizi iyileştirmek ve anonim trafik analizi yapmak içindir.</p>"); }
+        function showContact() { openModal("<h2>📧 İletişim</h2><p style='margin-top:15px;'>Reklam ve iş birliği talepleri için:<br><strong>iletisim@kelimekelime.com</strong></p>"); }
+        function showSuggest() {
+            openModal(`
+                <h2>🧩 Yeni Kelime Öner</h2>
+                <p style="font-size:0.8rem; color:#64748b; margin-bottom:15px;">Sözlükte bulamadığınız kelimeleri gönderin, ekleyelim!</p>
+                <input type="text" id="sugK" placeholder="Kelime" style="width:100%; padding:14px; margin-bottom:12px; border:1px solid #e2e8f0; border-radius:12
