@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>KelimeKelime | Bulmaca Sözlüğü</title>
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%225%22 y=%225%22 width=%2242%22 height=%2242%22 rx=%2210%22 fill=%22%23eef2ff%22/><rect x=%2253%22 y=%225%22 width=%2242%22 height=%2242%22 rx=%2210%22 fill=%22%234f46e5%22/><rect x=%225%22 y=%2253%22 width=%2242%22 height=%2242%22 rx=%2210%22 fill=%22%234f46e5%22/><rect x=%2253%22 y=%2253%22 width=%2242%22 height=%2242%22 rx=%2210%22 fill=%22%23eef2ff%22/></svg>">
+
     <meta name="description" content="En kapsamlı bulmaca sözlüğü. Binlerce kelimenin anlamı, tıp, denizcilik ve tarih terimleri rehberi. KelimeKelime ile aradığın cevabı hemen bul!">
     <meta name="keywords" content="bulmaca sözlüğü, kelime anlamları, tıp terimleri, denizcilik terimleri, bulmaca cevapları, kelime bulucu">
     <meta name="author" content="KelimeKelime">
@@ -21,13 +24,11 @@
             background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px); background-size: 20px 20px;
         }
         
-        /* Navbar Tasarımı (Sabit & Profesyonel) */
         .navbar { 
             background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); 
             padding: 0.8rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000;
         }
         
-        /* Kare Bulmaca Logosu */
         .logo-wrapper { display: flex; align-items: center; gap: 12px; cursor: pointer; text-decoration: none; }
         .logo-icon {
             display: grid; grid-template-columns: repeat(2, 1fr); gap: 3px; width: 34px; height: 34px; transform: rotate(-5deg);
@@ -51,10 +52,9 @@
         .search-wrapper input { flex: 1; border: none; padding: 10px; font-size: 1rem; outline: none; background: transparent; }
         .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 1.2rem; border-radius: 12px; cursor: pointer; font-weight: 700; }
         
-        /* DÜZELTİLEN CSS: Kategori ve Alfabe Şeritleri */
         .cat-strip, .alphabet-strip { 
             display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0; 
-            width: 100%; /* Sayfa genişliğine yayılması için */
+            width: 100%;
         }
         .cat-btn, .letter-btn { 
             background: var(--card); border: 1px solid var(--border); font-weight: 700; cursor: pointer; transition: 0.2s; 
@@ -112,11 +112,9 @@
 
     <section id="iletisim" style="background: #ffffff; padding: 60px 20px; text-align: center; border-top: 1px solid #f0f0f0; margin-top: 40px;">
         <div style="max-width: 700px; margin: 0 auto;">
-            
             <div style="background: var(--primary-light); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
                 <span style="font-size: 24px; color: var(--primary);">🧩</span>
             </div>
-            
             <h3 style="color: #1e293b; font-size: 1.8rem; font-weight: 800; margin-bottom: 15px;">Bize Katkıda Bulunun</h3>
             <p style="color: #64748b; line-height: 1.7; font-size: 1.1rem; margin-bottom: 30px;">
                 Eksik kelimeleri bildirebilir, yeni terimler önerebilir veya içeriklerdeki hataları iletebilirsiniz.
@@ -180,7 +178,7 @@
                     </select>
                     <label style="display:block; font-size:0.8rem; font-weight:800; margin-bottom:5px; color:#64748b;">MESAJINIZ</label>
                     <textarea id="formMessage" placeholder="Kelimeyi ve anlamını buraya yazabilirsiniz..." style="width:100%; height:120px; padding:12px; border-radius:10px; border:1px solid #e2e8f0; margin-bottom:20px; font-family:inherit; resize:none; outline:none;"></textarea>
-                    <button type="button" onclick="submitForm()" style="width:100%; padding:166px; border-radius:12px; border:none; background:var(--primary); color:white; font-weight:800; cursor:pointer; font-size:1rem;">Mesajı Gönder</button>
+                    <button type="button" onclick="submitForm()" style="width:100%; padding:16px; border-radius:12px; border:none; background:var(--primary); color:white; font-weight:800; cursor:pointer; font-size:1rem;">Mesajı Gönder</button>
                     <button onclick="document.getElementById('infoModal').style.display='none'" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer; font-size:0.85rem;">Vazgeç</button>
                 </div>
             `;
