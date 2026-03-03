@@ -65,9 +65,17 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    const URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
-    const KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
-    const sb = supabase.createClient(URL, KEY);
+    // URL'yi manuel olarak temizleyip kuruyoruz
+    const pureUrl = "https://mvsbrknkfwwptjifdqca.supabase.co".replace(/\s/g, "");
+    const pureKey = "sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr".replace(/\s/g, "");
+
+    let sb;
+    try {
+        sb = supabase.createClient(pureUrl, pureKey);
+        console.log("Bağlantı denendi...");
+    } catch (e) {
+        console.error("Kritik Hata:", e.message);
+    }
 
     function tM() {
         document.getElementById('sid').classList.toggle('active');
@@ -75,7 +83,6 @@
     }
 
     window.onload = () => {
-        // Alfabe
         const ltrs = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
         ltrs.forEach(l => {
             const b = document.createElement('button');
@@ -84,7 +91,6 @@
             document.getElementById('alpha').appendChild(b);
         });
 
-        // Kategoriler
         const cs = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik"];
         cs.forEach(c => {
             const b = document.createElement('button');
@@ -93,7 +99,7 @@
             document.getElementById('cats').appendChild(b);
         });
 
-        loadV();
+        if(sb) loadV();
     };
 
     async function loadV() {
@@ -108,17 +114,19 @@
 
     async function search() {
         const q = document.getElementById('sInp').value.trim();
-        if(!q) return;
+        if(!q || !sb) return;
         const { data } = await sb.from('kelimeler').select('*').or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(30);
         render(data, `🔍 "${q}" Sonuçları`);
     }
 
     async function getByL(l) {
+        if(!sb) return;
         const { data } = await sb.from('kelimeler').select('*').ilike('kelime', `${l}%`).order('kelime');
         render(data, `${l} Harfi`);
     }
 
     async function getByC(c) {
+        if(!sb) return;
         const { data } = await sb.from('kelimeler').select('*').eq('kategori', c).order('kelime');
         render(data, `${c} Kategorisi`);
     }
@@ -137,7 +145,7 @@
             a.className = 'card';
             a.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <small>TANIMALAMA</small>
+                    <small>TANIMLAMA</small>
                     <small style="background:var(--p); color:white;">${i.kategori || 'Genel'}</small>
                 </div>
                 <p style="margin:15px 0; font-size:1.1rem; font-weight:500;">${i.anlam}</p>
