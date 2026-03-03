@@ -1,34 +1,66 @@
-const view = document.getElementById('viewArea');
-
-function renderWords(data, title) {
-    view.innerHTML = `<h3 style="margin-bottom:15px; color:var(--m);">${title}</h3>`;
-    if (!data || data.length === 0) {
-        view.innerHTML += `<div class="card">Sonuç bulunamadı.</div>`;
-        return;
-    }
-
-    data.forEach((item, index) => {
-        // Her 4 kartta bir reklam yeri aç
-        if (index > 0 && index % 4 === 0) {
-            view.innerHTML += `<div class="ad-box">Reklam Alanı</div>`;
-        }
-
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-            <small>${item.kategori || 'Genel'}</small>
-            <p style="font-size:1.1rem; margin:10px 0;">${item.anlam}</p>
-            <h2 style="color:var(--p);">${item.kelime.toUpperCase()}</h2>
-        `;
+// Menü HTML'ini sayfaya enjekte et (index.html'i kirletmeden)
+document.body.insertAdjacentHTML('beforeend', `
+    <div class="overlay" id="overlay"></div>
+    <div class="side-menu" id="sideMenu">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+            <h2 style="font-weight:800;">Menü</h2>
+            <button onclick="toggleMenu()" style="border:none; background:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+        </div>
         
-        // Eğer admin açıksa silme butonu ekle
-        if (typeof checkAdminStatus === "function" && checkAdminStatus()) {
-            const btn = document.createElement('button');
-            btn.innerText = "SİL";
-            btn.onclick = () => handleDelete(item.id);
-            card.appendChild(btn);
-        }
+        <div class="menu-section">
+            <h4>Kategoriler</h4>
+            <div id="menuCats"></div>
+        </div>
 
-        view.appendChild(card);
-    });
+        <div class="menu-section">
+            <h4>Topluluk</h4>
+            <a class="menu-link" onclick="showPopup('öneri')">💡 Kelime Öner</a>
+            <a class="menu-link" onclick="showPopup('iletişim')">📧 İletişim</a>
+        </div>
+
+        <div class="menu-section">
+            <h4>Yasal</h4>
+            <a class="menu-link" onclick="showPopup('gizlilik')">🛡️ Gizlilik Politikası</a>
+            <a class="menu-link" onclick="showPopup('hizmet')">📜 Kullanım Şartları</a>
+        </div>
+    </div>
+`);
+
+// Hamburger butonunu Navbar'a ekle
+document.querySelector('.navbar').innerHTML += `<button class="menu-btn" onclick="toggleMenu()">☰</button>`;
+
+function toggleMenu() {
+    document.getElementById('sideMenu').classList.toggle('active');
+    document.getElementById('overlay').classList.toggle('active');
 }
+
+document.getElementById('overlay').onclick = toggleMenu;
+
+// Profesyonel Protokol Popup'ları (Statik Sayfalar Yerine Pratik Çözüm)
+function showPopup(type) {
+    toggleMenu();
+    let content = {
+        'gizlilik': "Gizlilik Politikası: Verileriniz üçüncü taraflarla paylaşılmaz...",
+        'iletişim': "Bize ulaşın: iletisim@kelimekelime.com",
+        'öneri': "Önerdiğiniz kelimeyi ve anlamını bize yazın!",
+        'hizmet': "Hizmet Şartları: Bu site bilgi amaçlıdır..."
+    };
+    alert(content[type]); // Şimdilik alert, ilerde şık bir modal yaparız.
+}
+
+// Kategorileri Menüye Doldur
+const categories = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor"];
+const menuCatArea = document.getElementById('menuCats');
+categories.forEach(c => {
+    const link = document.createElement('a');
+    link.className = 'menu-link';
+    link.innerText = c;
+    link.onclick = async () => {
+        toggleMenu();
+        const { data } = await getWords({ column: 'kategori', value: c });
+        renderWords(data, `${c} Kategorisi`);
+    };
+    menuCatArea.appendChild(link);
+});
+
+// Render fonksiyonu zaten önceki ui.js içinde vardı, onu koruyoruz.
