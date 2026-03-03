@@ -11,6 +11,48 @@ window.onload = () => {
     showVitrin();
 };
 
+// --- GÜVENLİK VE FORM GÖNDERME SİSTEMİ (EKLEDİĞİM KISIM) ---
+async function submitData() {
+    const k = document.getElementById('fSubject').value.trim();
+    const a = document.getElementById('fMessage').value.trim();
+    const btn = document.getElementById('submitBtn');
+
+    // VERİ GÜVENLİĞİ: 1 Dakikalık Rate Limit
+    const lastSent = localStorage.getItem('last_submit_time');
+    const now = Date.now();
+    if (lastSent && (now - lastSent < 60000)) {
+        alert("Çok hızlısınız! Yeni bir öneri için lütfen 1 dakika bekleyin.");
+        return;
+    }
+
+    if(!k || !a) { alert("Lütfen tüm alanları doldurun."); return; }
+    
+    btn.innerText = "Gönderiliyor...";
+    btn.disabled = true;
+
+    try {
+        const { error } = await _supabase.from('oneriler').insert([{ kelime: k, anlam: a }]);
+        if(error) throw error;
+
+        // Başarılı gönderimden sonra zamanı kaydet
+        localStorage.setItem('last_submit_time', Date.now());
+
+        // Başarı mesajını göster (Yapıyı bozmadan modal içine basar)
+        document.getElementById('modalInner').innerHTML = `
+            <div style="text-align:center; padding:20px;">
+                <div style="font-size:3rem; margin-bottom:15px;">✅</div>
+                <h3 style="color:var(--primary); margin-bottom:10px;">Başarılı!</h3>
+                <p style="color:var(--text-muted);">Öneriniz editör incelemesine alındı!</p>
+                <button onclick="closeForm()" style="margin-top:20px; background:var(--primary); color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer;">Kapat</button>
+            </div>`;
+    } catch (err) {
+        alert("Hata: " + err.message);
+        btn.innerText = "GÖNDER";
+        btn.disabled = false;
+    }
+}
+// --- GÜVENLİK KISMI BİTTİ ---
+
 function initAlphabet() {
     const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
     const strip = document.getElementById('alphabetStrip');
@@ -59,7 +101,6 @@ function initSearch() {
         inp.oninput = (e) => {
             clearTimeout(searchTimer);
             const val = e.target.value.trim();
-            // Performans: Her harfte değil, yazma bitince (300ms sonra) ara
             searchTimer = setTimeout(() => {
                 if (val.length >= 2) runSearch(val);
                 else if (val.length === 0) showVitrin();
@@ -112,11 +153,9 @@ async function fetchRandomWord() {
 
 async function runSearch(q) {
     try {
-        // Analytics Takibi: Kullanıcının ne aradığını kaydedelim
         if (typeof gtag === 'function') {
             gtag('event', 'search', { 'search_term': q });
         }
-
         const { data, error } = await _supabase.from('kelimeler').select('*').or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(25);
         if (error) throw error;
         render(data);
@@ -145,7 +184,6 @@ async function filterByCategory(cat) {
     }
 }
 
-// Yeni: Sistemsel Hataları Kullanıcıya Gösterme
 function handleError(msg) {
     const res = document.getElementById('results');
     res.innerHTML = `
