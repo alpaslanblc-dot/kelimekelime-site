@@ -74,4 +74,31 @@ categories.forEach(c => {
         renderWords(data, `${c} Kategorisi`);
     };
     menuCatArea.appendChild(link);
-});
+})// Arama ve Harf tıklama sonucunu buraya gönderiyoruz
+function renderWords(data, title) {
+    const view = document.getElementById('viewArea');
+    if(!view) return; // Güvenlik kontrolü
+
+    view.innerHTML = `<h3 style="margin-bottom:20px; color:var(--m); font-size:0.9rem; text-transform:uppercase;">${title}</h3>`;
+    
+    if (!data || data.length === 0) {
+        view.innerHTML += `<div class="card">Sonuç bulunamadı. Lütfen başka bir arama yapın.</div>`;
+        return;
+    }
+
+    data.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div style="display:flex; justify-content:space-between;">
+                <span style="background:var(--pl); color:var(--p); padding:4px 10px; border-radius:8px; font-size:0.7rem; font-weight:800;">${item.kategori || 'Genel'}</span>
+            </div>
+            <p style="font-size:1.2rem; margin:15px 0; color:var(--t); font-weight:500;">${item.anlam}</p>
+            <div style="border-top:1px solid var(--b); padding-top:15px;">
+                <h2 style="letter-spacing:1px; color:var(--p); font-size:1.6rem;">${item.kelime.toUpperCase()}</h2>
+            </div>
+        `;
+        view.appendChild(card);
+    });
+}
+
