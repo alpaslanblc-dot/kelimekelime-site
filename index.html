@@ -7,138 +7,151 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --primary: #4f46e5; --primary-light: #eef2ff; --bg: #f8fafc; 
-            --text-main: #1e293b; --text-muted: #64748b; --border: #e2e8f0; --white: #ffffff; 
-        }
+        :root { --p: #4f46e5; --pl: #eef2ff; --bg: #f8fafc; --t: #1e293b; --m: #64748b; --b: #e2e8f0; --w: #ffffff; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text-main); line-height: 1.6; }
+        body { background: var(--bg); color: var(--t); line-height: 1.6; }
+        
+        /* REKLAM ALANLARI (AD SENSE READY) */
+        .ad-slot { background: #f1f5f9; border: 2px dashed var(--b); margin: 20px 0; display: flex; align-items: center; justify-content: center; color: var(--m); font-size: 0.75rem; border-radius: 12px; min-height: 100px; }
 
-        /* REKLAM ALANLARI (CLS Korumalı) */
-        .ad-slot { 
-            background: #f1f5f9; border: 2px dashed var(--border); 
-            margin: 20px auto; display: flex; align-items: center; 
-            justify-content: center; color: var(--text-muted); 
-            font-size: 0.8rem; border-radius: 12px; min-height: 120px; max-width: 800px;
-        }
-
-        /* CONTAINER & NAV */
-        .navbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 1rem 5%; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.4rem; font-weight: 800; color: var(--text-main); text-decoration: none; }
-        .logo span { color: var(--primary); }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-        /* ARAMA BÖLÜMÜ */
-        .search-box { display: flex; gap: 10px; background: var(--white); padding: 10px; border-radius: 15px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .search-box input { flex: 1; border: none; outline: none; padding: 10px; font-size: 1rem; }
-        .search-box button { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; }
-
-        /* KATEGORİ ŞERİDİ */
-        .strip { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; }
+        .navbar { background: var(--w); border-bottom: 1px solid var(--b); padding: 0.8rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 1.5rem; font-weight: 800; cursor: pointer; text-decoration: none; color: var(--t); }
+        .logo span { color: var(--p); }
+        
+        .strip-section { background: var(--w); border-bottom: 1px solid var(--b); padding: 12px 0; }
+        .strip { display: flex; gap: 10px; overflow-x: auto; padding: 0 5%; scrollbar-width: none; }
         .strip::-webkit-scrollbar { display: none; }
-        .btn-item { flex-shrink: 0; border: 1px solid var(--border); background: var(--white); padding: 8px 15px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
-        .btn-item:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-item { flex-shrink: 0; border: 1px solid var(--b); background: var(--w); border-radius: 10px; cursor: pointer; font-weight: 700; padding: 10px 14px; font-size: 0.9rem; }
+        .btn-item:hover { background: var(--p); color: var(--w); }
 
-        /* KARTLAR & SKELETON */
-        .word-card { background: var(--white); padding: 25px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 20px; position: relative; }
-        .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e6e6e6 50%, #f0f0f0 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 5px; }
-        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .search-container { margin: 20px 0; display: flex; gap: 10px; background: var(--w); padding: 10px; border-radius: 18px; border: 1px solid var(--b); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .search-container input { flex: 1; border: none; padding: 12px; outline: none; font-size: 1.1rem; }
+        .search-container button { background: var(--p); color: var(--w); border: none; padding: 0 25px; border-radius: 14px; cursor: pointer; font-weight: 700; }
 
-        /* FOOTER & LEGAL */
-        footer { text-align: center; padding: 40px; margin-top: 40px; border-top: 1px solid var(--border); }
-        .legal-link { color: var(--text-muted); text-decoration: none; margin: 0 10px; font-size: 0.8rem; cursor: pointer; }
+        .card { background: var(--w); padding: 30px; border-radius: 24px; border: 1px solid var(--b); margin-bottom: 25px; position: relative; }
+        .card h2 { font-size: 1.8rem; margin-top: 10px; letter-spacing: 1px; }
+        
+        footer { text-align: center; padding: 40px; border-top: 1px solid var(--b); margin-top: 40px; background: var(--w); }
+        .footer-link { margin: 0 10px; color: var(--m); cursor: pointer; font-size: 0.8rem; text-decoration: none; }
+        .footer-link:hover { color: var(--p); }
     </style>
 </head>
 <body>
 
-<nav class="navbar">
-    <a href="/" class="logo">Kelime<span>Kelime</span></a>
-    <button onclick="openForm()" style="background:var(--primary-light); color:var(--primary); border:none; padding:8px 15px; border-radius:8px; font-weight:700; cursor:pointer;">ÖNERİ YAP</button>
-</nav>
+<header class="navbar">
+    <div class="logo" onclick="location.reload()">Kelime<span>Kelime</span></div>
+    <button onclick="alert('Öneriler yakında aktif!')" style="background:var(--pl); color:var(--p); border:none; padding:8px 16px; border-radius:10px; font-weight:800; cursor:pointer;">ÖNERİ YAP</button>
+</header>
 
-<div class="ad-slot">Reklam Alanı (Tepe Banner)</div>
+<div class="strip-section">
+    <div class="strip" id="alphaStrip"></div>
+    <div class="strip" id="catStrip" style="margin-top: 12px;"></div>
+</div>
 
 <main class="container">
-    <div class="search-box">
+    <div class="ad-slot">Reklam Alanı (Tepe Banner)</div>
+    
+    <div class="search-container">
         <input type="text" id="searchInput" placeholder="Soru veya cevap yazın...">
         <button onclick="runSearch()">ARA</button>
     </div>
 
-    <div class="strip" id="categoryStrip"></div>
-
-    <div id="results">
-        <div class="word-card"><div class="skeleton" style="height:15px; width:40%; margin-bottom:15px;"></div><div class="skeleton" style="height:40px;"></div></div>
+    <div id="contentArea">
+        <div style="text-align:center; padding:50px; color:var(--p); font-weight:700;">Yükleniyor...</div>
     </div>
 </main>
 
 <footer>
     <div style="margin-bottom: 15px;">
-        <span class="legal-link" onclick="alert('KelimeKelime: En iyi bulmaca yardımcınız.')">Hakkımızda</span>
-        <span class="legal-link" onclick="alert('Gizlilik Politikası: Verileriniz güvende.')">Gizlilik</span>
-        <span class="legal-link" onclick="alert('Kullanım Şartları: Adil kullanım esastır.')">Şartlar</span>
+        <span class="footer-link" onclick="alert('Hakkımızda: Bulmaca tutkunları için en büyük sözlük rehberi.')">Hakkımızda</span>
+        <span class="footer-link" onclick="alert('Gizlilik: Verileriniz Google AdSense standartlarında korunmaktadır.')">Gizlilik Politikası</span>
+        <span class="footer-link" onclick="alert('Şartlar: KelimeKelime kullanım koşulları.')">Kullanım Şartları</span>
     </div>
-    <p style="font-size:0.75rem; color:var(--text-muted);">© 2026 KelimeKelime.com</p>
+    <p style="font-size:0.75rem; color:var(--m);">© 2026 KelimeKelime.com | Para Kazanma Makinesi</p>
 </footer>
 
 <script>
-    // BAĞLANTI AYARLARI
-    const SB_URL = 'https://mvsbrknkfwwptjifdqca.supabase.co';
-    const SB_KEY = 'sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr';
-    const _supabase = supabase.createClient(SB_URL, SB_KEY);
+    // SUPABASE BAĞLANTISI (DEĞİŞTİRMEYİN)
+    const SB_URL = "https://mvsbrknkfwwptjifdqca.supabase.co";
+    const SB_KEY = "sb_publishable_siHYnBPzrZSyHcx01nopsA_I4im8Ygr";
+    const _sb = supabase.createClient(SB_URL, SB_KEY);
 
     window.onload = () => {
-        loadCategories();
-        showVitrin();
+        // Alfabe Oluştur
+        const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
+        alphabet.forEach(l => {
+            const b = document.createElement('button'); b.className = 'btn-item'; b.innerText = l;
+            b.onclick = () => getByL(l); document.getElementById('alphaStrip').appendChild(b);
+        });
+
+        // Kategoriler Oluştur
+        const cats = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik"];
+        cats.forEach(c => {
+            const b = document.createElement('button'); b.className = 'btn-item'; b.innerText = c;
+            b.onclick = () => getByC(c); document.getElementById('catStrip').appendChild(b);
+        });
+
+        loadVitrin();
     };
 
-    function loadCategories() {
-        const cats = ["Tarih", "Sanat", "İnanç", "Doğa", "Tıp", "Siyaset", "Spor", "Denizcilik"];
-        const strip = document.getElementById('categoryStrip');
-        cats.forEach(c => {
-            const btn = document.createElement('button');
-            btn.className = 'btn-item';
-            btn.innerText = c;
-            btn.onclick = () => filterByCategory(c);
-            strip.appendChild(btn);
-        });
-    }
-
-    async function showVitrin() {
-        const { data } = await _supabase.from('kelimeler').select('*').limit(10);
-        render(data, "📅 Bugünün Kelimeleri");
+    async function loadVitrin() { 
+        const { data } = await _sb.from('kelimeler').select('*').limit(10); 
+        render(data, "📅 Bugünün Kelimeleri"); 
     }
 
     async function runSearch() {
         const q = document.getElementById('searchInput').value.trim();
         if(!q) return;
-        const { data } = await _supabase.from('kelimeler').select('*').or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(20);
-        render(data, `🔍 "${q}" Araması`);
+        const { data } = await _sb.from('kelimeler').select('*').or(`kelime.ilike.%${q}%,anlam.ilike.%${q}%`).limit(30);
+        render(data, `🔍 "${q}" Sonuçları`);
     }
 
-    async function filterByCategory(cat) {
-        const { data } = await _supabase.from('kelimeler').select('*').eq('kategori', cat).limit(30);
-        render(data, `📂 ${cat} Kategorisi`);
+    async function getByL(l) {
+        const { data } = await _sb.from('kelimeler').select('*').ilike('kelime', `${l}%`).order('kelime');
+        render(data, `${l} Harfi`);
     }
 
-    function render(data, title = "") {
-        const res = document.getElementById('results');
-        res.innerHTML = title ? `<h3 style="margin-bottom:20px;">${title}</h3>` : '';
+    async function getByC(c) {
+        const { data } = await _sb.from('kelimeler').select('*').eq('kategori', c).order('kelime');
+        render(data, `${c} Kategorisi`);
+    }
 
-        if (!data || data.length === 0) {
-            res.innerHTML += '<p style="text-align:center; padding:20px; color:gray;">Sonuç bulunamadı.</p>';
+    function render(data, title) {
+        const area = document.getElementById('contentArea');
+        area.innerHTML = `<h3 style="margin-bottom:20px; color:var(--m); font-size:0.9rem; font-weight:800; text-transform:uppercase;">${title}</h3>`;
+        
+        if(!data || data.length === 0) {
+            area.innerHTML += `<div style="text-align:center; padding:40px;">Sonuç bulunamadı.</div>`;
             return;
         }
 
-        data.forEach((item, index) => {
-            // HER 4 KELİMEDE BİR REKLAM YERLEŞİMİ (PARA KAZANMA)
+        data.forEach((i, index) => {
+            // --- SAFHA 3: REKLAM YERLEŞİMİ (PARA KAZANMA) ---
             if (index > 0 && index % 4 === 0) {
                 const ad = document.createElement('div');
                 ad.className = 'ad-slot';
-                ad.innerText = "İçerik Arası Reklam (AdSense)";
-                res.appendChild(ad);
+                ad.innerText = "İçerik Arası Reklam (Google AdSense)";
+                area.appendChild(ad);
             }
 
-            const art = document.createElement('article');
-            art.className = 'word-card';
-            art.innerHTML = `
-                <div style
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div style="display:flex; justify-content:space-between;">
+                    <small style="font-weight:800; color:var(--m); font-size:0.7rem;">TANIM</small>
+                    <span style="background:var(--pl); color:var(--p); padding:4px 10px; border-radius:8px; font-size:0.7rem; font-weight:800;">${i.kategori || 'Genel'}</span>
+                </div>
+                <p style="font-size:1.15rem; color:var(--t); font-weight:500; margin:15px 0;">${i.anlam}</p>
+                <div style="border-top:1px solid var(--b); padding-top:15px;">
+                    <small style="color:var(--p); font-weight:800; font-size:0.7rem;">CEVAP:</small>
+                    <h2>${i.kelime.toUpperCase()}</h2>
+                </div>
+            `;
+            area.appendChild(card);
+        });
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+</script>
+</body>
+</html>
