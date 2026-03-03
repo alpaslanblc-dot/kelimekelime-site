@@ -20,12 +20,27 @@
             font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 0; 
             background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px); background-size: 20px 20px;
         }
+        
+        /* Yeni Navbar Tasarımı */
         .navbar { 
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); 
-            padding: 0.8rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); 
+            padding: 0.8rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000;
         }
-        .logo { font-size: 1.3rem; font-weight: 800; cursor: pointer; }
-        .logo span { color: var(--primary); }
+        
+        /* Kare Bulmaca Logosu */
+        .logo-wrapper { display: flex; align-items: center; gap: 12px; cursor: pointer; text-decoration: none; }
+        .logo-icon {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 3px; width: 34px; height: 34px; transform: rotate(-5deg);
+        }
+        .grid-box { border-radius: 4px; }
+        .grid-box.empty { background: var(--primary-light); }
+        .grid-box.filled { background: var(--primary); }
+
+        .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+        .logo-main { font-size: 1.4rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
+        .logo-main span { color: var(--primary); }
+        .logo-sub { font-size: 0.6rem; font-weight: 800; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+
         .container { max-width: 850px; margin: 0 auto; padding: 1rem; }
         .hero { text-align: center; margin-bottom: 1.5rem; }
         .hero h1 { font-size: 2.5rem; letter-spacing: -2px; font-weight: 800; margin-bottom: 1rem; }
@@ -37,33 +52,41 @@
         .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 1.2rem; border-radius: 12px; cursor: pointer; font-weight: 700; }
         
         .cat-strip, .alphabet-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0; }
-        .cat-btn, .letter-btn { 
-            background: var(--card); border: 1px solid var(--border); font-weight: 700; cursor: pointer; transition: 0.2s;
-        }
+        .cat-btn, .letter-btn { background: var(--card); border: 1px solid var(--border); font-weight: 700; cursor: pointer; transition: 0.2s; }
         .cat-btn { padding: 0.5rem 1rem; border-radius: 10px; font-size: 0.75rem; color: var(--text-muted); }
         .letter-btn { width: 32px; height: 32px; border-radius: 8px; font-size: 0.75rem; }
         .cat-btn.active, .cat-btn:hover, .letter-btn:hover { background: var(--primary); color: white; }
 
-        .word-card { 
-            background: var(--card); padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border); 
-            margin-bottom: 1.2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
+        .word-card { background: var(--card); padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 1.2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         
         footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); margin-top: 2rem; font-size: 0.75rem; }
         .footer-links a { color: var(--primary); text-decoration: none; margin: 0 10px; font-weight: 600; cursor: pointer; }
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); }
+        
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); }
         .modal-content { background: white; margin: 10% auto; padding: 2.5rem; width: 90%; max-width: 500px; border-radius: 24px; position: relative; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
         
         @media (max-width: 480px) {
             .hero h1 { font-size: 1.8rem; }
+            .logo-sub { display: none; }
         }
     </style>
 </head>
 <body>
 
     <header class="navbar">
-        <div class="logo" onclick="location.reload()">Kelime<span>Kelime</span></div>
-        <div style="font-size:0.7rem; font-weight:bold; color:var(--text-muted)">BULMACA SÖZLÜĞÜ</div>
+        <div class="logo-wrapper" onclick="location.reload()">
+            <div class="logo-icon">
+                <div class="grid-box empty"></div>
+                <div class="grid-box filled"></div>
+                <div class="grid-box filled"></div>
+                <div class="grid-box empty"></div>
+            </div>
+            <div class="logo-text">
+                <div class="logo-main">Kelime<span>Kelime</span></div>
+                <div class="logo-sub">Bulmaca Sözlüğü</div>
+            </div>
+        </div>
+        <div style="font-size:0.6rem; font-weight:bold; color:var(--text-muted); background:var(--primary-light); padding:4px 8px; border-radius:6px;">V2.0 PRO</div>
     </header>
 
     <main class="container">
@@ -86,96 +109,7 @@
             </div>
             <h3 style="color: #1e293b; font-size: 1.8rem; font-weight: 800; margin-bottom: 15px;">Bize Katkıda Bulunun</h3>
             <p style="color: #64748b; line-height: 1.7; font-size: 1.1rem; margin-bottom: 30px;">
-                Eksik kelimeleri bildirebilir, yeni terimler önerebilir veya içeriklerle ilgili hataları bize iletebilirsiniz.
+                Eksik kelimeleri bildirebilir, yeni terimler önerebilir veya hataları iletebilirsiniz.
             </p>
             <button onclick="showContactForm()" style="display: inline-block; background: var(--primary); color: #ffffff; padding: 16px 40px; border-radius: 14px; border:none; cursor:pointer; font-weight: 700; font-size: 1rem; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3); transition: 0.2s;">
                 ✨ Kelime Öner / Hata Bildir
-            </button>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-links">
-            <a onclick="showInfo('about')">Hakkımızda</a>
-            <a onclick="showInfo('privacy')">Gizlilik</a>
-            <a href="#iletisim">İletişim</a>
-        </div>
-        <p style="margin-top: 15px; color: #94a3b8;">&copy; 2026 KelimeKelime</p>
-    </footer>
-
-    <div id="infoModal" class="modal" onclick="this.style.display='none'">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h3 id="modalTitle" style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 15px;"></h3>
-            <div id="modalText"></div>
-            <button id="modalCloseBtn" onclick="document.getElementById('infoModal').style.display='none'" style="width:100%; padding:14px; border-radius:12px; border:none; background:var(--primary); color:white; font-weight:bold; cursor:pointer; margin-top:10px;">Kapat</button>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js"></script>
-    <script>
-        // Hakkımızda ve Gizlilik Modalları
-        function showInfo(type) {
-            const m = document.getElementById('infoModal');
-            const t = document.getElementById('modalTitle');
-            const txt = document.getElementById('modalText');
-            document.getElementById('modalCloseBtn').style.display = 'block';
-
-            if(type === 'about') {
-                t.innerText = "Hakkımızda";
-                txt.innerHTML = "<p style='color: #1e293b; line-height: 1.6;'>KelimeKelime, bulmaca meraklıları için hazırlanmış modern bir dijital sözlüktür. Denizcilikten tıbba kadar pek çok alanda doğru bilgiye hızlı ulaşım sağlar.</p>";
-            } else {
-                t.innerText = "Gizlilik Politikası";
-                txt.innerHTML = "<p style='color: #1e293b; line-height: 1.6;'>Sitemizde Google AdSense çerezleri kullanılmaktadır. Verileriniz anonim olarak reklam kişiselleştirme amacıyla işlenebilir.</p>";
-            }
-            m.style.display = 'block';
-        }
-
-        // İletişim Formu Modalı
-        function showContactForm() {
-            const m = document.getElementById('infoModal');
-            const t = document.getElementById('modalTitle');
-            const txt = document.getElementById('modalText');
-            document.getElementById('modalCloseBtn').style.display = 'none'; // Kendi gönder butonumuz olacağı için bunu gizliyoruz
-            
-            t.innerText = "Öneri veya Hata Bildir";
-            txt.innerHTML = `
-                <div style="text-align: left; margin-top: 10px;">
-                    <label style="display:block; font-size:0.8rem; font-weight:800; margin-bottom:5px; color:#64748b;">KONU SEÇİN</label>
-                    <select id="formSubject" style="width:100%; padding:12px; border-radius:10px; border:1px solid #e2e8f0; margin-bottom:15px; font-family:inherit; outline:none;">
-                        <option>Yeni Kelime Önerisi</option>
-                        <option>Hata Bildirimi</option>
-                        <option>Diğer</option>
-                    </select>
-                    
-                    <label style="display:block; font-size:0.8rem; font-weight:800; margin-bottom:5px; color:#64748b;">MESAJINIZ</label>
-                    <textarea id="formMessage" placeholder="Kelimeyi ve anlamını buraya yazabilirsiniz..." style="width:100%; height:120px; padding:12px; border-radius:10px; border:1px solid #e2e8f0; margin-bottom:20px; font-family:inherit; resize:none; outline:none;"></textarea>
-                    
-                    <button type="button" onclick="submitForm()" style="width:100%; padding:16px; border-radius:12px; border:none; background:var(--primary); color:white; font-weight:800; cursor:pointer; font-size:1rem;">Mesajı Gönder</button>
-                    <button onclick="document.getElementById('infoModal').style.display='none'" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer; font-size:0.85rem;">Vazgeç</button>
-                </div>
-            `;
-            m.style.display = 'block';
-        }
-
-        // Form Gönderme Simülasyonu
-        function submitForm() {
-            const message = document.getElementById('formMessage').value;
-            if(!message) { alert("Lütfen bir mesaj yazın."); return; }
-
-            const txt = document.getElementById('modalText');
-            const t = document.getElementById('modalTitle');
-            
-            t.innerText = "Başarılı!";
-            txt.innerHTML = `
-                <div style="text-align:center; padding: 20px 0;">
-                    <div style="font-size: 50px; margin-bottom:15px;">✅</div>
-                    <p style="font-weight:800; color:#1e293b;">Mesajınız iletildi.</p>
-                    <p style="color:#64748b; font-size:0.9rem;">Katkınız için teşekkür ederiz. Editörlerimiz en kısa sürede inceleyecektir.</p>
-                    <button onclick="document.getElementById('infoModal').style.display='none'" style="width:100%; padding:14px; border-radius:12px; border:none; background:#1e293b; color:white; font-weight:bold; cursor:pointer; margin-top:20px;">Kapat</button>
-                </div>
-            `;
-        }
-    </script>
-</body>
-</html>
