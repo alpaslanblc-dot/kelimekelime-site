@@ -2,6 +2,16 @@
 <html lang="tr">
 <head>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2174139710234620" crossorigin="anonymous"></script>
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L0KTR31EQE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-L0KTR31EQE');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
@@ -12,7 +22,8 @@
     <meta name="robots" content="index, follow">
 
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.kelimekelime.com/"> <meta property="og:title" content="KelimeKelime | Online Bulmaca Sözlüğü">
+    <meta property="og:url" content="https://www.kelimekelime.com/"> 
+    <meta property="og:title" content="KelimeKelime | Online Bulmaca Sözlüğü">
     <meta property="og:description" content="Bulmacalarda takılmaya son! Binlerce kelimenon anlamı ve cevabı tek tıkla elinizin altında.">
     <meta property="og:image" content="https://www.kelimekelime.com/og-image.jpg">
 
@@ -133,8 +144,7 @@
         <nav id="categoryStrip" class="cat-strip" aria-label="Kategoriler"></nav>
         <nav id="alphabetStrip" class="alphabet-strip" aria-label="Alfabetik Arama"></nav>
         
-        <section id="results" aria-live="polite">
-            </section>
+        <section id="results" aria-live="polite"></section>
 
         <section id="iletisimArea" style="background: white; padding: 40px; border-radius: 24px; text-align: center; margin-top: 50px; border: 1px solid var(--border);">
             <h3 style="font-weight: 800;">Bize Ulaşın</h3>
@@ -258,7 +268,6 @@
             if(data) render([data[Math.floor(Math.random() * data.length)]], "🎲 Rastgele Seçilen Kelime");
         }
 
-        // --- SEMANTİK RENDER (SEO İÇİN KRİTİK) ---
         function render(data, title = "") {
             const res = document.getElementById('results');
             if(!res) return;
@@ -272,7 +281,6 @@
             data.forEach(item => {
                 const art = document.createElement('article');
                 art.className = 'word-card';
-                // Yapılandırılmış Veri (Schema.org) botlar için eklenmiştir
                 art.setAttribute('itemscope', '');
                 art.setAttribute('itemtype', 'https://schema.org/DefinedTerm');
                 
