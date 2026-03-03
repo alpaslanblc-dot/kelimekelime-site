@@ -21,7 +21,7 @@
             background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px); background-size: 20px 20px;
         }
         
-        /* Yeni Navbar Tasarımı */
+        /* Navbar Tasarımı (Sabit & Profesyonel) */
         .navbar { 
             background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); 
             padding: 0.8rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000;
@@ -51,11 +51,18 @@
         .search-wrapper input { flex: 1; border: none; padding: 10px; font-size: 1rem; outline: none; background: transparent; }
         .search-wrapper button { background: var(--primary); color: white; border: none; padding: 0 1.2rem; border-radius: 12px; cursor: pointer; font-weight: 700; }
         
-        .cat-strip, .alphabet-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0; }
-        .cat-btn, .letter-btn { background: var(--card); border: 1px solid var(--border); font-weight: 700; cursor: pointer; transition: 0.2s; }
+        /* DÜZELTİLEN CSS: Kategori ve Alfabe Şeritleri */
+        .cat-strip, .alphabet-strip { 
+            display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0; 
+            width: 100%; /* Sayfa genişliğine yayılması için */
+        }
+        .cat-btn, .letter-btn { 
+            background: var(--card); border: 1px solid var(--border); font-weight: 700; cursor: pointer; transition: 0.2s; 
+            font-family: 'Inter', sans-serif;
+        }
         .cat-btn { padding: 0.5rem 1rem; border-radius: 10px; font-size: 0.75rem; color: var(--text-muted); }
-        .letter-btn { width: 32px; height: 32px; border-radius: 8px; font-size: 0.75rem; }
-        .cat-btn.active, .cat-btn:hover, .letter-btn:hover { background: var(--primary); color: white; }
+        .letter-btn { width: 32px; height: 32px; border-radius: 8px; font-size: 0.75rem; color: var(--text-main); text-transform: uppercase; }
+        .cat-btn.active, .cat-btn:hover, .letter-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
         .word-card { background: var(--card); padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 1.2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         
@@ -97,6 +104,7 @@
                 <button id="searchBtn">Ara</button>
             </div>
         </section>
+        
         <div id="categoryStrip" class="cat-strip"></div>
         <div id="alphabetStrip" class="alphabet-strip"></div>
         <div id="results"></div>
@@ -104,12 +112,96 @@
 
     <section id="iletisim" style="background: #ffffff; padding: 60px 20px; text-align: center; border-top: 1px solid #f0f0f0; margin-top: 40px;">
         <div style="max-width: 700px; margin: 0 auto;">
+            
             <div style="background: var(--primary-light); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                <span style="font-size: 24px;">💡</span>
+                <span style="font-size: 24px; color: var(--primary);">🧩</span>
             </div>
+            
             <h3 style="color: #1e293b; font-size: 1.8rem; font-weight: 800; margin-bottom: 15px;">Bize Katkıda Bulunun</h3>
             <p style="color: #64748b; line-height: 1.7; font-size: 1.1rem; margin-bottom: 30px;">
-                Eksik kelimeleri bildirebilir, yeni terimler önerebilir veya hataları iletebilirsiniz.
+                Eksik kelimeleri bildirebilir, yeni terimler önerebilir veya içeriklerdeki hataları iletebilirsiniz.
             </p>
             <button onclick="showContactForm()" style="display: inline-block; background: var(--primary); color: #ffffff; padding: 16px 40px; border-radius: 14px; border:none; cursor:pointer; font-weight: 700; font-size: 1rem; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3); transition: 0.2s;">
                 ✨ Kelime Öner / Hata Bildir
+            </button>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a onclick="showInfo('about')">Hakkımızda</a>
+            <a onclick="showInfo('privacy')">Gizlilik</a>
+            <a href="#iletisim">İletişim</a>
+        </div>
+        <p style="margin-top: 15px; color: #94a3b8;">&copy; 2026 KelimeKelime</p>
+    </footer>
+
+    <div id="infoModal" class="modal" onclick="this.style.display='none'">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 id="modalTitle" style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 15px;"></h3>
+            <div id="modalText"></div>
+            <button id="modalCloseBtn" onclick="document.getElementById('infoModal').style.display='none'" style="width:100%; padding:14px; border-radius:12px; border:none; background:var(--primary); color:white; font-weight:bold; cursor:pointer; margin-top:10px;">Kapat</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+    <script>
+        function showInfo(type) {
+            const m = document.getElementById('infoModal');
+            const t = document.getElementById('modalTitle');
+            const txt = document.getElementById('modalText');
+            document.getElementById('modalCloseBtn').style.display = 'block';
+
+            if(type === 'about') {
+                t.innerText = "Hakkımızda";
+                txt.innerHTML = "<p style='color: #1e293b; line-height: 1.6;'>KelimeKelime, bulmaca severlerin aradıkları terimlere saniyeler içinde ulaşması için geliştirilmiş, Türkiye'nin en modern bulmaca sözlüğüdür.</p>";
+            } else {
+                t.innerText = "Gizlilik Politikası";
+                txt.innerHTML = "<p style='color: #1e293b; line-height: 1.6;'>Gizliliğinize önem veriyoruz. Sitemizde deneyiminizi iyileştirmek için çerezler kullanılır. Verileriniz üçüncü taraflarla paylaşılmaz.</p>";
+            }
+            m.style.display = 'block';
+        }
+
+        function showContactForm() {
+            const m = document.getElementById('infoModal');
+            const t = document.getElementById('modalTitle');
+            const txt = document.getElementById('modalText');
+            document.getElementById('modalCloseBtn').style.display = 'none';
+            
+            t.innerText = "Öneri veya Hata Bildir";
+            txt.innerHTML = `
+                <div style="text-align: left; margin-top: 10px;">
+                    <label style="display:block; font-size:0.8rem; font-weight:800; margin-bottom:5px; color:#64748b;">KONU SEÇİN</label>
+                    <select id="formSubject" style="width:100%; padding:12px; border-radius:10px; border:1px solid #e2e8f0; margin-bottom:15px; font-family:inherit; outline:none;">
+                        <option>Yeni Kelime Önerisi</option>
+                        <option>Hata Bildirimi</option>
+                        <option>Diğer</option>
+                    </select>
+                    <label style="display:block; font-size:0.8rem; font-weight:800; margin-bottom:5px; color:#64748b;">MESAJINIZ</label>
+                    <textarea id="formMessage" placeholder="Kelimeyi ve anlamını buraya yazabilirsiniz..." style="width:100%; height:120px; padding:12px; border-radius:10px; border:1px solid #e2e8f0; margin-bottom:20px; font-family:inherit; resize:none; outline:none;"></textarea>
+                    <button type="button" onclick="submitForm()" style="width:100%; padding:166px; border-radius:12px; border:none; background:var(--primary); color:white; font-weight:800; cursor:pointer; font-size:1rem;">Mesajı Gönder</button>
+                    <button onclick="document.getElementById('infoModal').style.display='none'" style="width:100%; background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer; font-size:0.85rem;">Vazgeç</button>
+                </div>
+            `;
+            m.style.display = 'block';
+        }
+
+        function submitForm() {
+            const message = document.getElementById('formMessage').value;
+            if(!message) { alert("Lütfen bir mesaj yazın."); return; }
+            const txt = document.getElementById('modalText');
+            const t = document.getElementById('modalTitle');
+            t.innerText = "Başarılı!";
+            txt.innerHTML = `
+                <div style="text-align:center; padding: 20px 0;">
+                    <div style="font-size: 50px; margin-bottom:15px;">✅</div>
+                    <p style="font-weight:800; color:#1e293b;">Mesajınız iletildi.</p>
+                    <p style="color:#64748b; font-size:0.9rem;">Editörlerimiz en kısa sürede inceleyecektir.</p>
+                    <button onclick="document.getElementById('infoModal').style.display='none'" style="width:100%; padding:14px; border-radius:12px; border:none; background:#1e293b; color:white; font-weight:bold; cursor:pointer; margin-top:20px;">Kapat</button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
